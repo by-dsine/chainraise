@@ -28,7 +28,7 @@ export default function Post({ post }: Props) {
 
   const onSubmit: SubmitHandler<ICommentForm> = (data) => {
     setSubmitted(true)
-    fetch('/api/createComment', {
+    fetch('/api/comments/createComment', {
       method: 'POST',
       body: JSON.stringify(data),
     })
