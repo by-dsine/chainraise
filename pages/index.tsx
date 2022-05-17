@@ -130,14 +130,13 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function Home() {
   return (
-    <div className="relative bg-white overflow-hidden">
-    
+    <div className="relative overflow-hidden bg-white">
       <NewHeader />
 
       <main className="mt-4">
-        <div className="mx-auto max-w-6xl md:max-w-7xl bg-gray-800 p-8 rounded-lg">
+        <div className="mx-auto max-w-6xl rounded-lg bg-gray-800 p-8 md:max-w-7xl">
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className="px-4 sm:px-6 sm:text-center md:mx-auto md:max-w-2xl lg:col-span-6 lg:flex lg:items-center lg:text-left">
               <div>
@@ -148,7 +147,9 @@ export default function Example() {
                   <span className="rounded-full bg-indigo-500 px-3 py-0.5 text-xs font-semibold uppercase leading-5 tracking-wide text-white">
                     Need funds?
                   </span>
-                  <span className="ml-4 text-sm">Start your own ChainRaise!</span>
+                  <span className="ml-4 text-sm">
+                    Start your own ChainRaise!
+                  </span>
                   <ChevronRightIcon
                     className="ml-2 h-5 w-5 text-gray-500"
                     aria-hidden="true"
@@ -156,13 +157,13 @@ export default function Example() {
                 </a>
                 <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-white sm:mt-5 sm:leading-none lg:mt-6 lg:text-5xl xl:text-6xl">
                   <span className="text-white md:block">
-The next big thing should be for 
+                    The next big thing should be for
                   </span>{' '}
-                  <span className="md:block text-blue-600">everybody</span>
-
+                  <span className="text-blue-600 md:block">everybody</span>
                 </h1>
                 <p className="mt-3 text-base text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                  Join ChainRaise now to get started investing in start-ups and small businesses doing things you care about.
+                  Join ChainRaise now to get started investing in start-ups and
+                  small businesses doing things you care about.
                 </p>
                 {/* <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-white sm:mt-10">
                   Used by
@@ -477,7 +478,7 @@ The next big thing should be for
                 <div className="grid grid-cols-1 gap-y-12 sm:col-span-2 sm:grid-cols-2 sm:gap-x-8">
                   <div>
                     <h3 className="text-sm font-medium text-gray-900">
-                      raises
+                      Explore
                     </h3>
                     <ul role="list" className="mt-6 space-y-6">
                       {footerNavigation.raises.map((item) => (

@@ -1,6 +1,13 @@
 import React from 'react'
 import NewHeader from '../../components/NewHeader'
 import { SearchIcon } from '@heroicons/react/solid'
+import {
+  ChatAlt2Icon,
+  ChatAltIcon,
+  CheckCircleIcon,
+  SaveIcon,
+  ShareIcon,
+} from '@heroicons/react/outline'
 
 const tabs = [
   { name: 'Following', href: '#', current: true },
@@ -11,8 +18,11 @@ const messages = [
   {
     id: 1,
     subject: 'Velit placeat sit ducimus non sed',
-    sender: 'Gloria Roberston',
+    sender: 'DJ Dilla, CTO',
+    senderPic: '/dylan.png',
+    previewPic: '/logomark.png',
     time: '1d ago',
+    type: 'post',
     datetime: '2021-01-27T16:35',
     preview:
       'Doloremque dolorem maiores assumenda dolorem facilis. Velit vel in a rerum natus facere. Enim rerum eaque qui facilis. Numquam laudantium sed id dolores omnis in. Eos reiciendis deserunt maiores et accusamus quod dolor.',
@@ -20,8 +30,11 @@ const messages = [
   {
     id: 2,
     subject: 'Velit placeat sit ducimus non sed',
-    sender: 'Gloria Roberston',
+    sender: 'DJ Dilla, CTO',
+    senderPic: '/dylan.png',
+    previewPic: '/logomark.png',
     time: '1d ago',
+    type: 'raise_launch',
     datetime: '2021-01-27T16:35',
     preview:
       'Doloremque dolorem maiores assumenda dolorem facilis. Velit vel in a rerum natus facere. Enim rerum eaque qui facilis. Numquam laudantium sed id dolores omnis in. Eos reiciendis deserunt maiores et accusamus quod dolor.',
@@ -29,8 +42,11 @@ const messages = [
   {
     id: 3,
     subject: 'Velit placeat sit ducimus non sed',
-    sender: 'Gloria Roberston',
+    sender: 'DJ Dilla, CTO',
+    senderPic: '/dylan.png',
+    previewPic: '/logomark.png',
     time: '1d ago',
+    type: 'article',
     datetime: '2021-01-27T16:35',
     preview:
       'Doloremque dolorem maiores assumenda dolorem facilis. Velit vel in a rerum natus facere. Enim rerum eaque qui facilis. Numquam laudantium sed id dolores omnis in. Eos reiciendis deserunt maiores et accusamus quod dolor.',
@@ -38,8 +54,11 @@ const messages = [
   {
     id: 4,
     subject: 'Velit placeat sit ducimus non sed',
-    sender: 'Gloria Roberston',
+    sender: 'DJ Dilla, CTO',
+    senderPic: '/dylan.png',
+    previewPic: '/logomark.png',
     time: '1d ago',
+    type: 'post',
     datetime: '2021-01-27T16:35',
     preview:
       'Doloremque dolorem maiores assumenda dolorem facilis. Velit vel in a rerum natus facere. Enim rerum eaque qui facilis. Numquam laudantium sed id dolores omnis in. Eos reiciendis deserunt maiores et accusamus quod dolor.',
@@ -47,8 +66,11 @@ const messages = [
   {
     id: 5,
     subject: 'Velit placeat sit ducimus non sed',
-    sender: 'Gloria Roberston',
+    sender: 'DJ Dilla, CTO',
+    senderPic: '/dylan.png',
+    previewPic: '/logomark.png',
     time: '1d ago',
+    type: 'post',
     datetime: '2021-01-27T16:35',
     preview:
       'Doloremque dolorem maiores assumenda dolorem facilis. Velit vel in a rerum natus facere. Enim rerum eaque qui facilis. Numquam laudantium sed id dolores omnis in. Eos reiciendis deserunt maiores et accusamus quod dolor.',
@@ -56,8 +78,11 @@ const messages = [
   {
     id: 6,
     subject: 'Velit placeat sit ducimus non sed',
-    sender: 'Gloria Roberston',
+    sender: 'DJ Dilla, CTO',
+    senderPic: '/dylan.png',
+    previewPic: '/logomark.png',
     time: '1d ago',
+    type: 'raise_launch',
     datetime: '2021-01-27T16:35',
     preview:
       'Doloremque dolorem maiores assumenda dolorem facilis. Velit vel in a rerum natus facere. Enim rerum eaque qui facilis. Numquam laudantium sed id dolores omnis in. Eos reiciendis deserunt maiores et accusamus quod dolor.',
@@ -145,25 +170,30 @@ export default function index() {
                         {messages.map((message) => (
                           <li
                             key={message.id}
-                            className="relative bg-white py-5 px-4 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 hover:bg-gray-50"
+                            className="relative bg-white px-4 pt-5 pb-1"
                           >
                             <div className="flex justify-between space-x-3">
                               <div className="min-w-0 flex-1">
-                                <a
-                                  href="#"
-                                  className="block focus:outline-none"
-                                >
-                                  <span
-                                    className="absolute inset-0"
-                                    aria-hidden="true"
-                                  />
-                                  <p className="truncate text-sm font-medium text-gray-900">
-                                    {message.sender}
-                                  </p>
-                                  <p className="truncate text-sm text-gray-500">
-                                    {message.subject}
-                                  </p>
-                                </a>
+                                <div className="flex items-center space-x-4">
+                                  <span className="relative inline-block">
+                                    <img
+                                      className="h-10 w-10 rounded-full"
+                                      src={message.senderPic}
+                                      alt=""
+                                    />
+                                    <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white">
+                                      <CheckCircleIcon className="text-white" />
+                                    </span>
+                                  </span>
+                                  <div className="flex flex-col">
+                                    <p className="truncate text-sm font-medium text-gray-900">
+                                      {message.sender}
+                                    </p>
+                                    <p className="truncate text-sm text-gray-500">
+                                      {message.subject}
+                                    </p>
+                                  </div>
+                                </div>
                               </div>
                               <time
                                 dateTime={message.datetime}
@@ -172,10 +202,32 @@ export default function index() {
                                 {message.time}
                               </time>
                             </div>
-                            <div className="mt-1">
-                              <p className="line-clamp-2 text-sm text-gray-600">
-                                {message.preview}
-                              </p>
+                            <div className="mt-2">
+                              <div className="flex">
+                                <p className="line-clamp-2 flex-grow text-sm text-gray-600">
+                                  {message.preview}
+                                </p>
+                                {message.previewPic && (
+                                  <img
+                                    className="aspect-square max-h-12"
+                                    src={message.previewPic}
+                                  />
+                                )}
+                              </div>
+                            </div>
+                            <div className="bg-gray pt-2 grid w-full grid-cols-1 justify-items-stretch md:grid-cols-2 lg:grid-cols-3 p-1">
+                              <button className="col-span-1 rounded-sm hover:bg-gray-50">
+                                Comments
+                                <ChatAlt2Icon className="inline-flex h-6 w-6 px-1" />
+                              </button>
+                              <button className="col-span-1 rounded-sm hover:bg-gray-50">
+                                Share
+                                <ShareIcon className="inline-flex h-6 w-6 px-1" />
+                              </button>
+                              <button className="col-span-1 rounded-sm hover:bg-gray-50">
+                                Save
+                                <SaveIcon className="inline-flex h-6 w-6 px-1" />
+                              </button>
                             </div>
                           </li>
                         ))}
