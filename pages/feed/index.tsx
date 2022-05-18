@@ -1,5 +1,5 @@
 import React from 'react'
-import NewHeader from '../../components/NewHeader'
+import Header from '../../components/Header'
 import { SearchIcon } from '@heroicons/react/solid'
 import {
   ChatAlt2Icon,
@@ -88,6 +88,13 @@ const messages = [
       'Doloremque dolorem maiores assumenda dolorem facilis. Velit vel in a rerum natus facere. Enim rerum eaque qui facilis. Numquam laudantium sed id dolores omnis in. Eos reiciendis deserunt maiores et accusamus quod dolor.',
   },
 ]
+const user = {
+  name: 'Quimby Ingmeen ',
+  email: 'quimby.ingmeen@example.com',
+  role: 'Link Member',
+  imageUrl:
+    'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+}
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -96,13 +103,90 @@ function classNames(...classes: string[]) {
 export default function index() {
   return (
     <div className="relative overflow-hidden bg-white">
-      <NewHeader />
-      <main className="mt-4 pb-8">
+      <Header />
+      <main className="pb-8">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-          <h1 className="sr-only">Page title</h1>
+          <h1 className="sr-only">My Feed</h1>
           {/* Main 3 column grid */}
           <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
             {/* Left column */}
+            <div className="grid grid-cols-1 gap-4">
+              <section aria-labelledby="section-2-title">
+                <h2 className="sr-only" id="section-2-title">
+                  Search Bar
+                </h2>
+                <div className="overflow-hidden rounded-lg bg-white shadow">
+                  <div className="p-6">
+                    {/* Search */}
+                    <div className="min-w-0 flex-1 px-2">
+                      <div className="mx-auto w-full max-w-xs">
+                        <label htmlFor="desktop-search" className="sr-only">
+                          Search
+                        </label>
+                        <div className="relative text-black focus-within:text-gray-600">
+                          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <SearchIcon
+                              className="h-5 w-5"
+                              aria-hidden="true"
+                            />
+                          </div>
+                          <input
+                            id="desktop-search"
+                            className="block w-full rounded-md border border-gray-300 bg-white bg-opacity-20 py-2 pl-10 pr-3 leading-5 text-gray-900 placeholder-gray-500 focus:bg-opacity-100 focus:placeholder-gray-500 focus:outline-none focus:ring-0 sm:text-sm"
+                            placeholder="Search"
+                            type="search"
+                            name="search"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Welcome panel */}
+              <section aria-labelledby="profile-overview-title">
+                <div className="overflow-hidden rounded-lg bg-white shadow">
+                  <h2 className="sr-only" id="profile-overview-title">
+                    Profile Overview
+                  </h2>
+                  <div className="bg-white p-6">
+                    <div className="sm:flex sm:items-center sm:justify-between">
+                      <div className="sm:flex sm:space-x-5">
+                        <div className="flex-shrink-0">
+                          <img
+                            className="mx-auto h-20 w-20 rounded-full"
+                            src={user.imageUrl}
+                            alt=""
+                          />
+                        </div>
+                        <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
+                          <p className="text-sm font-medium text-gray-600">
+                            Welcome back,
+                          </p>
+                          <p className="text-xl font-bold text-gray-900 sm:text-2xl">
+                            {user.name}
+                          </p>
+                          <p className="text-sm font-medium text-gray-600">
+                            {user.role}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-center pb-5 sm:mt-0">
+                    <a
+                      href="#"
+                      className="flex w-3/4 items-center justify-center rounded-md border border-gray-300 bg-white py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+                    >
+                      View profile
+                    </a>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            {/* Right column */}
             <div className="grid grid-cols-1 gap-4 lg:col-span-2">
               <section aria-labelledby="section-1-title">
                 <h2 className="sr-only" id="section-1-title">
@@ -215,7 +299,7 @@ export default function index() {
                                 )}
                               </div>
                             </div>
-                            <div className="bg-gray pt-2 grid w-full grid-cols-1 justify-items-stretch md:grid-cols-2 lg:grid-cols-3 p-1">
+                            <div className="bg-gray grid w-full grid-cols-1 justify-items-stretch p-1 pt-2 md:grid-cols-2 lg:grid-cols-3">
                               <button className="col-span-1 rounded-sm hover:bg-gray-50">
                                 Comments
                                 <ChatAlt2Icon className="inline-flex h-6 w-6 px-1" />
@@ -232,42 +316,6 @@ export default function index() {
                           </li>
                         ))}
                       </ul>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </div>
-
-            {/* Right column */}
-            <div className="grid grid-cols-1 gap-4">
-              <section aria-labelledby="section-2-title">
-                <h2 className="sr-only" id="section-2-title">
-                  Section title
-                </h2>
-                <div className="overflow-hidden rounded-lg bg-white shadow">
-                  <div className="p-6">
-                    {/* Search */}
-                    <div className="min-w-0 flex-1 px-2">
-                      <div className="mx-auto w-full max-w-xs">
-                        <label htmlFor="desktop-search" className="sr-only">
-                          Search
-                        </label>
-                        <div className="relative text-black focus-within:text-gray-600">
-                          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                            <SearchIcon
-                              className="h-5 w-5"
-                              aria-hidden="true"
-                            />
-                          </div>
-                          <input
-                            id="desktop-search"
-                            className="block w-full rounded-md border border-gray-300 bg-white bg-opacity-20 py-2 pl-10 pr-3 leading-5 text-gray-900 placeholder-gray-500 focus:bg-opacity-100 focus:placeholder-gray-500 focus:outline-none focus:ring-0 sm:text-sm"
-                            placeholder="Search"
-                            type="search"
-                            name="search"
-                          />
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>

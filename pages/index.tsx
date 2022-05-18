@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react'
-import NewHeader from '../components/NewHeader'
+import Header from '../components/Header'
 import { ChevronRightIcon } from '@heroicons/react/solid'
 
 const collections = [
@@ -133,35 +133,38 @@ function classNames(...classes: string[]) {
 export default function Home() {
   return (
     <div className="relative overflow-hidden bg-white">
-      <NewHeader />
+      <Header />
 
-      <main className="mt-4">
-        <div className="mx-auto max-w-6xl rounded-lg bg-gray-800 p-8 md:max-w-7xl">
-          <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-            <div className="px-4 sm:px-6 sm:text-center md:mx-auto md:max-w-2xl lg:col-span-6 lg:flex lg:items-center lg:text-left">
+      <main>
+        <div className="mx-auto max-w-6xl rounded-lg  md:max-w-7xl">
+
+          <div className="lg:grid lg:grid-cols-12 lg:gap-8 p-8 bg-gradient-to-r from-cr-secondary to-cr-primary">
+
+            <div className="z-10 px-4 sm:px-6 sm:text-center md:mx-auto md:max-w-2xl lg:col-span-6 lg:flex lg:items-center lg:text-left">
+
               <div>
                 <a
                   href="#"
-                  className="inline-flex items-center rounded-full bg-gray-900 p-1 pr-2 text-white hover:text-gray-200 sm:text-base lg:text-sm xl:text-base"
+                  className="inline-flex items-center rounded-full border border-gray-700 bg-transparent p-1 pr-2 sm:text-base lg:text-sm xl:text-base"
                 >
-                  <span className="rounded-full bg-indigo-500 px-3 py-0.5 text-xs font-semibold uppercase leading-5 tracking-wide text-white">
+                  <span className="rounded-full bg-cr-primary px-3 py-0.5 text-xs font-semibold uppercase leading-5 tracking-wide text-white">
                     Need funds?
                   </span>
-                  <span className="ml-4 text-sm">
+                  <span className="ml-4 text-sm text-gray-700">
                     Start your own ChainRaise!
                   </span>
                   <ChevronRightIcon
-                    className="ml-2 h-5 w-5 text-gray-500"
+                    className="ml-2 h-5 w-5 text-cr-primary"
                     aria-hidden="true"
                   />
                 </a>
-                <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-white sm:mt-5 sm:leading-none lg:mt-6 lg:text-5xl xl:text-6xl">
-                  <span className="text-white md:block">
+                <h1 className="mt-4 text-4xl  tracking-tight sm:mt-5 sm:leading-none lg:mt-6 lg:text-5xl xl:text-6xl">
+                  <span className="text-cr-primary font-bold md:block">
                     The next big thing should be for
                   </span>{' '}
-                  <span className="text-blue-600 md:block">everybody</span>
+                  <span className="text-cr-primary font-extrabold md:block">everybody</span>
                 </h1>
-                <p className="mt-3 text-base text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                <p className="mt-3 text-base text-gray-700 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
                   Join ChainRaise now to get started investing in start-ups and
                   small businesses doing things you care about.
                 </p>
@@ -196,18 +199,16 @@ export default function Home() {
               </div>
             </div>
             <div className="mt-16 sm:mt-24 lg:col-span-6 lg:mt-0">
-              <div className="bg-white sm:mx-auto sm:w-full sm:max-w-md sm:overflow-hidden sm:rounded-lg">
-                <div className="px-4 py-8 sm:px-10">
+              <div className="border bg-white sm:mx-auto sm:w-full sm:max-w-md sm:overflow-hidden sm:rounded-lg">
+                <div className="px-4 py-8 sm:px-10 ">
                   <div>
-                    <p className="text-sm font-medium text-gray-700">
-                      Sign in with
-                    </p>
+                    <p className="text-sm font-medium">Sign in with</p>
 
                     <div className="mt-1 grid grid-cols-3 gap-3">
                       <div>
                         <a
                           href="#"
-                          className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
+                          className="inline-flex w-full justify-center rounded-md border border-cr-primary bg-white py-2 px-4 text-sm font-medium text-cr-primary shadow-sm hover:bg-gray-50"
                         >
                           <span className="sr-only">Sign in with Facebook</span>
                           <svg
@@ -228,7 +229,7 @@ export default function Home() {
                       <div>
                         <a
                           href="#"
-                          className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
+                          className="inline-flex w-full justify-center rounded-md border border-cr-primary bg-white py-2 px-4 text-sm font-medium text-cr-primary shadow-sm hover:bg-gray-50"
                         >
                           <span className="sr-only">Sign in with Twitter</span>
                           <svg
@@ -245,7 +246,7 @@ export default function Home() {
                       <div>
                         <a
                           href="#"
-                          className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
+                          className="inline-flex w-full justify-center rounded-md border border-cr-primary bg-white py-2 px-4 text-sm font-medium text-cr-primary shadow-sm hover:bg-gray-50"
                         >
                           <span className="sr-only">Sign in with GitHub</span>
                           <svg
@@ -270,10 +271,10 @@ export default function Home() {
                       className="absolute inset-0 flex items-center"
                       aria-hidden="true"
                     >
-                      <div className="w-full border-t border-gray-300" />
+                      <div className="w-full border-t border-cr-primary" />
                     </div>
                     <div className="relative flex justify-center text-sm">
-                      <span className="bg-white px-2 text-gray-500">Or</span>
+                      <span className="bg-white px-2 text-cr-primary">Or</span>
                     </div>
                   </div>
 
@@ -290,7 +291,7 @@ export default function Home() {
                           autoComplete="name"
                           placeholder="Full name"
                           required
-                          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          className="block w-full rounded-md border-cr-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                       </div>
 
@@ -305,7 +306,7 @@ export default function Home() {
                           autoComplete="email"
                           placeholder="Mobile number or email"
                           required
-                          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          className="block w-full rounded-md border-cr-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                       </div>
 
@@ -320,7 +321,7 @@ export default function Home() {
                           placeholder="Password"
                           autoComplete="current-password"
                           required
-                          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          className="block w-full rounded-md border-cr-primary shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                       </div>
 
@@ -336,7 +337,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="border-t-2 border-gray-200 bg-gray-50 px-4 py-6 sm:px-10">
-                  <p className="text-xs leading-5 text-gray-500">
+                  <p className="text-xs leading-5 text-cr-primary">
                     By signing up, you agree to our{' '}
                     <a
                       href="#"
@@ -399,7 +400,7 @@ export default function Home() {
                       {raise.name}
                     </a>
                   </h3>
-                  <p className="mt-1 text-sm text-gray-500">{raise.color}</p>
+                  <p className="mt-1 text-sm text-cr-primary">{raise.color}</p>
                   <p className="mt-1 text-sm font-medium text-gray-900">
                     {raise.price}
                   </p>
@@ -446,7 +447,7 @@ export default function Home() {
                     <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-900">
                       {perk.name}
                     </h3>
-                    <p className="mt-3 text-sm text-gray-500">
+                    <p className="mt-3 text-sm text-cr-primary">
                       {perk.description}
                     </p>
                   </div>
@@ -485,7 +486,7 @@ export default function Home() {
                         <li key={item.name} className="text-sm">
                           <a
                             href={item.href}
-                            className="text-gray-500 hover:text-gray-600"
+                            className="text-cr-primary hover:text-gray-600"
                           >
                             {item.name}
                           </a>
@@ -502,7 +503,7 @@ export default function Home() {
                         <li key={item.name} className="text-sm">
                           <a
                             href={item.href}
-                            className="text-gray-500 hover:text-gray-600"
+                            className="text-cr-primary hover:text-gray-600"
                           >
                             {item.name}
                           </a>
@@ -520,7 +521,7 @@ export default function Home() {
                       <li key={item.name} className="text-sm">
                         <a
                           href={item.href}
-                          className="text-gray-500 hover:text-gray-600"
+                          className="text-cr-primary hover:text-gray-600"
                         >
                           {item.name}
                         </a>
@@ -535,7 +536,7 @@ export default function Home() {
                 <h3 className="text-sm font-medium text-gray-900">
                   Sign up for our newsletter
                 </h3>
-                <p className="mt-6 text-sm text-gray-500">
+                <p className="mt-6 text-sm text-cr-primary">
                   The latest deals and savings, sent to your inbox weekly.
                 </p>
                 <form className="mt-2 flex sm:max-w-md">
@@ -547,7 +548,7 @@ export default function Home() {
                     type="text"
                     autoComplete="email"
                     required
-                    className="w-full min-w-0 appearance-none rounded-md border border-gray-300 bg-white py-2 px-4 text-base text-gray-900 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full min-w-0 appearance-none rounded-md border border-cr-primary bg-white py-2 px-4 text-base text-gray-900 placeholder-cr-primary shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   />
                   <div className="ml-4 flex-shrink-0">
                     <button
@@ -563,7 +564,7 @@ export default function Home() {
           </div>
 
           <div className="border-t border-gray-100 py-10 text-center">
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-cr-primary">
               &copy; 2021 Workflow, Inc. All rights reserved.
             </p>
           </div>
