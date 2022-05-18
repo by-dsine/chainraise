@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next'
 import React, { useState } from 'react'
 import PortableText from 'react-portable-text'
-import Header from '../../components/Header'
+import Header from '../../components/OldHeader'
 import { sanityClient, urlFor } from '../../sanity'
 import type { Post } from '../../typings'
 import { useForm, SubmitHandler } from 'react-hook-form'
@@ -28,7 +28,7 @@ export default function Post({ post }: Props) {
 
   const onSubmit: SubmitHandler<ICommentForm> = (data) => {
     setSubmitted(true)
-    fetch('/api/createComment', {
+    fetch('/api/comments/createComment', {
       method: 'POST',
       body: JSON.stringify(data),
     })
