@@ -1,6 +1,6 @@
 import React from 'react'
 import { sanityClient, urlFor } from '../sanity'
-import { Post } from '../typings'
+import { Post } from '../types/typings'
 import Link from 'next/link'
 
 interface Props {

@@ -1,3 +1,13 @@
+// Form Types
+export type INewPostForm = {
+    body: string
+    username: string
+    profileImg: string
+    image?: string
+    mood?: string
+}
+
+// Sanity Types
 export interface Post {
     _id: string;
     _createdAt: string;

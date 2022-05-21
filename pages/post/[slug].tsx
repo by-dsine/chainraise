@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import PortableText from 'react-portable-text'
 import Header from '../../components/OldHeader'
 import { sanityClient, urlFor } from '../../sanity'
-import type { Post } from '../../typings'
+import type { Post } from '../../types/typings'
 import { useForm, SubmitHandler } from 'react-hook-form'
 
 interface Props {

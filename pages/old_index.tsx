@@ -7,7 +7,7 @@ import Header from '../components/OldHeader'
 import NewHeader from '../components/Header'
 import PostGrid from '../components/PostGrid'
 import { sanityClient, urlFor } from '../sanity'
-import { Post } from '../typings'
+import { Post } from '../types/typings'
 
 interface Props {
   posts: Post[]

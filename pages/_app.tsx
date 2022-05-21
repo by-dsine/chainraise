@@ -2,17 +2,13 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import NewHeader from '../components/Header'
+import { SessionProvider } from 'next-auth/react'
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-    // <div className="scrollbar-hide h-screen overflow-y-scroll bg-gray-50">
-    //   <Head>
-    //     <title>ChainRaise</title>
-    //     <link rel="icon" href="/logomark.png" />
-    //   </Head>
-    //   <NewHeader/>
+    <SessionProvider session={session}>
       <Component {...pageProps} />
-    //</div>
+    </SessionProvider>
   )
 }
 

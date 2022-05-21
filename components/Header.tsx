@@ -9,6 +9,7 @@ import {
   QuestionMarkCircleIcon,
 } from '@heroicons/react/outline'
 import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
+import { useSession } from 'next-auth/react'
 
 const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP']
 const navigation = {
@@ -50,12 +51,10 @@ const navigation = {
         },
       ],
     },
-    
   ],
   pages: [
     { name: 'Feed', href: '/feed' },
-    { name: 'Company', href: '#' },
-    { name: 'Learn', href: '#' },
+    { name: 'Company', href: '/about' },
   ],
 }
 
@@ -63,10 +62,10 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-
 export default function Header() {
   const [open, setOpen] = useState(false)
   const router = useRouter()
+  const { data: session } = useSession()
 
   return (
     <>
@@ -246,64 +245,6 @@ export default function Header() {
 
       <header className="relative">
         <nav aria-label="Top">
-          {/* Top navigation */}
-          <div className="hidden bg-cr-primary">
-            <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-              {/* Currency selector */}
-              <form>
-                <div>
-                  <label htmlFor="desktop-currency" className="sr-only">
-                    Currency
-                  </label>
-                  <div className="group relative -ml-2 rounded-md border-transparent bg-cr-primary focus-within:ring-2 focus-within:ring-white">
-                    <select
-                      id="desktop-currency"
-                      name="currency"
-                      className="flex items-center rounded-md border-transparent bg-cr-primary bg-none py-0.5 pl-2 pr-5 text-sm font-medium text-white focus:border-transparent focus:outline-none focus:ring-0 group-hover:text-gray-100"
-                    >
-                      {currencies.map((currency) => (
-                        <option key={currency}>{currency}</option>
-                      ))}
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center">
-                      <svg
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 20 20"
-                        className="h-5 w-5 text-gray-300"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="1.5"
-                          d="M6 8l4 4 4-4"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </form>
-
-              <div className="flex items-center space-x-6">
-                <a
-                  href="#"
-                  className="text-sm font-medium text-white hover:text-gray-100"
-                >
-                  Sign in
-                </a>
-                <a
-                  href="#"
-                  className="text-sm font-medium text-white hover:text-gray-100"
-                >
-                  Create an account
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Secondary navigation */}
           <div className="bg-white">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="flex h-16 items-center justify-between">
@@ -311,7 +252,11 @@ export default function Header() {
                 <div className="hidden lg:flex lg:flex-1 lg:items-center">
                   <a href="#">
                     <span className="sr-only">Workflow</span>
-                    <img className="h-8 w-auto" src="/chainraise_logo_black_text.png" alt="" />
+                    <img
+                      className="h-8 w-auto"
+                      src="/chainraise_logo_black_text.png"
+                      alt=""
+                    />
                   </a>
                 </div>
 
