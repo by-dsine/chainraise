@@ -9,7 +9,7 @@ import {
   QuestionMarkCircleIcon,
 } from '@heroicons/react/outline'
 import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 
 const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP']
 const navigation = {
@@ -53,8 +53,8 @@ const navigation = {
     },
   ],
   pages: [
-    { name: 'Feed', href: '/feed' },
-    { name: 'Company', href: '/about' },
+    { name: 'Feed', href: '/feed'},
+    { name: 'Company', href: '/about'},
   ],
 }
 
@@ -404,9 +404,19 @@ export default function Header() {
                 </a>
 
                 <div className="flex flex-1 items-center justify-end">
+                {session && (
+                    <button
+                      onClick={() => signOut()}
+                      className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block"
+                    >
+                      Sign Out
+                    </button>
+                  )}
+
+                  
                   <a
                     href="#"
-                    className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block"
+                    className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block lg:ml-8"
                   >
                     Search
                   </a>

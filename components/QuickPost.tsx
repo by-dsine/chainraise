@@ -105,8 +105,9 @@ export default function QuickPost() {
                 <label htmlFor="comment" className="sr-only">
                   Post
                 </label>
-                <PortableText
-                  content={[]} {...register('body')}
+                <textarea
+                  {...register('body')}
+                  rows={3}
                   className="block w-full resize-none border-0 border-b border-transparent p-0 pb-2 focus:border-indigo-600 focus:ring-0 sm:text-sm"
                 />
               </div>

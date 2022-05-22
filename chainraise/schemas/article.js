@@ -1,6 +1,6 @@
 export default {
-  name: 'post',
-  title: 'Post',
+  name: 'article',
+  title: 'Article',
   type: 'document',
   fields: [
     {
@@ -27,7 +27,7 @@ export default {
       name: 'author',
       title: 'Author',
       type: 'reference',
-      to: {type: 'author'},
+      to: {type: 'user'},
     },
     {
       name: 'mainImage',
@@ -44,12 +44,6 @@ export default {
       of: [{type: 'reference', to: {type: 'category'}}],
     },
     {
-      name: 'contentType',
-      title: 'Content Type',
-      type: 'reference',
-      to: {type: 'category'},
-    },
-    {
       name: 'publishedAt',
       title: 'Published at',
       type: 'datetime',
@@ -64,7 +58,7 @@ export default {
   preview: {
     select: {
       title: 'title',
-      author: 'author.name',
+      author: 'user.name',
       media: 'mainImage',
     },
     prepare(selection) {
