@@ -19,7 +19,11 @@ export default NextAuth({
     signIn: '/auth/signin',
   },
   callbacks: {
-    async session({ session, user, token }) {
+    async session({ session, user }) {
+      console.log("Initial session state: ")
+      console.log("Session: ", session)
+      console.log("User: ", user)
+
       session.user.username = session!
         .user!.name!.split(' ')
         .join('')

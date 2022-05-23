@@ -3,6 +3,7 @@ import Header from '../components/Header'
 import { ChevronRightIcon } from '@heroicons/react/solid'
 import { signIn, useSession } from 'next-auth/react'
 import LoginCard from '../components/LoginCard'
+import AdCard from '../components/AdCard'
 
 const collections = [
   {
@@ -186,12 +187,9 @@ export default function Home() {
                 </div> */}
               </div>
             </div>
-
-            {!session && (
-              <div className="mt-16 sm:mt-24 lg:col-span-4 lg:mt-0">
-                <LoginCard />
-              </div>
-            )}
+            <div className="mt-16 sm:mt-24 lg:col-span-4 lg:mt-0">
+              {session ? <AdCard /> : <LoginCard />}
+            </div>
           </div>
         </div>
 
