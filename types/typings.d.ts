@@ -7,6 +7,19 @@ export type INewPostForm = {
     mood?: string
 }
 
+export type IPersonalInformationForm = {
+    id: string
+    username: string
+    bio?: string
+    firstName?: string
+    lastName?: string
+    address?: string
+    city?: string
+    state?: string
+    zipCode?: string
+    phone?: string
+}
+
 // Sanity Types
 export interface Post {
     _id: string;

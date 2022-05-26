@@ -1,9 +1,7 @@
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import { prisma } from '../../../lib/db'
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -17,18 +15,30 @@ export default NextAuth({
   ],
   pages: {
     signIn: '/auth/signin',
+    newUser: '/auth/new-user',
   },
   callbacks: {
+    async signIn({ user }) {
+      // Users must have an email so we can send them compliance notices
+      if (!user.email) {
+        return false
+      }
+      return true
+    },
     async session({ session, user }) {
-      console.log("Initial session state: ")
-      console.log("Session: ", session)
-      console.log("User: ", user)
+      if (!session.user.uid) {
+        const getUser = await prisma.user.findFirst({
+          where: {
+            email: session!.user!.email,
+          },
+        })
+        session.user.uid = getUser?.id
+      }
 
       session.user.username = session!
         .user!.name!.split(' ')
         .join('')
         .toLocaleLowerCase()
-      //session.user.uid = token!.sub // Google user id
 
       return session
     },

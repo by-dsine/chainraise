@@ -4,8 +4,18 @@ export default {
   type: 'document',
   fields: [
     {
+      name: 'uid',
+      title: 'UID',
+      type: 'string',
+    },
+    {
       name: 'name',
       title: 'Name',
+      type: 'string',
+    },
+    {
+      name: 'username',
+      title: 'Username',
       type: 'string',
     },
     {
