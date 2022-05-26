@@ -15,6 +15,7 @@ import {
 import { INewPostForm } from '../types/typings'
 import { Controller, ControllerRenderProps, SubmitHandler, useForm } from 'react-hook-form'
 import PortableText from 'react-portable-text'
+import { useSession } from 'next-auth/react'
 
 const moods = [
   {
@@ -66,6 +67,8 @@ function classNames(...classes: string[]) {
 }
 
 export default function QuickPost() {
+  const { data: session } = useSession()
+
   const [selected, setSelected] = useState(moods[5])
   const [submitted, setSubmitted] = useState(false)
   const [fileSelected, setFileSelected] = React.useState<File>()
@@ -226,7 +229,7 @@ export default function QuickPost() {
                   </div>
                   {fileSelected && (
                     <div className="flow-root">
-                      <p>{fileSelected}</p>
+                      <p>{fileSelected.name}</p>
                     </div>
                   )}
                 </div>

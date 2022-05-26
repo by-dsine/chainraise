@@ -53,8 +53,8 @@ const navigation = {
     },
   ],
   pages: [
-    { name: 'Feed', href: '/feed'},
-    { name: 'Company', href: '/about'},
+    { name: 'Feed', href: '/feed' },
+    { name: 'Company', href: '/about' },
   ],
 }
 
@@ -243,21 +243,21 @@ export default function Header() {
         </Dialog>
       </Transition.Root>
 
-      <header className="relative">
+      <header className="relative z-20">
         <nav aria-label="Top">
           <div className="bg-white">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="flex h-16 items-center justify-between">
                 {/* Logo (lg+) */}
                 <div className="hidden lg:flex lg:flex-1 lg:items-center">
-                  <a href="#">
-                    <span className="sr-only">Workflow</span>
+                  <span className="sr-only">Workflow</span>
+                  <Link href="/" className="cursor-pointer">
                     <img
                       className="h-8 w-auto"
                       src="/chainraise_logo_black_text.png"
                       alt=""
                     />
-                  </a>
+                  </Link>
                 </div>
 
                 <div className="hidden h-full lg:flex">
@@ -404,19 +404,25 @@ export default function Header() {
                 </a>
 
                 <div className="flex flex-1 items-center justify-end">
-                {session && (
-                    <button
-                      onClick={() => signOut()}
-                      className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block"
-                    >
-                      Sign Out
-                    </button>
+                  {session && (
+                    <>
+                      <Link href="account">
+                        <button className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block">
+                          My Account{' '}
+                        </button>
+                      </Link>
+                      <button
+                        onClick={() => signOut()}
+                        className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:ml-8 lg:block"
+                      >
+                        Sign Out
+                      </button>
+                    </>
                   )}
 
-                  
                   <a
                     href="#"
-                    className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block lg:ml-8"
+                    className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:ml-8 lg:block"
                   >
                     Search
                   </a>

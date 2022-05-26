@@ -24,7 +24,7 @@ export function UserPanel() {
               <div className="flex-shrink-0">
                 <img
                   className="mx-auto h-20 w-20 rounded-full"
-                  src={user.imageUrl}
+                  src={session?.user?.image || "/logomark.png"}
                   alt=""
                 />
               </div>
@@ -33,7 +33,7 @@ export function UserPanel() {
                   Welcome back,
                 </p>
                 <p className="text-xl font-bold text-gray-900 sm:text-2xl">
-                  {user.name}
+                  {session?.user.name}
                 </p>
                 <p className="text-sm font-medium text-gray-600">{user.role}</p>
               </div>
