@@ -15,7 +15,7 @@ const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP']
 const navigation = {
   categories: [
     {
-      name: 'Browse',
+      name: 'Browse Offerings',
       featured: [
         {
           name: 'New Offerings',
@@ -53,8 +53,7 @@ const navigation = {
     },
   ],
   pages: [
-    { name: 'Feed', href: '/feed' },
-    { name: 'Company', href: '/about' },
+    { name: 'Raise', href: '/raise-funds' },
   ],
 }
 
@@ -405,19 +404,12 @@ export default function Header() {
 
                 <div className="flex flex-1 items-center justify-end">
                   {session && (
-                    <>
-                      <Link href="account">
-                        <button className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block">
-                          My Account{' '}
-                        </button>
-                      </Link>
-                      <button
-                        onClick={() => signOut()}
-                        className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:ml-8 lg:block"
-                      >
-                        Sign Out
-                      </button>
-                    </>
+                    <button
+                      onClick={() => signOut()}
+                      className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:ml-8 lg:block"
+                    >
+                      Sign Out
+                    </button>
                   )}
 
                   <a
@@ -428,23 +420,13 @@ export default function Header() {
                   </a>
 
                   <div className="flex items-center lg:ml-8">
-                    {/* Help */}
-                    <a
-                      href="#"
-                      className="p-2 text-gray-400 hover:text-gray-500 lg:hidden"
-                    >
-                      <span className="sr-only">Help</span>
-                      <QuestionMarkCircleIcon
-                        className="h-6 w-6"
-                        aria-hidden="true"
+                    <span className="relative inline-block">
+                      <img
+                        className="h-12 w-12 rounded-full"
+src="/dylan.png"                        alt=""
                       />
-                    </a>
-                    <a
-                      href="#"
-                      className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:block"
-                    >
-                      Help
-                    </a>
+                      <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-cr-secondary ring-2 ring-white" />
+                    </span>
                   </div>
                 </div>
               </div>
