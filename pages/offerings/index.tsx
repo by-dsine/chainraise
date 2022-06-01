@@ -156,7 +156,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function OfferingLanding() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
@@ -262,7 +262,7 @@ export default function Example() {
               ))}
             </div>
           </main>
-          <aside className="hidden xl:col-span-4 xl:block mt-36">
+          <aside className="hidden sm:col-span-4 sm:block mt-36">
             <div className="sticky top-6 space-y-4">
               <form className="hidden lg:block">
                 <h3 className="sr-only">Categories</h3>

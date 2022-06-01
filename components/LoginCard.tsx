@@ -11,7 +11,7 @@ export default function LoginCard() {
           <div className="mt-1 grid grid-cols-2 gap-3">
             <div>
               <button
-                onClick={() => signIn('google', { callbackUrl: '/feed' })}
+                onClick={() => signIn('google', { callbackUrl: '/browse' })}
                 className="inline-flex w-full justify-center rounded-md border border-stone-900 bg-white py-2 px-4 text-sm font-medium text-stone-900 shadow-sm hover:bg-gray-50"
               >
                 <span className="sr-only">Sign in with Google</span>

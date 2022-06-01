@@ -9,17 +9,18 @@ import {
   QuestionMarkCircleIcon,
 } from '@heroicons/react/outline'
 import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
-import { signOut, useSession } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP']
 const navigation = {
   categories: [
     {
       name: 'Browse Offerings',
+      link: '/offerings',
       featured: [
         {
           name: 'New Offerings',
-          href: '#',
+          href: '/offerings',
           imageSrc:
             'https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg',
           imageAlt:
@@ -52,9 +53,7 @@ const navigation = {
       ],
     },
   ],
-  pages: [
-    { name: 'Raise', href: '/raise-funds' },
-  ],
+  pages: [{ name: 'Raise', href: '/raise-funds' }],
 }
 
 function classNames(...classes: string[]) {
@@ -383,13 +382,13 @@ export default function Header() {
                   </button>
 
                   {/* Search */}
-                  <a
+                  {/* <a
                     href="#"
                     className="ml-2 p-2 text-gray-400 hover:text-gray-500"
                   >
                     <span className="sr-only">Search</span>
                     <SearchIcon className="h-6 w-6" aria-hidden="true" />
-                  </a>
+                  </a> */}
                 </div>
 
                 {/* Logo (lg-) */}
@@ -403,31 +402,41 @@ export default function Header() {
                 </a>
 
                 <div className="flex flex-1 items-center justify-end">
-                  {session && (
+                  {session ? (
                     <button
                       onClick={() => signOut()}
                       className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:ml-8 lg:block"
                     >
                       Sign Out
                     </button>
+                  ) : (
+                    <button
+                      onClick={() => signIn('google', { callbackUrl: '/offerings' })}
+                      className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:ml-8 lg:block"
+                    >
+                      Sign In
+                    </button>
                   )}
 
-                  <a
+                  {/* <a
                     href="#"
                     className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:ml-8 lg:block"
                   >
                     Search
-                  </a>
+                  </a> */}
 
-                  <div className="flex items-center lg:ml-8">
-                    <span className="relative inline-block">
-                      <img
-                        className="h-12 w-12 rounded-full"
-src="/dylan.png"                        alt=""
-                      />
-                      <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-cr-secondary ring-2 ring-white" />
-                    </span>
-                  </div>
+                  {session && (
+                    <div className="flex items-center lg:ml-8">
+                      <span className="relative inline-block">
+                        <img
+                          className="h-12 w-12 rounded-full"
+                          src={session?.user?.image || "/default_user.png"}
+                          alt=""
+                        />
+                        <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-cr-secondary ring-2 ring-white" />
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
