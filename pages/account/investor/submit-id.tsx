@@ -1,7 +1,7 @@
 import React from 'react'
 import { CheckIcon } from '@heroicons/react/solid'
 import Header from '../../../components/Header'
-import AccountType from '../components/AccountType'
+import AccountType from '../../../components/account/AccountType'
 
 const steps = [
   {

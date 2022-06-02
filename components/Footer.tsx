@@ -2,15 +2,13 @@ import React from 'react'
 
 const footerNavigation = {
   raises: [
-    { name: 'Bags', href: '#' },
-    { name: 'Tees', href: '#' },
-    { name: 'Objects', href: '#' },
-    { name: 'Home Goods', href: '#' },
-    { name: 'Accessories', href: '#' },
+    { name: 'Offerings', href: '/offerings' },
+    { name: 'Clubs', href: '/social' },
+    { name: 'Organizations', href: '/social' },
+    { name: 'Blog', href: '/blog' },
   ],
   company: [
     { name: 'Who we are', href: '#' },
-    { name: 'Sustainability', href: '#' },
     { name: 'Press', href: '#' },
     { name: 'Careers', href: '#' },
     { name: 'Terms & Conditions', href: '#' },
@@ -18,16 +16,11 @@ const footerNavigation = {
   ],
   customerService: [
     { name: 'Contact', href: '#' },
-    { name: 'Shipping', href: '#' },
-    { name: 'Returns', href: '#' },
-    { name: 'Warranty', href: '#' },
-    { name: 'Secure Payments', href: '#' },
     { name: 'FAQ', href: '#' },
-    { name: 'Find a store', href: '#' },
   ],
 }
 
-export function Footer() {
+export default function Footer() {
   return (
     <footer aria-labelledby="footer-heading" className="bg-gray-50">
       <h2 id="footer-heading" className="sr-only">
@@ -108,7 +101,7 @@ export function Footer() {
                 Sign up for our newsletter
               </h3>
               <p className="mt-6 text-sm text-stone-900">
-                The latest deals and savings, sent to your inbox weekly.
+                The latest offerings and updates, sent to your inbox weekly.
               </p>
               <form className="mt-2 flex sm:max-w-md">
                 <label htmlFor="email-address" className="sr-only">

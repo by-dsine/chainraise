@@ -47,7 +47,7 @@ export default function Example() {
 
   return (
     <>
-      <RadioGroup value={selected} onChange={setSelected}>
+      <RadioGroup value={selected} onChange={setSelected} className="max-w-2xl mt-4">
         <RadioGroup.Label className="sr-only">Privacy setting</RadioGroup.Label>
         <div className="-space-y-px rounded-md bg-white">
           {settings.map((setting, settingIdx) => (
@@ -108,7 +108,7 @@ export default function Example() {
         </div>
       </RadioGroup>
       {selected?.name == 'Entity' && (
-        <div className="relative mt-3 rounded-md border border-gray-300 px-3 py-2 shadow-sm focus-within:border-indigo-600 focus-within:ring-1 focus-within:ring-indigo-600">
+        <div className=" max-w-xl relative mt-3 rounded-md border border-gray-300 px-3 py-2 shadow-sm focus-within:border-indigo-600 focus-within:ring-1 focus-within:ring-indigo-600">
           <label
             htmlFor="name"
             className="absolute -top-2 left-2 -mt-px inline-block bg-white px-1 text-xs font-medium text-gray-900"
@@ -124,13 +124,22 @@ export default function Example() {
           />
         </div>
       )}
-        <button
-          type="button"
-          className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 mt-2 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        >
-          {' '}
-          Next
-        </button>
+         <div className="pt-5">
+          <div className="flex justify-end">
+            <button
+              type="button"
+              className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Next
+            </button>
+          </div>
+        </div>
     </>
   )
 }
