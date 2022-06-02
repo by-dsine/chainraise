@@ -16,65 +16,140 @@
   ```
 */
 import { Fragment } from 'react'
-import { StarIcon } from '@heroicons/react/solid'
+import {
+  DotsVerticalIcon,
+  EyeIcon,
+  MailIcon,
+  StarIcon,
+} from '@heroicons/react/solid'
 import { Tab } from '@headlessui/react'
 import Header from '../../components/Header'
 import Link from 'next/link'
+import { DownloadIcon, QuestionMarkCircleIcon } from '@heroicons/react/outline'
 
 const product = {
   name: 'Multivest',
   version: { name: '1.0', date: 'June 5, 2021', datetime: '2021-06-05' },
   price: '$220',
   description:
-    'Pursue compelling returns with this creative real estate fund. The fund\'s capital will be used to develop, scale, and expand shorter than typical investment stategies, develop and market residential and commercial projects.',
+    "Pursue compelling returns with this creative real estate fund. The fund's capital will be used to develop, scale, and expand shorter than typical investment stategies, develop and market residential and commercial projects.",
+  pitch: {
+    disclosure:
+      'Sometimes it may not seem it is what it be but it is what it do.',
+    summary:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    sections: [
+      {
+        title: 'Problem',
+        subtitle: '',
+        resources: [
+          {
+            src: 'https://images.unsplash.com/photo-1654067425069-7c14c7bf1fd6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxM3x8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60',
+            alt: 'lorem ipsum',
+            type: 'picture',
+          },
+          {
+            src: 'https://images.unsplash.com/photo-1654067425069-7c14c7bf1fd6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxM3x8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60',
+            alt: 'lorem ipsum',
+            type: 'picture',
+          },
+        ],
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vestibulum sed arcu non odio. Sed viverra ipsum nunc aliquet bibendum enim facilisis gravida. Leo a diam sollicitudin tempor id eu nisl nunc. Dictumst quisque sagittis purus sit amet. Vestibulum mattis ullamcorper velit sed. Consectetur a erat nam at lectus urna duis convallis convallis. Eu augue ut lectus arcu bibendum at varius vel. Lobortis elementum nibh tellus molestie nunc non. Laoreet non curabitur gravida arcu. Viverra accumsan in nisl nisi scelerisque. Pellentesque pulvinar pellentesque habitant morbi tristique senectus et netus et. In eu mi bibendum neque egestas congue quisque. Vitae et leo duis ut diam quam nulla porttitor massa. Vitae purus faucibus ornare suspendisse sed nisi lacus. Nullam non nisi est sit amet facilisis magna etiam tempor.',
+      },
+      {
+        title: 'Solution',
+        subtitle: '',
+        resources: [
+          {
+            src: 'https://images.unsplash.com/photo-1654067425069-7c14c7bf1fd6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxM3x8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60',
+            alt: 'lorem ipsum',
+            type: 'picture',
+          },
+          {
+            src: 'https://images.unsplash.com/photo-1654067425069-7c14c7bf1fd6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxM3x8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60',
+            alt: 'lorem ipsum',
+            type: 'picture',
+          },
+        ],
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vestibulum sed arcu non odio. Sed viverra ipsum nunc aliquet bibendum enim facilisis gravida. Leo a diam sollicitudin tempor id eu nisl nunc. Dictumst quisque sagittis purus sit amet. Vestibulum mattis ullamcorper velit sed. Consectetur a erat nam at lectus urna duis convallis convallis. Eu augue ut lectus arcu bibendum at varius vel. Lobortis elementum nibh tellus molestie nunc non. Laoreet non curabitur gravida arcu. Viverra accumsan in nisl nisi scelerisque. Pellentesque pulvinar pellentesque habitant morbi tristique senectus et netus et. In eu mi bibendum neque egestas congue quisque. Vitae et leo duis ut diam quam nulla porttitor massa. Vitae purus faucibus ornare suspendisse sed nisi lacus. Nullam non nisi est sit amet facilisis magna etiam tempor.',
+      },
+      {
+        title: 'Competition',
+        subtitle: "Check out how we're crushing the competition!",
+        resources: [
+          {
+            src: 'https://images.unsplash.com/photo-1654067425069-7c14c7bf1fd6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxM3x8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60',
+            alt: 'lorem ipsum',
+            type: 'picture',
+          },
+          {
+            src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            alt: 'lorem ipsum',
+            type: 'youtube',
+          },
+        ],
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vestibulum sed arcu non odio. Sed viverra ipsum nunc aliquet bibendum enim facilisis gravida. Leo a diam sollicitudin tempor id eu nisl nunc. Dictumst quisque sagittis purus sit amet. Vestibulum mattis ullamcorper velit sed. Consectetur a erat nam at lectus urna duis convallis convallis. Eu augue ut lectus arcu bibendum at varius vel. Lobortis elementum nibh tellus molestie nunc non. Laoreet non curabitur gravida arcu. Viverra accumsan in nisl nisi scelerisque. Pellentesque pulvinar pellentesque habitant morbi tristique senectus et netus et. In eu mi bibendum neque egestas congue quisque. Vitae et leo duis ut diam quam nulla porttitor massa. Vitae purus faucibus ornare suspendisse sed nisi lacus. Nullam non nisi est sit amet facilisis magna etiam tempor.',
+      },
+    ],
+  },
   highlights: [
     'Team compensation is highly dependent on investor profits',
     'High potential given strong growth in the real estate market',
     'Industry-leading portal to track investments',
   ],
-  imageSrc:
-    '/multivest_header.jpg',
-  imageAlt:
-    'Multivest Header',
+  imageSrc: '/multivest_header.jpg',
+  imageAlt: 'Multivest Header',
 }
+
+const discussionPosts = [
+  {
+    id: 1,
+    author: 'dilly',
+    avatarSrc: '/dylan.png',
+    body: 'Here is a question for you! What it do?',
+    datetime: '2022-06-01 07:37:16-08',
+    date: 'June 1, 2022',
+    comments: [
+      {
+        id: 2,
+        author: 'corey',
+        avatarSrc: '/corey.png',
+        body: 'Here is an answer for you! It does what it is, ya feel?',
+        datetime: '2022-06-01 07:37:16-08',
+        date: 'June 1, 2022',
+      },
+    ],
+  },
+  {
+    id: 2,
+    author: 'jake',
+    avatarSrc: '/jake.png',
+    body: "This isn't really a question. I just want to be seen.",
+    datetime: '2022-06-01 07:37:16-08',
+    date: 'June 1, 2022',
+    comments: [
+      {
+        id: 2,
+        author: 'corey',
+        avatarSrc: '/corey.png',
+        body: 'Here is an answer for you! It does what it is, ya feel?',
+        datetime: '2022-06-01 07:37:16-08',
+        date: 'June 1, 2022',
+      },
+    ],
+  },
+]
 
 const features = [
-    { name: 'Target Raise', description: '$4.5M' },
-    { name: 'Minimum Investment', description: '$1000' },
-    { name: 'Price per unit', description: '$500' },
-    { name: 'Offering Type', description: 'Reg CF' },
- ]
+  { name: 'Target Raise', description: '$4.5M' },
+  { name: 'Minimum Investment', description: '$1000' },
+  { name: 'Price per unit', description: '$500' },
+  { name: 'Offering Type', description: 'Reg CF' },
+]
 
-const reviews = {
-  average: 4,
-  featured: [
-    {
-      id: 1,
-      rating: 5,
-      content: `
-        <p>This icon pack is just what I need for my latest project. There's an icon for just about anything I could ever need. Love the playful look!</p>
-      `,
-      date: 'July 16, 2021',
-      datetime: '2021-07-16',
-      author: 'Emily Selman',
-      avatarSrc:
-        'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
-    },
-    {
-      id: 2,
-      rating: 5,
-      content: `
-        <p>Blown away by how polished this icon pack is. Everything looks so consistent and each SVG is optimized out of the box so I can use it directly with confidence. It would take me several hours to create a single icon this good, so it's a steal at this price.</p>
-      `,
-      date: 'July 12, 2021',
-      datetime: '2021-07-12',
-      author: 'Hector Gibbons',
-      avatarSrc:
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
-    },
-    // More reviews...
-  ],
-}
 const faqs = [
   {
     question: 'What format are these icons?',
@@ -88,35 +163,42 @@ const faqs = [
   },
   // More FAQs...
 ]
-const license = {
-  href: '#',
-  summary:
-    'For personal and professional use. You cannot resell or redistribute these icons in their original or modified state.',
-  content: `
-    <h4>Overview</h4>
-    
-    <p>For personal and professional use. You cannot resell or redistribute these icons in their original or modified state.</p>
-    
-    <ul role="list">
-    <li>You\'re allowed to use the icons in unlimited projects.</li>
-    <li>Attribution is not required to use the icons.</li>
-    </ul>
-    
-    <h4>What you can do with it</h4>
-    
-    <ul role="list">
-    <li>Use them freely in your personal and professional work.</li>
-    <li>Make them your own. Change the colors to suit your project or brand.</li>
-    </ul>
-    
-    <h4>What you can\'t do with it</h4>
-    
-    <ul role="list">
-    <li>Don\'t be greedy. Selling or distributing these icons in their original or modified state is prohibited.</li>
-    <li>Don\'t be evil. These icons cannot be used on websites or applications that promote illegal or immoral beliefs or activities.</li>
-    </ul>
-  `,
-}
+
+const announcements = [
+  {
+    id: 1,
+    title: 'Office closed on July 2nd',
+    preview:
+      'Cum qui rem deleniti. Suscipit in dolor veritatis sequi aut. Vero ut earum quis deleniti. Ut a sunt eum cum ut repudiandae possimus. Nihil ex tempora neque cum consectetur dolores.',
+  },
+  {
+    id: 2,
+    title: 'New password policy',
+    preview:
+      'Alias inventore ut autem optio voluptas et repellendus. Facere totam quaerat quam quo laudantium cumque eaque excepturi vel. Accusamus maxime ipsam reprehenderit rerum id repellendus rerum. Culpa cum vel natus. Est sit autem mollitia.',
+  },
+  {
+    id: 3,
+    title: 'Office closed on July 2nd',
+    preview:
+      'Tenetur libero voluptatem rerum occaecati qui est molestiae exercitationem. Voluptate quisquam iure assumenda consequatur ex et recusandae. Alias consectetur voluptatibus. Accusamus a ab dicta et. Consequatur quis dignissimos voluptatem nisi.',
+  },
+]
+
+const documents = [
+  { title: 'Form C', href: '#', bgColor: 'bg-pink-600' },
+  {
+    title: 'Notice of Qualification',
+    href: '#',
+    bgColor: 'bg-purple-600',
+  },
+  { title: "Your Mom's Address", href: '#', bgColor: 'bg-yellow-500' },
+  {
+    title: 'Offering Statement',
+    href: '#',
+    bgColor: 'bg-green-500',
+  },
+]
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -141,7 +223,7 @@ export default function Example() {
               </div>
             </div>
 
-            {/* Product details */}
+            {/* Product summary */}
             <div className="mx-auto mt-6 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none">
               <div className="flex flex-col-reverse">
                 <div className="mt-4">
@@ -152,26 +234,6 @@ export default function Example() {
                   <h2 id="information-heading" className="sr-only">
                     Product information
                   </h2>
-                  
-                </div>
-
-                <div>
-                  <h3 className="sr-only">Reviews</h3>
-                  <div className="flex items-center">
-                    {[0, 1, 2, 3, 4].map((rating) => (
-                      <StarIcon
-                        key={rating}
-                        className={classNames(
-                          reviews.average > rating
-                            ? 'text-yellow-400'
-                            : 'text-gray-300',
-                          'h-5 w-5 flex-shrink-0'
-                        )}
-                        aria-hidden="true"
-                      />
-                    ))}
-                  </div>
-                  <p className="sr-only">{reviews.average} out of 5 stars</p>
                 </div>
               </div>
 
@@ -185,7 +247,7 @@ export default function Example() {
                     <dt className="font-medium text-gray-900">
                       {feature.name}
                     </dt>
-                    <dd className="mt-2 text-l text-gray-500">
+                    <dd className="text-l mt-2 text-gray-500">
                       {feature.description}
                     </dd>
                   </div>
@@ -193,13 +255,13 @@ export default function Example() {
               </dl>
 
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4">
-                <Link href="/checkout" >
-                <button
-                  type="button"
-                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-                >
-                  Invest
-                </button>
+                <Link href="/checkout">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  >
+                    Invest
+                  </button>
                 </Link>
               </div>
 
@@ -214,19 +276,6 @@ export default function Example() {
                     ))}
                   </ul>
                 </div>
-              </div>
-
-              <div className="mt-10 border-t border-gray-200 pt-10">
-                <h3 className="text-sm font-medium text-gray-900">License</h3>
-                <p className="mt-4 text-sm text-gray-500">
-                  {license.summary}{' '}
-                  <a
-                    href={license.href}
-                    className="font-medium text-indigo-600 hover:text-indigo-500"
-                  >
-                    Read full license
-                  </a>
-                </p>
               </div>
 
               <div className="mt-10 border-t border-gray-200 pt-10">
@@ -292,6 +341,7 @@ export default function Example() {
               </div>
             </div>
 
+            {/* Product details */}
             <div className="mx-auto mt-16 w-full max-w-2xl lg:col-span-4 lg:mt-0 lg:max-w-none">
               <Tab.Group as="div">
                 <div className="border-b border-gray-200">
@@ -347,92 +397,268 @@ export default function Example() {
                   </Tab.List>
                 </div>
                 <Tab.Panels as={Fragment}>
+                  {/* Pitch */}
                   <Tab.Panel className="-mb-10">
-                    <h3 className="sr-only">Customer Reviews</h3>
+                    <h3 className="sr-only">Pitch</h3>
 
-                    {reviews.featured.map((review, reviewIdx) => (
-                      <div
-                        key={review.id}
-                        className="flex space-x-4 text-sm text-gray-500"
-                      >
-                        <div className="flex-none py-10">
-                          <img
-                            src={review.avatarSrc}
-                            alt=""
-                            className="h-10 w-10 rounded-full bg-gray-100"
-                          />
-                        </div>
-                        <div
-                          className={classNames(
-                            reviewIdx === 0 ? '' : 'border-t border-gray-200',
-                            'py-10'
-                          )}
-                        >
-                          <h3 className="font-medium text-gray-900">
-                            {review.author}
-                          </h3>
-                          <p>
-                            <time dateTime={review.datetime}>
-                              {review.date}
-                            </time>
-                          </p>
+                    <div className="mt-10">
+                      <div className="prose prose-sm mt-4 text-gray-500">
+                        {product.pitch.summary}
+                      </div>
+                    </div>
 
-                          <div className="mt-4 flex items-center">
-                            {[0, 1, 2, 3, 4].map((rating) => (
-                              <StarIcon
-                                key={rating}
-                                className={classNames(
-                                  review.rating > rating
-                                    ? 'text-yellow-400'
-                                    : 'text-gray-300',
-                                  'h-5 w-5 flex-shrink-0'
-                                )}
-                                aria-hidden="true"
+                    {product.pitch.sections.map((section) => (
+                      <div className="mt-2 ">
+                        <h3 className="text-2xl font-semibold">
+                          {section.title}
+                        </h3>
+                        <h4 className="mt-2 text-lg font-normal">
+                          {section.subtitle}
+                        </h4>
+                        {section.resources.map((resource) => (
+                          <div className="aspect-16 aspect-h-9 my-2 rounded-lg">
+                            {resource.type === 'picture' ? (
+                              <img
+                                className="h-full w-full rounded-lg"
+                                src={resource.src}
+                                alt={resource.alt}
                               />
-                            ))}
+                            ) : resource.type === 'youtube' ? (
+                              <div className="h-full w-full">
+                                <iframe
+                                  className="h-96 w-full rounded-lg"
+                                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                                  title="YouTube video player"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                ></iframe>
+                              </div>
+                            ) : null}
                           </div>
-                          <p className="sr-only">
-                            {review.rating} out of 5 stars
-                          </p>
-
-                          <div
-                            className="prose prose-sm mt-4 max-w-none text-gray-500"
-                            dangerouslySetInnerHTML={{ __html: review.content }}
-                          />
-                        </div>
+                        ))}
+                        <h4 className="mx-auto mt-2 mb-4 w-4/5 text-lg font-normal ">
+                          {section.description}
+                        </h4>
                       </div>
                     ))}
                   </Tab.Panel>
 
+                  {/* Discussion */}
                   <Tab.Panel className="text-sm text-gray-500">
-                    <h3 className="sr-only">Frequently Asked Questions</h3>
+                    <h3 className="sr-only">Discussion</h3>
+                    <div className="mt-4 flex items-start space-x-4">
+                      <div className="flex-shrink-0">
+                        <img
+                          className="inline-block h-10 w-10 rounded-full"
+                          src="/dylan.png"
+                          alt=""
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <form action="#" className="relative">
+                          <div className="overflow-hidden rounded-lg border border-gray-300 shadow-sm focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
+                            <label htmlFor="comment" className="sr-only">
+                              Add your comment
+                            </label>
+                            <textarea
+                              rows={3}
+                              name="comment"
+                              id="comment"
+                              className="block w-full resize-none border-0 py-3 focus:ring-0 sm:text-sm"
+                              placeholder="Add your comment..."
+                              defaultValue={''}
+                            />
 
-                    <dl>
-                      {faqs.map((faq) => (
-                        <Fragment key={faq.question}>
-                          <dt className="mt-10 font-medium text-gray-900">
-                            {faq.question}
-                          </dt>
-                          <dd className="prose prose-sm mt-2 max-w-none text-gray-500">
-                            <p>{faq.answer}</p>
-                          </dd>
-                        </Fragment>
-                      ))}
-                    </dl>
+                            {/* Spacer element to match the height of the toolbar */}
+                            <div className="py-2" aria-hidden="true">
+                              {/* Matches height of button in toolbar (1px border + 36px content height) */}
+                              <div className="py-px">
+                                <div className="h-9" />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="absolute inset-x-0 bottom-0 flex justify-between py-2 pl-3 pr-2">
+                            <div className="flex items-center space-x-5"></div>
+                            <div className="flex-shrink-0">
+                              <button
+                                type="submit"
+                                className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                              >
+                                Post
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                    {discussionPosts.map((post, postIdx) => (
+                      <>
+                        <div
+                          key={post.id}
+                          className="flex space-x-4 text-sm text-gray-500"
+                        >
+                          <div className="flex-none py-10">
+                            <img
+                              src={post.avatarSrc}
+                              alt=""
+                              className="h-12 w-12 rounded-full bg-gray-100"
+                            />
+                          </div>
+                          <div
+                            className={classNames(
+                              postIdx === 0 ? '' : 'border-t border-gray-200',
+                              'flex-1 py-10'
+                            )}
+                          >
+                            <h3 className="font-medium text-gray-900">
+                              {post.author}
+                            </h3>
+                            <p>
+                              <time dateTime={post.datetime}>{post.date}</time>
+                            </p>
+
+                            <div className="prose prose-sm mt-4 max-w-none text-gray-500">
+                              {post.body}
+                            </div>
+                          </div>
+                        </div>
+                        {post.comments.map((comment, commentIdx) => (
+                          <div
+                            key={comment.id}
+                            className="flex space-x-4 pl-12 text-sm text-gray-500"
+                          >
+                            <div className="flex-none py-10">
+                              <img
+                                src={comment.avatarSrc}
+                                alt=""
+                                className="h-12 w-12 rounded-full bg-gray-100"
+                              />
+                            </div>
+                            <div
+                              className={classNames(
+                                commentIdx === 0
+                                  ? ''
+                                  : 'border-t border-gray-200',
+                                'flex-1 py-10'
+                              )}
+                            >
+                              <h3 className="font-medium text-gray-900">
+                                {comment.author}
+                              </h3>
+                              <p>
+                                <time dateTime={comment.datetime}>
+                                  {comment.date}
+                                </time>
+                              </p>
+
+                              <div className="prose prose-sm mt-4 max-w-none text-gray-500">
+                                {comment.body}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    ))}
                   </Tab.Panel>
 
+                  {/* Updates */}
                   <Tab.Panel className="pt-10">
-                    <h3 className="sr-only">License</h3>
+                    <h3 className="sr-only">Updates</h3>
+                    <div>
+                      <div className="mt-6 flow-root">
+                        <ul
+                          role="list"
+                          className="-my-5 divide-y divide-gray-200"
+                        >
+                          {announcements.map((announcement) => (
+                            <li key={announcement.id} className="py-5">
+                              <div className="relative focus-within:ring-2 focus-within:ring-indigo-500">
+                                <h3 className="text-sm font-semibold text-gray-800">
+                                  <a
+                                    href="#"
+                                    className="hover:underline focus:outline-none"
+                                  >
+                                    {/* Extend touch target to entire panel */}
+                                    <span
+                                      className="absolute inset-0"
+                                      aria-hidden="true"
+                                    />
+                                    {announcement.title}
+                                  </a>
+                                </h3>
+                                <p className="line-clamp-2 mt-1 text-sm text-gray-600">
+                                  {announcement.preview}
+                                </p>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div className="mt-6">
+                        <a
+                          href="#"
+                          className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+                        >
+                          View all
+                        </a>
+                      </div>
+                    </div>
 
-                    <div
-                      className="prose prose-sm max-w-none text-gray-500"
-                      dangerouslySetInnerHTML={{ __html: license.content }}
-                    />
+                    <div className="prose prose-sm max-w-none text-gray-500" />
                   </Tab.Panel>
 
+                  {/* Documents */}
                   <Tab.Panel className="pt-10">
                     <h3 className="sr-only">Documents</h3>
-
+                    <ul
+                      role="list"
+                      className="grid grid-cols-1 gap-6 sm:grid-cols-2"
+                    >
+                      {documents.map((document) => (
+                        <li
+                          key={document.title}
+                          className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow"
+                        >
+                          <div className="flex w-full items-center justify-between space-x-6 p-6">
+                            <div className="flex-1 truncate">
+                              <div className="flex items-center space-x-3">
+                                <h3 className="truncate text-sm font-medium text-gray-900">
+                                  {document.title}
+                                </h3>
+                              </div>
+                            </div>
+                          </div>
+                          <div>
+                            <div className="-mt-px flex divide-x divide-gray-200">
+                              <div className="flex w-0 flex-1">
+                                <a
+                                  href="#"
+                                  className="relative -mr-px inline-flex w-0 flex-1 items-center justify-center rounded-bl-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500"
+                                >
+                                  <DownloadIcon
+                                    className="h-5 w-5 text-gray-400"
+                                    aria-hidden="true"
+                                  />
+                                  <span className="ml-3">Download</span>
+                                </a>
+                              </div>
+                              <div className="-ml-px flex w-0 flex-1">
+                                <a
+                                  href="#"
+                                  className="relative inline-flex w-0 flex-1 items-center justify-center rounded-br-lg border border-transparent py-4 text-sm font-medium text-gray-700 hover:text-gray-500"
+                                >
+                                  <EyeIcon
+                                    className="h-5 w-5 text-gray-400"
+                                    aria-hidden="true"
+                                  />
+                                  <span className="ml-3">View</span>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
                   </Tab.Panel>
                 </Tab.Panels>
               </Tab.Group>
