@@ -35,15 +35,15 @@ model Session {
 }
 
 model User {
-  id            String        @id @default(cuid())
+  id            String       @id @default(cuid())
   profileId     Int?
   name          String?
-  email         String?       @unique
+  email         String?      @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
-  UserProfile   UserProfile[]
+  userProfile   UserProfile?
 }
 
 model VerificationToken {
@@ -56,7 +56,7 @@ model VerificationToken {
 
 model UserProfile {
   id     String @id @default(cuid())
-  userId String
+  userId String @unique
 
   firstName String?
   lastName  String?
@@ -66,9 +66,9 @@ model UserProfile {
   city      String?
   state     String?
   zipCode   String?
-  phone String?
+  phone     String?
 
-  user                        User                              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                        User?                             @relation(fields: [userId], references: [id])
   followedBy                  Follows[]                         @relation("following")
   following                   Follows[]                         @relation("follower")
   userPosts                   UserPost[]
@@ -81,6 +81,23 @@ model UserProfile {
   offeringPostComments        OfferingUserPostComment[]
   offeringPostReactions       OfferingUserPostReaction[]
   offeringPostCommentReaction OfferingUserPostCommentReaction[]
+  PlatformRole                PlatformRole[]
+}
+
+model PlatformRole {
+  id     String         @id @default(cuid())
+  userId String
+  user   UserProfile    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleId Int
+  role   RolePermission @relation(fields: [roleId], references: [id], onDelete: Cascade)
+}
+
+model RolePermission {
+  id         Int            @id @default(autoincrement())
+  name       String
+  isAdmin    Boolean
+  canApprove Boolean
+  roles      PlatformRole[]
 }
 
 model Follows {
@@ -149,20 +166,21 @@ model Organization {
   offerings   Offering[]
 }
 
-model Role {
+model OrganizationRole {
   id          Int                      @id @default(autoincrement())
   name        String
+  canApprove  Boolean
   memberships OrganizationMembership[]
 }
 
 model OrganizationMembership {
-  id             String       @id @default(cuid())
+  id             String           @id @default(cuid())
   organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   userId         String
-  user           UserProfile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user           UserProfile      @relation(fields: [userId], references: [id], onDelete: Cascade)
   roleId         Int
-  role           Role         @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  role           OrganizationRole @relation(fields: [roleId], references: [id], onDelete: Cascade)
 }
 
 model Offering {

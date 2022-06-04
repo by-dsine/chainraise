@@ -428,11 +428,14 @@ export default function Header() {
                   {session && (
                     <div className="flex items-center lg:ml-8">
                       <span className="relative inline-block">
+                        <Link href="/account">
                         <img
                           className="h-12 w-12 rounded-full"
                           src={session?.user?.image || "/default_user.png"}
                           alt=""
                         />
+                        </Link>
+                        
                         <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-cr-secondary ring-2 ring-white" />
                       </span>
                     </div>
