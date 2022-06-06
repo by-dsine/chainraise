@@ -8,9 +8,11 @@ import {
 import Header from '../../components/Header'
 import { GetStaticProps } from 'next'
 import { sanityClient } from '../../sanity'
-import { useSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import { IPersonalInformationForm } from '../../types/typings'
 import { useForm } from 'react-hook-form'
+import useOrCreateUserProfile from '../../hooks/useOrCreateUserProfile'
+import { UserProfile } from '@prisma/client'
 
 const navigation = [
   { name: 'Account', href: '#', icon: UserCircleIcon, current: true },
@@ -24,9 +26,8 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
-  const { data: session } = useSession()
-  console.log(session)
+export default function NewUser() {
+  const { userProfile, isLoading, isError} = useOrCreateUserProfile();
 
   const {
     control,
@@ -34,15 +35,6 @@ export default function Example() {
     handleSubmit,
     formState: { errors },
   } = useForm<IPersonalInformationForm>()
-
-  // const newUser = {
-  //   _id: session!.user.uid!,
-  //   _type: 'user',
-  // }
-
-  // sanityClient.createIfNotExists(newUser).then((res) => {
-  //   console.log(res)
-  // })
 
   return (
     <div className="relative overflow-hidden bg-white">

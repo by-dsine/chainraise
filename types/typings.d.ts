@@ -8,7 +8,7 @@ export type INewPostForm = {
 }
 
 export type IPersonalInformationForm = {
-    id: string
+    userId: string
     username: string
     bio?: string
     firstName?: string

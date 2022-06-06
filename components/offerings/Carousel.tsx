@@ -11,15 +11,24 @@ import 'pure-react-carousel/dist/react-carousel.es.css'
 export default function Carousel() {
   return (
     <CarouselProvider
-        className="bg-slate-300 aspect-video"
+      className="aspect-video bg-slate-300"
       naturalSlideWidth={100}
       naturalSlideHeight={125}
       totalSlides={3}
     >
       <Slider>
-        <Slide index={0}>I am the first Slide</Slide>
-        <Slide index={1}>I am the second Slide.</Slide>
-        <Slide index={2}>I am the third Slide.</Slide>
+        <Slide className="max-h-48" index={0}>
+          {' '}
+          <img className="max-h-48" src="/dylan.png" />
+        </Slide>
+        <Slide className="max-h-48" index={1}>
+          {' '}
+          <img className="max-h-48"  src="/corey.png" />
+        </Slide>
+        <Slide className="max-h-48" index={2}>
+          {' '}
+          <img  className="max-h-48" src="/jake.png" />
+        </Slide>
       </Slider>
       <ButtonBack>Back</ButtonBack>
       <ButtonNext>Next</ButtonNext>

@@ -9,8 +9,6 @@ const footerNavigation = {
   ],
   company: [
     { name: 'Who we are', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Careers', href: '#' },
     { name: 'Terms & Conditions', href: '#' },
     { name: 'Privacy', href: '#' },
   ],
@@ -32,7 +30,7 @@ export default function Footer() {
             {/* Image section */}
             <div className="col-span-1 md:col-span-2 lg:col-start-1 lg:row-start-1">
               <img
-                src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600"
+                src="/chainraise_logo.png"
                 alt=""
                 className="h-8 w-auto"
               />
