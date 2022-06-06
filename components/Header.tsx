@@ -151,12 +151,6 @@ export default function Header() {
                                 />
                                 {item.name}
                               </a>
-                              <p
-                                aria-hidden="true"
-                                className="mt-1 text-sm text-gray-500"
-                              >
-                                Shop now
-                              </p>
                             </div>
                           ))}
                         </div>
@@ -179,61 +173,37 @@ export default function Header() {
                 </div>
 
                 <div className="space-y-6 border-t border-gray-200 py-6 px-4">
-                  <div className="flow-root">
-                    <a
-                      href="#"
-                      className="-m-2 block p-2 font-medium text-gray-900"
-                    >
-                      Create an account
-                    </a>
-                  </div>
-                  <div className="flow-root">
-                    <a
-                      href="#"
-                      className="-m-2 block p-2 font-medium text-gray-900"
-                    >
-                      Sign in
-                    </a>
-                  </div>
-                </div>
-
-                <div className="space-y-6 border-t border-gray-200 py-6 px-4">
-                  {/* Currency selector */}
-                  <form>
-                    <div className="inline-block">
-                      <label htmlFor="mobile-currency" className="sr-only">
-                        Currency
-                      </label>
-                      <div className="group relative -ml-2 rounded-md border-transparent focus-within:ring-2 focus-within:ring-white">
-                        <select
-                          id="mobile-currency"
-                          name="currency"
-                          className="flex items-center rounded-md border-transparent bg-none py-0.5 pl-2 pr-5 text-sm font-medium text-gray-700 focus:border-transparent focus:outline-none focus:ring-0 group-hover:text-gray-800"
-                        >
-                          {currencies.map((currency) => (
-                            <option key={currency}>{currency}</option>
-                          ))}
-                        </select>
-                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center">
-                          <svg
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 20 20"
-                            className="h-5 w-5 text-gray-500"
-                          >
-                            <path
-                              stroke="currentColor"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="1.5"
-                              d="M6 8l4 4 4-4"
-                            />
-                          </svg>
-                        </div>
-                      </div>
+                              {session ? (
+                    <div className="flow-root">
+                      <button
+                        onClick={() => signOut()}
+                        className="-m-2 block p-2 font-medium text-gray-900"
+                      >
+                        Sign Out
+                      </button>
                     </div>
-                  </form>
+                  ) : (
+                    <>
+                      <div className="flow-root">
+                        <a
+                          href="#"
+                          className="-m-2 block p-2 font-medium text-gray-900"
+                        >
+                          Create an account
+                        </a>
+                      </div>
+                      <div className="flow-root">
+                        <button
+                          onClick={() =>
+                            signIn('google', { callbackUrl: '/offerings' })
+                          }
+                          className="-m-2 block p-2 font-medium text-gray-900"
+                        >
+                          Sign In
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
               </Dialog.Panel>
             </Transition.Child>
@@ -248,10 +218,10 @@ export default function Header() {
               <div className="flex h-16 items-center justify-between">
                 {/* Logo (lg+) */}
                 <div className="hidden lg:flex lg:flex-1 lg:items-center">
-                  <span className="sr-only">Workflow</span>
-                  <Link href="/" className="cursor-pointer">
+                  <span className="sr-only">ChainRaise</span>
+                  <Link href="/">
                     <img
-                      className="h-8 w-auto"
+                      className="h-8 w-auto cursor-pointer"
                       src="/chainraise_logo_black_text.png"
                       alt=""
                     />
@@ -392,11 +362,11 @@ export default function Header() {
                 </div>
 
                 {/* Logo (lg-) */}
-                <a href="#" className="lg:hidden">
+                <a href="/" className="lg:hidden">
                   <span className="sr-only">Workflow</span>
                   <img
-                    src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600"
-                    alt=""
+                    src="/chainraise_logo.png"
+                    alt="ChainRaise Logo"
                     className="h-8 w-auto"
                   />
                 </a>
@@ -411,7 +381,9 @@ export default function Header() {
                     </button>
                   ) : (
                     <button
-                      onClick={() => signIn('google', { callbackUrl: '/offerings' })}
+                      onClick={() =>
+                        signIn('google', { callbackUrl: '/offerings' })
+                      }
                       className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:ml-8 lg:block"
                     >
                       Sign In
@@ -429,13 +401,13 @@ export default function Header() {
                     <div className="flex items-center lg:ml-8">
                       <span className="relative inline-block">
                         <Link href="/account">
-                        <img
-                          className="h-12 w-12 rounded-full"
-                          src={session?.user?.image || "/default_user.png"}
-                          alt=""
-                        />
+                          <img
+                            className="h-12 w-12 cursor-pointer rounded-full"
+                            src={session?.user?.image || '/default_user.png'}
+                            alt=""
+                          />
                         </Link>
-                        
+
                         <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-cr-secondary ring-2 ring-white" />
                       </span>
                     </div>

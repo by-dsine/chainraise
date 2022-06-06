@@ -381,7 +381,7 @@ export default function Example() {
                   <div className="text-right sm:col-span-2">
                     <button
                       type="submit"
-                      className="bg-grape-600 hover:bg-grape-700 focus:ring-grape-500 inline-flex justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
+                      className="bg-cr-primary hover:bg-grape-700 focus:ring-grape-500 inline-flex justify-center rounded-md border border-transparent py-2 px-4 text-sm text-white font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
                     >
                       Submit
                     </button>
@@ -402,8 +402,8 @@ export default function Example() {
             <div className="space-y-8 xl:col-span-1">
               <img
                 className="h-10"
-                src="https://tailwindui.com/img/logos/workflow-mark.svg?color=gray&shade=400"
-                alt="Company name"
+                src="/chainraise_logo.png"
+                alt="ChainRaise Logo"
               />
               <p className="text-base text-gray-400">
                 Making the world a better place through constructing elegant

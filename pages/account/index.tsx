@@ -101,11 +101,6 @@ export default function Account() {
       })
   }
 
-  const [availableToHire, setAvailableToHire] = useState(true)
-  const [privateAccount, setPrivateAccount] = useState(false)
-  const [allowCommenting, setAllowCommenting] = useState(true)
-  const [allowMentions, setAllowMentions] = useState(true)
-
   return (
     <div>
       <Header />
