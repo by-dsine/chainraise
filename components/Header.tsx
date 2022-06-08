@@ -36,7 +36,7 @@ const navigation = {
         },
         {
           name: 'Organizations',
-          href: '#',
+          href: '/organizations',
           imageSrc:
             'https://tailwindui.com/img/ecommerce-images/mega-menu-category-03.jpg',
           imageAlt:
@@ -55,6 +55,11 @@ const navigation = {
   ],
   pages: [{ name: 'Raise', href: '/raise-funds' }],
 }
+
+const userNavigation = [
+  { name: 'Your Profile', href: '/profile' },
+  { name: 'Settings', href: '#' },
+]
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -173,15 +178,33 @@ export default function Header() {
                 </div>
 
                 <div className="space-y-6 border-t border-gray-200 py-6 px-4">
-                              {session ? (
-                    <div className="flow-root">
-                      <button
-                        onClick={() => signOut()}
-                        className="-m-2 block p-2 font-medium text-gray-900"
-                      >
-                        Sign Out
-                      </button>
-                    </div>
+                  {session ? (
+                    <>
+                      <div className="flow-root">
+                        <button
+                          onClick={() => signOut()}
+                          className="-m-2 block p-2 font-medium text-gray-900"
+                        >
+                          Your Profile
+                        </button>
+                      </div>
+                      <div className="flow-root">
+                        <button
+                          onClick={() => signOut()}
+                          className="-m-2 block p-2 font-medium text-gray-900"
+                        >
+                          Settings
+                        </button>
+                      </div>
+                      <div className="flow-root">
+                        <button
+                          onClick={() => signOut()}
+                          className="-m-2 block p-2 font-medium text-gray-900"
+                        >
+                          Sign Out
+                        </button>
+                      </div>
+                    </>
                   ) : (
                     <>
                       <div className="flow-root">
@@ -336,6 +359,21 @@ export default function Header() {
                           {page.name}
                         </a>
                       ))}
+
+                      {session && (
+                        <>
+                          <div className="my-auto h-8 border border-gray-300"></div>
+                          {userNavigation.map((page) => (
+                            <a
+                              key={page.name}
+                              href={page.href}
+                              className="flex items-center text-sm font-medium text-gray-700 hover:text-cr-secondary"
+                            >
+                              {page.name}
+                            </a>
+                          ))}
+                        </>
+                      )}
                     </div>
                   </Popover.Group>
                 </div>
@@ -350,15 +388,6 @@ export default function Header() {
                     <span className="sr-only">Open menu</span>
                     <MenuIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
-
-                  {/* Search */}
-                  {/* <a
-                    href="#"
-                    className="ml-2 p-2 text-gray-400 hover:text-gray-500"
-                  >
-                    <span className="sr-only">Search</span>
-                    <SearchIcon className="h-6 w-6" aria-hidden="true" />
-                  </a> */}
                 </div>
 
                 {/* Logo (lg-) */}
@@ -389,13 +418,6 @@ export default function Header() {
                       Sign In
                     </button>
                   )}
-
-                  {/* <a
-                    href="#"
-                    className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:ml-8 lg:block"
-                  >
-                    Search
-                  </a> */}
 
                   {session && (
                     <div className="flex items-center lg:ml-8">
