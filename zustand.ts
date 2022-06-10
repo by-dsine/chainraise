@@ -9,11 +9,8 @@ interface investorFormStore {
   oid: string
   setOid: (oid: string) => void
 
-  dollarAmount: number
-  setDollarAmount: (dollarAmount: number) => void
-
-  centAmount: number
-  setCentAmount: (centAmount: number) => void
+  investmentAmount: number
+  setInvestmentAmount: (investmentAmount: number) => void
 
   // step 1
   accountType: string // can only be entity or individual
@@ -78,18 +75,11 @@ export const useInvestorForm = create<investorFormStore>((set) => ({
       oid: value,
     }))
   },
-  dollarAmount: 0,
-  setDollarAmount: (value) => {
+  investmentAmount: 0,
+  setInvestmentAmount: (value) => {
     set((state) => ({
       ...state,
-      dollarAmount: value,
-    }))
-  },
-  centAmount: 0,
-  setCentAmount: (value) => {
-    set((state) => ({
-      ...state,
-      centAmount: value,
+      investmentAmount: value,
     }))
   },
   accountType: '',

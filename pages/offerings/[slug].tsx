@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Disclosure, Menu, Popover, Transition } from '@headlessui/react'
 import {
   ChevronDownIcon,
@@ -12,6 +12,12 @@ import Header from '../../components/Header'
 import { Tab } from '@headlessui/react'
 import { DownloadIcon, QuestionMarkCircleIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
+import { useInvestorForm } from '../../zustand'
+import { useRouter } from 'next/router'
+import { InvestmentAmountForm } from '../../types/typings'
+import { useForm } from 'react-hook-form'
+import * as yup from "yup"
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const trendingRaises = [
   {
@@ -150,6 +156,7 @@ const product = {
   name: 'Multivest',
   version: { name: '1.0', date: 'June 5, 2021', datetime: '2021-06-05' },
   price: '$220',
+  minimum: 1000,
   description:
     "Pursue compelling returns with this creative real estate fund. The fund's capital will be used to develop, scale, and expand shorter than typical investment stategies, develop and market residential and commercial projects.",
   pitch: {
@@ -310,6 +317,37 @@ function classNames(...classes: string[]) {
 }
 
 export default function OfferingPage() {
+  const router = useRouter()
+  const {slug} = router.query
+  const investorForm = useInvestorForm();
+
+  useEffect(() => {
+    investorForm.setOid(slug as string)
+  }, [])
+
+  let schema = yup.object().shape({
+    investmentAmount: yup.number().moreThan(product.minimum - 1, "Your investment must satisfy the minimum.").required("Please enter an amount.")
+  })
+
+  const {
+    reset,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<InvestmentAmountForm>({
+    defaultValues: {
+      investmentAmount: 0
+    },
+    resolver: yupResolver(schema) 
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    if (!errors.investmentAmount) {
+      investorForm.setInvestmentAmount(data.investmentAmount)
+      router.push("/invest")
+    }
+  })
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
@@ -685,38 +723,40 @@ export default function OfferingPage() {
                   ))}
                 </dl>
 
-                <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-4 items-center">
+                <div className="mt-10">
+                  <form className='grid grid-cols-2 gap-x-6 gap-y-4 items-center' onSubmit={onSubmit}>
                   <div className='col-span-1'>
                     <div className="relative mt-1 rounded-md shadow-sm">
                       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                         <span className="text-gray-500 sm:text-sm">$</span>
                       </div>
                       <input
-                        type="text"
-                        name="price"
-                        id="price"
+                        type="number"
+                        {...register('investmentAmount')}
+                        id="investmentAmount"
                         className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         placeholder="0.00"
-                        aria-describedby="price-currency"
+                        aria-describedby="investment-amount"
+                        onChange={(event) => investorForm.setInvestmentAmount(event.target.valueAsNumber)}
                       />
                       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                         <span
                           className="text-gray-500 sm:text-sm"
-                          id="price-currency"
+                          id="investment-amount"
                         >
                           USD
                         </span>
                       </div>
                     </div>
                   </div>
-                  <Link href="/invest">
                     <button
-                      type="button"
+                      type="submit"
                       className="flex w-full items-center justify-center rounded-md border border-transparent bg-cr-primary py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-cr-primary focus:ring-offset-2 focus:ring-offset-gray-50"
                     >
                       Invest
                     </button>
-                  </Link>
+                    {errors?.investmentAmount && <p className='mx-auto col-span-2 text-sm text-red-600'>{errors.investmentAmount.message}</p>}
+                  </form>
                 </div>
 
                 <div className="mt-10 border-t border-gray-200 pt-10">

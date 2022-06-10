@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { CheckIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { Tab } from '@headlessui/react'
@@ -8,69 +8,26 @@ import PersonalInformation from '../../components/account/PersonalInformation'
 import AccreditationStatus from '../../components/account/AccreditationStatus'
 import SignDocuments from '../../components/account/SignDocuments'
 import { SubmitPayment } from '../../components/account/SubmitPayment'
-
-const steps = [
-  {
-    id: '01',
-    name: 'Account Type',
-    description: 'Who do you represent?',
-    href: '/account/investor',
-    status: 'complete',
-  },
-  {
-    id: '02',
-    name: 'Personal Information',
-    description: 'Who are you?',
-    href: '/account/investor/submit-id',
-    status: 'current',
-  },
-  {
-    id: '03',
-    name: 'Accreditation Status',
-    description: 'Submit documentation for your accreditation.',
-    href: '/account/investor/accreditation',
-    status: 'upcoming',
-  },
-  {
-    id: '04',
-    name: 'Sign and Submit',
-    description: 'Let me get yo autograph!',
-    href: '/account/investor/sign',
-    status: 'upcoming',
-  },
-  {
-    id: '05',
-    name: 'Submit Payment',
-    description: 'Make the magic happen.',
-    href: '/account/investor/payment',
-    status: 'upcoming',
-  },
-]
-
-const tabs = [
-  { id: 1, name: 'Account Type', href: '#', count: '52', current: false },
-  {
-    id: 2,
-    name: 'Personal Information',
-    href: '#',
-    count: '6',
-    current: false,
-  },
-  { id: 3, name: 'Accreditation Status', href: '#', count: '4', current: true },
-  { id: 4, name: 'Sign and Submit', href: '#', current: false },
-  { id: 5, name: 'Submit Payment', href: '#', current: false },
-]
+import { useInvestorForm } from '../../zustand'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Investor() {
+  const investorForm = useInvestorForm()
+
   return (
     <>
       <Header />
-      <div className="mx-auto pt-4 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <Tab.Group as="div">
+      <div className="mx-auto px-4 pt-4 sm:px-6 lg:max-w-7xl lg:px-8">
+        <Tab.Group
+          selectedIndex={investorForm.stepNumber}
+          onChange={(index) => {
+            investorForm.setStepNumber(index)
+            console.log(index)
+          }}
+        >
           <div className="border-b border-gray-200">
             <Tab.List className="-mb-px flex space-x-8">
               <Tab

@@ -7,7 +7,16 @@ export type INewPostForm = {
     mood?: string
 }
 
-export type IPersonalInformationForm = {
+export type InvestmentAmountForm = {
+    investmentAmount: number;
+}
+
+export type AccountTypeForm = {
+    accountType: string;
+    entityName: string;
+}
+
+export type PersonalInformationForm = {
     userId: string
     username: string
     bio?: string
@@ -18,6 +27,19 @@ export type IPersonalInformationForm = {
     state?: string
     zipCode?: string
     phone?: string
+}
+
+export type ContactInformationForm = {
+    firstName: string
+    middleName: string
+    lastName: string
+    email: string
+    phoneNumber: string
+    country: string
+    streetAddress: string
+    city: string
+    state: string
+    zipCode: string
 }
 
 // Sanity Types
