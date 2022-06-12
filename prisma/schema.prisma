@@ -81,7 +81,7 @@ model UserProfile {
   offeringPostComments        OfferingUserPostComment[]
   offeringPostReactions       OfferingUserPostReaction[]
   offeringPostCommentReaction OfferingUserPostCommentReaction[]
-  PlatformRole                PlatformRole[]
+  platformRoles               PlatformRole[]
 }
 
 model PlatformRole {

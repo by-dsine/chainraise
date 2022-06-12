@@ -18,15 +18,26 @@ export default async function getUserById(
       })
   }
 
-  const user = await prisma.user.findUnique({
+  const userProfile = await prisma.userProfile.findUnique({
     where: {
       id: uid,
+    },
+    include: {
+        platformRoles: {
+            include: {
+                role: {
+                    select: {
+                        isAdmin: true
+                    }
+                } 
+            }
+        }
     }
   })
 
-  if (!user) {
+  if (!userProfile) {
     return res.status(404).json({ message: 'User not found.' })
   }
 
-  return res.status(201).json(user)
+  return res.status(201).json(userProfile)
 }

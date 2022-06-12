@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../../lib/db'
-import { IPersonalInformationForm } from '../../../types/typings'
+import { PersonalInformationForm } from '../../../types/typings'
 
 export default async function getUserProfileByUserId(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const data: IPersonalInformationForm = JSON.parse(req.body)
+  const data: PersonalInformationForm = JSON.parse(req.body)
 
   if (!data.userId || data.userId === '') {
     return res.status(500).json({ message: 'No user id received.' })

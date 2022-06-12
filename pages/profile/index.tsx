@@ -38,19 +38,23 @@ import {
   QuestionMarkCircleIcon,
   ScaleIcon,
   ShieldCheckIcon,
-  UserGroupIcon,
   XIcon,
+  ExclamationCircleIcon,
+  ArrowRightIcon,
 } from '@heroicons/react/outline'
 import {
   CashIcon,
+  ChartBarIcon,
   CheckCircleIcon,
   ChevronDownIcon,
   ChevronRightIcon,
   OfficeBuildingIcon,
   SearchIcon,
+  UserGroupIcon,
 } from '@heroicons/react/solid'
 import Header from '../../components/Header'
 import useOrCreateUserProfile from '../../hooks/useOrCreateUserProfile'
+import Link from 'next/link'
 
 const navigation = [
   { name: 'Home', href: '#', icon: HomeIcon, current: true },
@@ -67,26 +71,50 @@ const secondaryNavigation = [
 ]
 const cards = [
   {
-    name: 'Supported Offerings',
+    name: 'Investments',
     href: '#',
     icon: CurrencyDollarIcon,
-    amount: '0',
+    amount: '1',
   },
-  { name: 'Saved Offerings', href: '#', icon: BookmarkIcon, amount: '0' },
+  { name: 'Saved Offerings', href: '#', icon: UserGroupIcon, amount: '42' },
+
   // More items...
+]
+
+const actions = [
+  { name: 'Complete Investor Flow', href: '#', icon: ExclamationCircleIcon },
 ]
 const transactions = [
   {
     id: 1,
-    name: 'Payment to Molly Sanders',
+    name: 'Payment to Multivest',
     href: '#',
     amount: '$20,000',
     currency: 'USD',
     status: 'success',
-    date: 'July 11, 2020',
-    datetime: '2020-07-11',
+    date: 'July 11, 2022',
+    datetime: '2022-07-11',
   },
-  // More transactions...
+  {
+    id: 2,
+    name: 'Payment to Super Cool Business',
+    href: '#',
+    amount: '$10,000',
+    currency: 'USD',
+    status: 'success',
+    date: 'July 23, 2022',
+    datetime: '2022-07-23',
+  },
+  {
+    id: 3,
+    name: 'Payment to ChainRaise',
+    href: '#',
+    amount: '$15,000',
+    currency: 'USD',
+    status: 'success',
+    date: 'July 30, 2022',
+    datetime: '2022-07-30',
+  },
 ]
 const statusStyles = {
   success: 'bg-green-100 text-green-800',
@@ -100,7 +128,6 @@ function classNames(...classes: string[]) {
 
 export default function ProfilePage() {
   const { userProfile, session, isLoading, isError } = useOrCreateUserProfile()
-
 
   return (
     <div className="min-h-full">
@@ -117,18 +144,13 @@ export default function ProfilePage() {
                     <div>
                       <div className="flex items-center">
                         <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:leading-9">
-                          Welcome to ChainRaise{", " + userProfile?.username || ", " + userProfile?.firstName || "!"}
+                          Welcome to ChainRaise
+                          {', ' + userProfile?.username ||
+                            ', ' + userProfile?.firstName ||
+                            '!'}
                         </h1>
                       </div>
                       <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
-                        <dt className="sr-only">Company</dt>
-                        <dd className="flex items-center text-sm font-medium capitalize text-gray-500 sm:mr-6">
-                          <OfficeBuildingIcon
-                            className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-                            aria-hidden="true"
-                          />
-                          Duke street studio
-                        </dd>
                         <dt className="sr-only">Account status</dt>
                         <dd className="mt-3 flex items-center text-sm font-medium capitalize text-gray-500 sm:mr-6 sm:mt-0">
                           <CheckCircleIcon
@@ -142,17 +164,19 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 <div className="mt-6 flex space-x-3 md:mt-0 md:ml-4">
-                  <button
-                    type="button"
-                    className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
-                  >
-                    Add money
-                  </button>
+                  <Link href="/profile/my-info">
+                    <button
+                      type="button"
+                      className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
+                    >
+                      Update Profile Information
+                    </button>
+                  </Link>
                   <button
                     type="button"
                     className="inline-flex items-center rounded-md border border-transparent bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
                   >
-                    Send money
+                    View Account Summary
                   </button>
                 </div>
               </div>
@@ -161,6 +185,37 @@ export default function ProfilePage() {
 
           <div className="mt-8">
             <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+              <div className="relative mt-1 rounded-md bg-cr-primary">
+                <div className="mx-auto max-w-7xl py-3 px-3 sm:px-6 lg:px-8">
+                  <div className="pr-16 sm:px-16 sm:text-center">
+                    <p className="font-medium text-white">
+                      <span>Complete your investor sign up.</span>
+
+                      <span className="block sm:ml-2 sm:inline-block">
+                        <a href="#" className="font-bold text-white underline">
+                          {' '}
+                          Click here <span aria-hidden="true">&rarr;</span>
+                        </a>
+                      </span>
+                    </p>
+                  </div>
+                  <div className="absolute inset-y-0 right-0 flex items-start pt-1 pr-1 sm:items-start sm:pt-1 sm:pr-2">
+                    <button
+                      type="button"
+                      className="flex rounded-md p-2 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-white"
+                    >
+                      <span className="sr-only">Dismiss</span>
+                      <XIcon
+                        className="h-6 w-6 text-white"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mx-auto mt-8 max-w-6xl px-4 sm:px-6 lg:px-8">
               <h2 className="text-lg font-medium leading-6 text-gray-900">
                 Overview
               </h2>
@@ -205,6 +260,42 @@ export default function ProfilePage() {
                     </div>
                   </div>
                 ))}
+
+                <div
+                  key="see more"
+                  className="overflow-hidden rounded-lg bg-white shadow"
+                >
+                  <div className="p-5">
+                    <div className="flex items-center">
+                      <div className="ml-5 w-0 flex-1">
+                        <dl>
+                          <dt className="truncate text-sm font-medium text-gray-500">
+                            Find New Offerings
+                          </dt>
+                          <dd>
+                            <div className="h-8 text-lg font-medium text-gray-900"></div>
+                          </dd>
+                        </dl>
+                      </div>
+                      <div className="flex-shrink-0">
+                        <ArrowRightIcon
+                          className="h-6 w-6 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 px-5 py-3">
+                    <div className="text-sm">
+                      <a
+                        href="#"
+                        className="font-medium text-cyan-700 hover:text-cyan-900"
+                      >
+                        View all
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

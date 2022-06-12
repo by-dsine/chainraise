@@ -69,6 +69,13 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
+export async function getServerSideProps() {
+  
+  return {
+    props: {}, // will be passed to the page component as props
+  }
+}
+
 export default function Admin() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -130,8 +137,8 @@ export default function Admin() {
                   <div className="flex flex-shrink-0 items-center px-4">
                     <img
                       className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/workflow-logo-purple-500-mark-gray-700-text.svg"
-                      alt="Workflow"
+                      src="/chainraise_logo.png"
+                      alt="ChainRaise Logo"
                     />
                   </div>
                   <div className="mt-5 h-0 flex-1 overflow-y-auto">
@@ -208,8 +215,8 @@ export default function Admin() {
           <div className="flex flex-shrink-0 items-center px-6">
             <img
               className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/workflow-logo-purple-500-mark-gray-700-text.svg"
-              alt="Workflow"
+              src="/chainraise_logo_b_text.png"
+              alt="ChainRaise"
             />
           </div>
           {/* Sidebar component, swap this element with another sidebar if you like */}
@@ -222,7 +229,7 @@ export default function Admin() {
                     <span className="flex min-w-0 items-center justify-between space-x-3">
                       <img
                         className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300"
-                        src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80"
+                        src=""
                         alt=""
                       />
                       <span className="flex min-w-0 flex-1 flex-col">
