@@ -19,13 +19,15 @@ export type AccountTypeForm = {
 export type PersonalInformationForm = {
     userId: string
     username: string
-    bio?: string
     firstName?: string
+    middleName?: string
     lastName?: string
     address?: string
     city?: string
     state?: string
+    country?: string
     zipCode?: string
+    email?: string
     phone?: string
 }
 

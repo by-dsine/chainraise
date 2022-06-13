@@ -150,14 +150,30 @@ export default function ProfilePage() {
                             '!'}
                         </h1>
                       </div>
-                      <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
+                      <dl className="group mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
                         <dt className="sr-only">Account status</dt>
-                        <dd className="mt-3 flex items-center text-sm font-medium capitalize text-gray-500 sm:mr-6 sm:mt-0">
+                        <dd className="mt-3 flex group-hover:opacity-10 items-center text-sm font-medium capitalize text-gray-500 sm:mr-6 sm:mt-0">
                           <CheckCircleIcon
                             className="mr-1.5 h-5 w-5 flex-shrink-0 text-green-400"
                             aria-hidden="true"
                           />
                           Verified account
+                        </dd>
+                        <dt className="sr-only">KYC/AML status</dt>
+                        <dd className="mt-3 hidden items-center text-sm font-medium capitalize text-gray-500 group-hover:flex sm:mr-6 sm:mt-0">
+                          <CheckCircleIcon
+                            className="mr-1.5 h-5 w-5 flex-shrink-0 text-green-400"
+                            aria-hidden="true"
+                          />
+                          KYC/AML Verified
+                        </dd>
+                        <dt className="sr-only">Accreditation Status</dt>
+                        <dd className="mt-3 hidden items-center  text-sm font-medium capitalize text-gray-500 group-hover:flex sm:mr-6 sm:mt-0">
+                          <CheckCircleIcon
+                            className="mr-1.5 h-5 w-5 flex-shrink-0 text-green-400"
+                            aria-hidden="true"
+                          />
+                          No Accreditation Required
                         </dd>
                       </dl>
                     </div>
