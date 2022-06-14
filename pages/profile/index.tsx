@@ -1,28 +1,3 @@
-/*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  const colors = require('tailwindcss/colors')
-  
-  module.exports = {
-    // ...
-    theme: {
-      extend: {
-        colors: {
-          cyan: colors.cyan,
-        },
-      },
-    },
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
@@ -152,7 +127,7 @@ export default function ProfilePage() {
                       </div>
                       <dl className="group mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
                         <dt className="sr-only">Account status</dt>
-                        <dd className="mt-3 flex group-hover:opacity-10 items-center text-sm font-medium capitalize text-gray-500 sm:mr-6 sm:mt-0">
+                        <dd className="mt-3 flex items-center text-sm font-medium capitalize text-gray-500 group-hover:opacity-10 sm:mr-6 sm:mt-0">
                           <CheckCircleIcon
                             className="mr-1.5 h-5 w-5 flex-shrink-0 text-green-400"
                             aria-hidden="true"
@@ -240,7 +215,7 @@ export default function ProfilePage() {
                 {cards.map((card) => (
                   <div
                     key={card.name}
-                    className="overflow-hidden rounded-lg bg-white shadow"
+                    className="rounded-lg bg-white shadow"
                   >
                     <div className="p-5">
                       <div className="flex items-center">
@@ -277,38 +252,22 @@ export default function ProfilePage() {
                   </div>
                 ))}
 
-                <div
-                  key="see more"
-                  className="overflow-hidden rounded-lg bg-white shadow"
-                >
-                  <div className="p-5">
-                    <div className="flex items-center">
-                      <div className="ml-5 w-0 flex-1">
-                        <dl>
-                          <dt className="truncate text-sm font-medium text-gray-500">
-                            Find New Offerings
-                          </dt>
-                          <dd>
-                            <div className="h-8 text-lg font-medium text-gray-900"></div>
-                          </dd>
-                        </dl>
+                <div key="see-more" className="bg-white">
+                  <div className="mx-auto max-w-7xl py-4 px-4 text-center">
+                    <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                      <span className="block">Find New Offerings</span>
+                      
+                    </h2>
+                    <div className="mt-8 flex">
+                      <div className="inline-flex rounded-md shadow mx-auto">
+                        <a
+                          href="#"
+                          className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-5 py-3 text-base font-medium text-white hover:bg-indigo-700"
+                        >
+                          Explore Now!
+                        </a>
                       </div>
-                      <div className="flex-shrink-0">
-                        <ArrowRightIcon
-                          className="h-6 w-6 text-gray-400"
-                          aria-hidden="true"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="bg-gray-50 px-5 py-3">
-                    <div className="text-sm">
-                      <a
-                        href="#"
-                        className="font-medium text-cyan-700 hover:text-cyan-900"
-                      >
-                        View all
-                      </a>
+                      
                     </div>
                   </div>
                 </div>

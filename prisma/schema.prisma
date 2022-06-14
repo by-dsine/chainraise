@@ -58,17 +58,22 @@ model UserProfile {
   id     String @id @default(cuid())
   userId String @unique
 
-  firstName  String?
-  middleName String?
-  lastName   String?
-  username   String? @unique
-  bio        String?
-  address    String?
-  city       String?
-  country    String?
-  state      String?
-  zipCode    String?
-  phone      String?
+  firstName           String?
+  middleName          String?
+  lastName            String?
+  username            String?   @unique
+  bio                 String?
+  address             String?
+  city                String?
+  country             String?
+  state               String?
+  zipCode             String?
+  email               String?
+  phone               String?
+  kycStatus           String?   @default("Not Started")
+  accreditationStatus String?   @default("Not Started")
+  dob                 DateTime?
+  residence           String?
 
   user                        User?                             @relation(fields: [userId], references: [id])
   followedBy                  Follows[]                         @relation("following")

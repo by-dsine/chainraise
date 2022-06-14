@@ -60,7 +60,6 @@ export default function Account() {
     formState: { errors },
   } = useForm<PersonalInformationForm>({
     defaultValues: {
-      userId: "",
       firstName: "",
       lastName: "",
       address: "",
@@ -143,7 +142,6 @@ export default function Account() {
                 action="#"
                 method="POST"
               >
-                <input hidden type="text" {...register('userId')}/>
                 
                 {/* Profile section */}
                 <div className="py-6 px-4 sm:p-6 lg:pb-8">

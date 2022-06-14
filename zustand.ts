@@ -1,4 +1,5 @@
 import { StatementType } from '@fauna-labs/fauna-schema-migrate/dist/types/expressions'
+import { BooleanSchema } from 'yup'
 import create from 'zustand'
 
 interface investorFormStore {
@@ -185,6 +186,22 @@ export const useInvestorForm = create<investorFormStore>((set) => ({
     set((state) => ({
       ...state,
       countryOfResidence: value,
+    }))
+  },
+}))
+
+// modal state
+interface modal {
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
+}
+
+export const useKycModal = create<modal>((set) => ({
+  isOpen: false,
+  setIsOpen: (value) => {
+    set((state) => ({
+      ...state,
+      isOpen: value,
     }))
   },
 }))

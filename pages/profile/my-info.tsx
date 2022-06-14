@@ -58,6 +58,10 @@ import useOrCreateUserProfile from '../../hooks/useOrCreateUserProfile'
 import Link from 'next/link'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { PersonalInformationForm } from '../../types/typings'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import KYCModal from '../../components/profile/KYCModal'
+import { useKycModal } from '../../zustand'
 
 const navigation = [
   { name: 'Home', href: '#', icon: HomeIcon, current: true },
@@ -125,15 +129,39 @@ const statusStyles = {
   failed: 'bg-gray-100 text-gray-800',
 }
 
+const residenceOptions = [
+  { id: 'us-citizen', title: 'U.S. Citizen' },
+  { id: 'us-resident', title: 'U.S. Resident' },
+  { id: 'non-resident', title: 'Non-resident' },
+]
+
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function ProfilePage() {
+  let kycStatus = ''
   const { userProfile, session, isLoading, isError } = useOrCreateUserProfile()
+  const kycModal = useKycModal()
+  const [isKycDone, setKycDone] = useState(false)
 
   const [isEditingAccreditationMethod, setEditingAccreditationMethod] =
     useState(false)
+
+  const contactInfoSchema = yup.object().shape({
+    firstName: yup.string().required('Please enter a first name.'),
+    middleName: yup.string(),
+    lastName: yup.string().required('Please enter a last name.'),
+    email: yup.string().email().required('Please enter a valid email.'),
+    phone: yup.string().required('Please enter a valid phone number.'),
+    country: yup.string().required('Please select a country.'),
+    address: yup.string().required('Please enter your legal mailing address.'),
+    city: yup.string().required('Please enter a city name.'),
+    state: yup.string().required('Please enter a state.'),
+    zipCode: yup.string().required('Please enter a zip code.'),
+    dob: yup.string().required('Please enter a date of birth.'),
+    residence: yup.string().required('Please select a residence option.'),
+  })
 
   const {
     reset,
@@ -142,8 +170,6 @@ export default function ProfilePage() {
     formState: { errors },
   } = useForm<PersonalInformationForm>({
     defaultValues: {
-      userId: '',
-      username: '',
       firstName: '',
       middleName: '',
       lastName: '',
@@ -154,34 +180,44 @@ export default function ProfilePage() {
       zipCode: '',
       email: '',
       phone: '',
+      dob: '',
+      residence: '',
     },
+    resolver: yupResolver(contactInfoSchema),
   })
 
   useEffect(() => {
     let defaults = {
-      userId: userProfile?.userId || "",
-      username: userProfile?.username || "",
-      firstName: userProfile?.firstName || "",
-      middleName: userProfile?.middleName || "",
-      lastName: userProfile?.lastName || "",
-      address: userProfile?.address || "",
-      city: userProfile?.city || "",
-      state: userProfile?.state || "",
-      country: userProfile?.country || "",
-      zipCode: userProfile?.zipCode || "",
-      phone: userProfile?.phone || "",
+      firstName: userProfile?.firstName || '',
+      middleName: userProfile?.middleName || '',
+      lastName: userProfile?.lastName || '',
+      address: userProfile?.address || '',
+      city: userProfile?.city || '',
+      state: userProfile?.state || '',
+      country: userProfile?.country || '',
+      zipCode: userProfile?.zipCode || '',
+      email: userProfile?.email || '',
+      phone: userProfile?.phone || '',
+    }
+    if (userProfile?.kycStatus) {
+      kycStatus = userProfile.kycStatus
     }
     reset(defaults)
   }, [userProfile, reset])
 
+  useEffect(() => {
+    if (kycStatus == 'Not Approved') {
+      setKycDone(false)
+    }
+  }, [kycStatus])
+
   const onSubmit: SubmitHandler<PersonalInformationForm> = (data) => {
-    console.log(data)
     fetch('/api/userProfile/updateProfile', {
       method: 'POST',
       body: JSON.stringify(data),
     })
       .then(() => {
-        alert('Successfully updated your information.')
+        alert('Sent.')
       })
       .catch((err) => {
         console.log(err)
@@ -190,6 +226,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-full">
+      <KYCModal />
       <Header />
       <div className="flex flex-1 flex-col">
         <main className="flex-1 pb-8">
@@ -204,9 +241,6 @@ export default function ProfilePage() {
                       <div className="flex items-center">
                         <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:leading-9">
                           Welcome to ChainRaise
-                          {', ' + userProfile?.username ||
-                            ', ' + userProfile?.firstName ||
-                            '!'}
                         </h1>
                       </div>
                       <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
@@ -255,7 +289,11 @@ export default function ProfilePage() {
               <div className="mt-10 sm:mt-0">
                 <div className="md:grid md:grid-cols-3 md:gap-6">
                   <div className="mt-10 md:col-span-3 md:mt-0">
-                    <form action="#" method="POST">
+                    <form
+                      onSubmit={handleSubmit(onSubmit)}
+                      action="#"
+                      method="POST"
+                    >
                       <div className="overflow-hidden sm:rounded-md">
                         <div className="bg-white py-5 px-4">
                           <div className="grid grid-cols-6 gap-6">
@@ -268,11 +306,16 @@ export default function ProfilePage() {
                               </label>
                               <input
                                 type="text"
-                                name="first-name"
+                                {...register('firstName')}
                                 id="first-name"
                                 autoComplete="given-name"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                               />
+                              {errors.firstName && (
+                                <p className="mx-auto mt-2 text-sm text-red-600">
+                                  {errors.firstName.message}
+                                </p>
+                              )}
                             </div>
 
                             <div className="col-span-6 sm:col-span-2">
@@ -284,11 +327,16 @@ export default function ProfilePage() {
                               </label>
                               <input
                                 type="text"
-                                name="middle-name"
+                                {...register('middleName')}
                                 id="middle-name"
                                 autoComplete="middle-name"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                               />
+                              {errors.middleName && (
+                                <p className="mx-auto mt-2 text-sm text-red-600">
+                                  {errors.middleName.message}
+                                </p>
+                              )}
                             </div>
 
                             <div className="col-span-6 sm:col-span-2">
@@ -300,11 +348,16 @@ export default function ProfilePage() {
                               </label>
                               <input
                                 type="text"
-                                name="last-name"
+                                {...register('lastName')}
                                 id="last-name"
                                 autoComplete="family-name"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                               />
+                              {errors.lastName && (
+                                <p className="mx-auto mt-2 text-sm text-red-600">
+                                  {errors.lastName.message}
+                                </p>
+                              )}
                             </div>
 
                             <div className="col-span-6 sm:col-span-3">
@@ -316,11 +369,16 @@ export default function ProfilePage() {
                               </label>
                               <input
                                 type="text"
-                                name="email-address"
+                                {...register('email')}
                                 id="email-address"
                                 autoComplete="email"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                               />
+                              {errors.email && (
+                                <p className="mx-auto mt-2 text-sm text-red-600">
+                                  {errors.email.message}
+                                </p>
+                              )}
                             </div>
 
                             <div className="col-span-6 sm:col-span-3">
@@ -332,11 +390,16 @@ export default function ProfilePage() {
                               </label>
                               <input
                                 type="tel"
-                                name="phone-number"
+                                {...register('phone')}
                                 id="phone-number"
                                 autoComplete="telephone"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                               />
+                              {errors.phone && (
+                                <p className="mx-auto mt-2 text-sm text-red-600">
+                                  {errors.phone.message}
+                                </p>
+                              )}
                             </div>
 
                             <div className="col-span-6 sm:col-span-3">
@@ -348,7 +411,7 @@ export default function ProfilePage() {
                               </label>
                               <select
                                 id="country"
-                                name="country"
+                                {...register('country')}
                                 autoComplete="country-name"
                                 className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                               >
@@ -356,6 +419,11 @@ export default function ProfilePage() {
                                 <option>Canada</option>
                                 <option>Mexico</option>
                               </select>
+                              {errors.country && (
+                                <p className="mx-auto mt-2 text-sm text-red-600">
+                                  {errors.country.message}
+                                </p>
+                              )}
                             </div>
 
                             <div className="col-span-6">
@@ -367,11 +435,16 @@ export default function ProfilePage() {
                               </label>
                               <input
                                 type="text"
-                                name="street-address"
+                                {...register('address')}
                                 id="street-address"
                                 autoComplete="street-address"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                               />
+                              {errors.address && (
+                                <p className="mx-auto mt-2 text-sm text-red-600">
+                                  {errors.address.message}
+                                </p>
+                              )}
                             </div>
 
                             <div className="col-span-6 sm:col-span-6 lg:col-span-2">
@@ -383,11 +456,16 @@ export default function ProfilePage() {
                               </label>
                               <input
                                 type="text"
-                                name="city"
+                                {...register('city')}
                                 id="city"
                                 autoComplete="address-level2"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                               />
+                              {errors.city && (
+                                <p className="mx-auto mt-2 text-sm text-red-600">
+                                  {errors.city.message}
+                                </p>
+                              )}
                             </div>
 
                             <div className="col-span-6 sm:col-span-3 lg:col-span-2">
@@ -399,11 +477,16 @@ export default function ProfilePage() {
                               </label>
                               <input
                                 type="text"
-                                name="region"
+                                {...register('state')}
                                 id="region"
                                 autoComplete="address-level1"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                               />
+                              {errors.state && (
+                                <p className="mx-auto mt-2 text-sm text-red-600">
+                                  {errors.state.message}
+                                </p>
+                              )}
                             </div>
 
                             <div className="col-span-6 sm:col-span-3 lg:col-span-2">
@@ -415,11 +498,75 @@ export default function ProfilePage() {
                               </label>
                               <input
                                 type="text"
-                                name="postal-code"
+                                {...register('zipCode')}
                                 id="postal-code"
                                 autoComplete="postal-code"
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                               />
+                              {errors.zipCode && (
+                                <p className="mx-auto mt-2 text-sm text-red-600">
+                                  {errors.zipCode.message}
+                                </p>
+                              )}
+                            </div>
+
+                            <div className="col-span-6 sm:col-span-3">
+                              <label
+                                htmlFor="region"
+                                className="block text-sm font-medium text-gray-700"
+                              >
+                                Date of Birth
+                              </label>
+                              <input
+                                type="date"
+                                {...register('dob')}
+                                id="dob"
+                                autoComplete="address-level1"
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                              />
+                              {errors.dob && (
+                                <p className="mx-auto mt-2 text-sm text-red-600">
+                                  {errors.dob.message}
+                                </p>
+                              )}
+                            </div>
+
+                            <div className="col-span-6 sm:col-span-3">
+                              <label className=" text-sm font-medium text-gray-700">
+                                Residence
+                              </label>
+                              <fieldset className="mt-4">
+                                <legend className="sr-only">
+                                  Notification method
+                                </legend>
+                                <div className="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
+                                  {residenceOptions.map((residenceOption) => (
+                                    <div
+                                      key={residenceOption.id}
+                                      className="flex items-center"
+                                    >
+                                      <input
+                                        id={residenceOption.id}
+                                        {...register('residence')}
+                                        value={residenceOption.id}
+                                        type="radio"
+                                        className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                      />
+                                      <label
+                                        htmlFor={residenceOption.id}
+                                        className="ml-3 block text-sm font-medium text-gray-700"
+                                      >
+                                        {residenceOption.title}
+                                      </label>
+                                    </div>
+                                  ))}
+                                </div>
+                              </fieldset>
+                              {errors.residence && (
+                                <p className="mx-auto mt-2 text-sm text-red-600">
+                                  {errors.residence.message}
+                                </p>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -430,6 +577,16 @@ export default function ProfilePage() {
                           >
                             Save
                           </button>
+
+                          {!isKycDone && (
+                            <button
+                              type="button"
+                              className="ml-2 rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-cr-primary focus:ring-offset-2"
+                              onClick={() => kycModal.setIsOpen(true)}
+                            >
+                              Complete KYC
+                            </button>
+                          )}
                         </div>
                       </div>
                     </form>
@@ -506,7 +663,7 @@ export default function ProfilePage() {
                               aria-hidden="true"
                             />
                             <span className="ml-2 w-0 flex-1 truncate">
-                              resume_back_end_developer.pdf
+                              asset_portfolio.pdf
                             </span>
                           </div>
                           <div className="ml-4 flex-shrink-0">
@@ -525,7 +682,7 @@ export default function ProfilePage() {
                               aria-hidden="true"
                             />
                             <span className="ml-2 w-0 flex-1 truncate">
-                              coverletter_back_end_developer.pdf
+                              statement_of_receipt.pdf
                             </span>
                           </div>
                           <div className="ml-4 flex-shrink-0">
