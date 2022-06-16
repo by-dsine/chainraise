@@ -140,7 +140,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function ProfilePage() {
-  let kycStatus = ''
+  const [kycStatus, setKycStatus] = useState("")
   const { userProfile, session, isLoading, isError } = useOrCreateUserProfile()
   const kycModal = useKycModal()
   const [isKycDone, setKycDone] = useState(false)
@@ -187,6 +187,7 @@ export default function ProfilePage() {
   })
 
   useEffect(() => {
+    console.log("userProfile, ",userProfile)
     let defaults = {
       firstName: userProfile?.firstName || '',
       middleName: userProfile?.middleName || '',
@@ -200,7 +201,7 @@ export default function ProfilePage() {
       phone: userProfile?.phone || '',
     }
     if (userProfile?.kycStatus) {
-      kycStatus = userProfile.kycStatus
+      setKycStatus(userProfile.kycStatus)
     }
     reset(defaults)
   }, [userProfile, reset])
@@ -226,7 +227,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-full">
-      <KYCModal />
+      {kycStatus && <KYCModal kycStatus={kycStatus}/>}
       <Header />
       <div className="flex flex-1 flex-col">
         <main className="flex-1 pb-8">

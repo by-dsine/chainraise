@@ -12,7 +12,7 @@ export default async function postUpdateToUserProfile(
   const session = await getSession({ req })
 
   if (!session?.user?.uid) {
-    return res.status(500).json({ message: 'No user id received.' })
+    return res.status(500).json({ message: 'No user id found.' })
   }
 
   const userProfile = await prisma.userProfile.update({

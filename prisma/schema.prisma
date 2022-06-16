@@ -55,8 +55,9 @@ model VerificationToken {
 }
 
 model UserProfile {
-  id     String @id @default(cuid())
-  userId String @unique
+  id        String  @id @default(cuid())
+  userId    String  @unique
+  ncPartyId String? @unique
 
   firstName           String?
   middleName          String?
