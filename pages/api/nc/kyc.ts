@@ -3,8 +3,13 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react'
 import { normalizeConfig } from 'next/dist/server/config-shared'
 import { prisma } from '../../../lib/db'
-import { CreatePartyResponse, PartyDetail } from '../../../types/typings'
+import {
+  BasicKYCAMLResponse,
+  CreatePartyResponse,
+  PartyDetail,
+} from '../../../types/typings'
 import { BASE_URL } from '../../../nc'
+import { AUTO_APPROVED, DISAPPROVED } from '../../../constants/const'
 export default async function handleNorthCapital(
   req: NextApiRequest,
   res: NextApiResponse
@@ -38,27 +43,54 @@ export default async function handleNorthCapital(
     console.log('No user id found on session.')
     return res.status(500).json({ message: 'No user id found on session.' })
   }
+
   // use prisma to get user information
+  const userProfile = await prisma.userProfile.findUnique({
+    where: {
+      userId: session.user.uid,
+    },
+    include: {
+      userKYCAML: {
+        orderBy: {
+          timestamp: 'desc',
+        },
+      },
+    },
+  })
+  if (!userProfile) {
+    return res.status(404).json({ message: 'User profile not found.' })
+  }
 
   switch (req.method) {
-    case 'PUT':
-      // #1 verify session userid
-      const userProfile = await prisma.userProfile.findUnique({
-        where: {
-          userId: session?.user?.uid,
-        },
-      })
-      if (!userProfile) {
-        return res.status(404).json({ message: 'User profile not found.' })
+    case 'GET':
+      if (userProfile.userKYCAML.length == 0) {
+        return res.status(200).json({
+          kycStatus: 'Not Started',
+          amlStatus: 'Not Started',
+        })
       }
+      return res.status(200).json({
+        kycStatus: userProfile.userKYCAML[0].kycStatus,
+        amlStatus: userProfile.userKYCAML[0].amlStatus,
+      })
+
+    case 'PUT':
+      // #1 verify user profile has required fields for KYC/AML
       if (!isUserProfileComplete(userProfile)) {
         return res.status(400).json({ message: 'User profile is incomplete.' })
       }
 
+      var currentKYCStatus = ''
+      var currentAMLStatus = ''
+
+      if (userProfile.userKYCAML.length > 0) {
+        currentKYCStatus = userProfile.userKYCAML[0].kycStatus!
+        currentAMLStatus = userProfile.userKYCAML[0].amlStatus!
+      }
       // #2 check for party id
       let partyId = userProfile.ncPartyId
       // Not started means party has not been created
-      if (userProfile.kycStatus == 'Not Started' || !partyId) {
+      if (currentKYCStatus == 'Not Started' || !currentKYCStatus || !partyId) {
         console.log('Attempting to create party.')
         try {
           // create North Capital party
@@ -93,7 +125,10 @@ export default async function handleNorthCapital(
           }
 
           const result = (await response.json()) as CreatePartyResponse
-          console.log('result is: ', JSON.stringify(result, null, 4))
+          console.log(
+            'createParty result is: ',
+            JSON.stringify(result, null, 4)
+          )
 
           // add north capital party ID to user profile
           if (result.statusCode == '101') {
@@ -106,13 +141,23 @@ export default async function handleNorthCapital(
             console.log(
               "Updating UserProfile with NC Party ID and new KYC Status: 'Party Created'"
             )
+            // update statuses
+            const userKYCAMLRecord = await prisma.userKYCAML.create({
+              data: {
+                kycStatus: 'Party Created',
+                amlStatus: 'Not Started',
+                userProfileId: userProfile.id,
+                timestamp: new Date(),
+              },
+            })
+
+            // update party id
             const userWithParty = await prisma.userProfile.update({
               where: {
                 userId: session?.user?.uid,
               },
               data: {
                 ncPartyId: partyIdAsNumber,
-                kycStatus: 'Party Created',
               },
             })
             if (!userWithParty || !userWithParty.ncPartyId) {
@@ -120,24 +165,18 @@ export default async function handleNorthCapital(
                 'This UserProfile object caused an issue: ',
                 userWithParty
               )
-              return res
-                .status(500)
-                .json({
-                  message:
-                    'Something went wrong when trying to update the party ID on ChainRaise DB.',
-                })
+              return res.status(500).json({
+                message:
+                  'Something went wrong when trying to update the party ID on ChainRaise DB.',
+              })
             }
             partyId = userWithParty.ncPartyId
           } else {
-            return res
-              .status(500)
-              .json({
-                message:
-                  'Something went wrong when trying to contact NC for a party ID.',
-              })
+            return res.status(500).json({
+              message:
+                'Something went wrong when trying to contact NC for a party ID.',
+            })
           }
-
-          return res.status(200).json(result)
         } catch (error) {
           if (error instanceof Error) {
             console.log('error message: ', error.message)
@@ -152,26 +191,68 @@ export default async function handleNorthCapital(
       // #3 try basic kyc/aml auto verification
       if (
         partyId &&
-        userProfile.kycStatus != 'Auto-Pass' &&
-        userProfile.kycStatus != 'Auto-Fail'
+        currentKYCStatus != AUTO_APPROVED &&
+        currentKYCStatus != DISAPPROVED
       ) {
-        const performKYCURL = 'https://api-sandboxdash.norcapsecurities.com/tapiv3/index.php/v3/performKycAmlBasic'
+        const performKYCURL =
+          'https://api-sandboxdash.norcapsecurities.com/tapiv3/index.php/v3/performKycAmlBasic'
         const data = new URLSearchParams()
         data.append('clientID', CLIENT_ID)
         data.append('developerAPIKey', DEVELOPER_KEY)
         data.append('partyId', partyId)
         const response = await fetch(performKYCURL, {
-          method: 'PUT',
+          method: 'POST',
           body: data,
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
         })
         if (!response.ok) {
-          throw new Error(`Error performing KYC! status: ${response.status}`)
+          return res.status(400).json({
+            message: 'shit, something broke',
+            body: await response.json(),
+          })
         }
-        return res.status(200).json({ message: `Received a ${response}` })
+        const result = (await response.json()) as BasicKYCAMLResponse
+        console.log('basicKYCAML result is: ', JSON.stringify(result, null, 4))
+        // TODO: Add logging to track which calls are being made where and what their results are
+        if (result.statusCode == '101') {
+          let KYCresult = result?.kyc?.kycstatus
+          let AMLresult = result?.kyc?.amlstatus
+
+          if (!KYCresult || !AMLresult) {
+            return res.status(500).json({
+              message: `One of these didn't return something valid. KYCresult: ${KYCresult} and AMLresult: ${AMLresult}`,
+            })
+          }
+          console.log(
+            `Updating UserProfile with NC KYC Status: ${KYCresult} and AML Status: ${AMLresult}`
+          )
+          const userKYCAMLRecord = await prisma.userKYCAML.create({
+            data: {
+              kycStatus: KYCresult,
+              amlStatus: AMLresult,
+              userProfileId: userProfile.id,
+              timestamp: new Date(),
+              response: result.kyc,
+            },
+          })
+
+          return res.status(200).json({
+            kycStatus: userKYCAMLRecord.kycStatus,
+            amlStatus: userKYCAMLRecord.amlStatus,
+          })
+        } else {
+          return res.status(500).json({
+            message:
+              'Something went wrong when trying to contact NC to do basic KYC/AML.',
+          })
+        }
       }
+
+      return res
+        .status(400)
+        .end(`Bad request. No actions were performed on any account.`)
 
     default:
       return res.status(405).end(`Method ${req.method} not allowed`)
@@ -196,6 +277,7 @@ function isUserProfileComplete(userProfile: UserProfile): boolean {
   }
   return true
 }
+
 function isUSCitizenOrResidentString(residenceStatus: string | null): string {
   if (residenceStatus == 'U.S. Citizen' || residenceStatus == 'U.S. Resident') {
     return 'true'

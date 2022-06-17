@@ -3,6 +3,9 @@ import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationIcon } from '@heroicons/react/outline'
 import { useKycModal } from '../../zustand'
+import { NOT_STARTED, PARTY_CREATED } from '../../constants/const'
+import { UserProfile } from '@prisma/client'
+import { KYCAMLStatus } from '../../types/typings'
 
 interface KycModalProps {
   kycStatus: string
@@ -10,10 +13,13 @@ interface KycModalProps {
 
 export default function KYCModal({ kycStatus }: KycModalProps) {
   const kycModal = useKycModal()
+  const [kycStateLoading, setKycStateLoading] = useState(false)
 
   const cancelButtonRef = useRef(null)
 
   const handleKYC = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    setKycStateLoading(true)
+
     const response = await fetch('/api/nc/kyc', {
       method: 'PUT',
       headers: {
@@ -21,7 +27,9 @@ export default function KYCModal({ kycStatus }: KycModalProps) {
         Accept: 'application/json',
       },
     });
-    console.log(response)
+    const result = (await response.json()) as KYCAMLStatus
+    console.log(result)
+    setKycStateLoading(false)
   };
   return (
     <Transition.Root show={kycModal.isOpen} as={Fragment}>
@@ -74,9 +82,15 @@ export default function KYCModal({ kycStatus }: KycModalProps) {
                         <p className="text-sm text-gray-500">
                           Your KYC Status is "<span>{kycStatus}</span>".
                         </p>
-                        {kycStatus == 'Not Started' && (
+                        {kycStatus == NOT_STARTED && (
                           <p className="text-sm text-gray-500">
                             Click below to submit your information for KYC
+                            verification.
+                          </p>
+                        )}
+                        {kycStatus == PARTY_CREATED && (
+                          <p className="text-sm text-gray-500">
+                            Click below to continue your KYC
                             verification.
                           </p>
                         )}
@@ -85,7 +99,7 @@ export default function KYCModal({ kycStatus }: KycModalProps) {
                   </div>
                 </div>
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                  {kycStatus == 'Not Started' && (
+                  {!kycStateLoading && [NOT_STARTED, PARTY_CREATED].includes(kycStatus) && (
                     <button
                       type="button"
                       className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"

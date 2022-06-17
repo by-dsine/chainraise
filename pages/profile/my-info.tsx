@@ -57,11 +57,12 @@ import Header from '../../components/Header'
 import useOrCreateUserProfile from '../../hooks/useOrCreateUserProfile'
 import Link from 'next/link'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { PersonalInformationForm } from '../../types/typings'
+import { KYCAMLStatus, PersonalInformationForm } from '../../types/typings'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import KYCModal from '../../components/profile/KYCModal'
 import { useKycModal } from '../../zustand'
+import { AUTO_APPROVED } from '../../constants/const'
 
 const navigation = [
   { name: 'Home', href: '#', icon: HomeIcon, current: true },
@@ -140,7 +141,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function ProfilePage() {
-  const [kycStatus, setKycStatus] = useState("")
+  const [kycStatus, setKycStatus] = useState('')
   const { userProfile, session, isLoading, isError } = useOrCreateUserProfile()
   const kycModal = useKycModal()
   const [isKycDone, setKycDone] = useState(false)
@@ -187,7 +188,24 @@ export default function ProfilePage() {
   })
 
   useEffect(() => {
-    console.log("userProfile, ",userProfile)
+    const fetchData = async () => {
+      const response = await fetch('/api/nc/kyc', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      })
+      const result = (await response.json()) as KYCAMLStatus
+      setKycStatus(result.kycStatus)
+      setKycDone(result.kycStatus == AUTO_APPROVED)
+    }
+
+    fetchData().catch(console.error)
+  }, [])
+
+  useEffect(() => {
+    console.log('userProfile, ', userProfile)
     let defaults = {
       firstName: userProfile?.firstName || '',
       middleName: userProfile?.middleName || '',
@@ -200,17 +218,8 @@ export default function ProfilePage() {
       email: userProfile?.email || '',
       phone: userProfile?.phone || '',
     }
-    if (userProfile?.kycStatus) {
-      setKycStatus(userProfile.kycStatus)
-    }
     reset(defaults)
   }, [userProfile, reset])
-
-  useEffect(() => {
-    if (kycStatus == 'Not Approved') {
-      setKycDone(false)
-    }
-  }, [kycStatus])
 
   const onSubmit: SubmitHandler<PersonalInformationForm> = (data) => {
     fetch('/api/userProfile/updateProfile', {
@@ -227,7 +236,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-full">
-      {kycStatus && <KYCModal kycStatus={kycStatus}/>}
+      {kycStatus && <KYCModal kycStatus={kycStatus} />}
       <Header />
       <div className="flex flex-1 flex-col">
         <main className="flex-1 pb-8">

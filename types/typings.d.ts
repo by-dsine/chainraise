@@ -1,3 +1,10 @@
+// ChainRaise API
+export type CRResponse = {
+  error: boolean
+  message: string
+  body: any
+}
+
 // Form Types
 export type INewPostForm = {
   body: string
@@ -45,7 +52,8 @@ export type ContactInformationForm = {
   zipCode: string
 }
 
-// API types
+// North Capital API types
+// createParty
 type CreatePartyResponse = {
   statusCode: string
   statusDesc: string
@@ -56,6 +64,40 @@ type PartyDetail = {
   partyId: string
   KYCstatus: string
   AMLstatus: string
+}
+// KYC/AML
+type BasicKYCAMLResponse = {
+  statusCode: string
+  statusDesc: string
+  kyc: BasicKYCAMLBody
+}
+
+type BasicKYCAMLBody = {
+  response: KYCAMLReport
+  kycstatus: string
+  amlstatus: string
+}
+
+type KYCAMLReport = {
+  'id-number': string
+  'summary-result': NCKeyMessage
+  results: NCKeyMessage
+  qualifiers: KYCAMLQualifiers
+  idnotescore: string
+}
+
+type NCKeyMessage = {
+  key: string
+  message: string
+}
+
+type KYCAMLQualifiers = {
+  qualifier: NCKeyMessage[]
+}
+
+type KYCAMLStatus = {
+  kycStatus: string
+  amlStatus: string
 }
 
 // Sanity Types
