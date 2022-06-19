@@ -20,7 +20,7 @@ export default async function handleNorthCapital(
   if (!session?.user?.uid) {
     console.log('Session not found.')
 
-    return res.status(500).json({ message: 'No user id found.' })
+    return res.status(500).json({ message: 'Session not found.' })
   }
   console.log('Session located.')
 
@@ -37,11 +37,6 @@ export default async function handleNorthCapital(
   if (!CLIENT_ID || !DEVELOPER_KEY) {
     console.log('North Capital parameters not loaded.')
     return res.status(500).json({ message: 'No NC parameters found.' })
-  }
-
-  if (!session?.user?.uid) {
-    console.log('No user id found on session.')
-    return res.status(500).json({ message: 'No user id found on session.' })
   }
 
   // use prisma to get user information
@@ -121,7 +116,7 @@ export default async function handleNorthCapital(
           })
 
           if (!response.ok) {
-            throw new Error(`Error creating party! status: ${response.status}`)
+            return res.status(500).json({ message:`Error creating party! status: ${response.status}`})
           }
 
           const result = (await response.json()) as CreatePartyResponse

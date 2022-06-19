@@ -5,6 +5,20 @@ export type CRResponse = {
   body: any
 }
 
+export type CRAdminStatistics = {
+  userCount: number
+  offeringsCount: number
+}
+
+export type DisplayUser = {
+  uid: string
+  name: string
+  accountType: string
+  kycStatus: string
+  amlStatus: string
+  accreditation: string
+}
+
 // Form Types
 export type INewPostForm = {
   body: string
@@ -50,6 +64,14 @@ export type ContactInformationForm = {
   city: string
   state: string
   zipCode: string
+}
+
+export type OrganizationPrimaryIssuerForm = {
+  organizationName: string
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
 }
 
 // North Capital API types
@@ -98,6 +120,17 @@ type KYCAMLQualifiers = {
 type KYCAMLStatus = {
   kycStatus: string
   amlStatus: string
+}
+
+type IssuerResponse = {
+  statusCode: string
+  statusDesc: string
+  issuerDetails: (boolean | IssuerDetails[])[]
+}
+
+type IssuerDetails = {
+  issuerId: string
+  issuerStatus: string
 }
 
 // Sanity Types

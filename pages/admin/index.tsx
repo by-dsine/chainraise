@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   BellIcon,
@@ -30,6 +30,12 @@ import {
 import Header from '../../components/Header'
 import useOrCreateUserProfile from '../../hooks/useOrCreateUserProfile'
 import Link from 'next/link'
+import { CRAdminStatistics, DisplayUser } from '../../types/typings'
+import UsersTable from '../../components/admin/UsersTable'
+import { GetServerSideProps } from 'next'
+import { useAllUsersForAdmin } from '../../hooks/users'
+import { useDisplayUserStore } from '../../lib/zustand/displayUserStore'
+import OfferingsTable from '../../components/admin/OfferingsTable'
 
 const navigation = [
   { name: 'Home', href: '#', icon: HomeIcon, current: true },
@@ -44,21 +50,10 @@ const secondaryNavigation = [
   { name: 'Help', href: '#', icon: QuestionMarkCircleIcon },
   { name: 'Privacy', href: '#', icon: ShieldCheckIcon },
 ]
-const cards = [
-  {
-    name: 'Investments',
-    href: '#',
-    icon: CurrencyDollarIcon,
-    amount: '1',
-  },
-  { name: 'Saved Offerings', href: '#', icon: UserGroupIcon, amount: '42' },
-
-  // More items...
-]
 
 const actions = [
   { name: 'Complete Investor Flow', href: '#', icon: ExclamationCircleIcon },
-] 
+]
 
 const transactions = [
   {
@@ -104,6 +99,61 @@ function classNames(...classes: string[]) {
 
 export default function ProfilePage() {
   const { userProfile, session, isLoading, isError } = useOrCreateUserProfile()
+
+  let { users } = useAllUsersForAdmin()
+
+  const usersForDisplay = useDisplayUserStore()
+
+  const [numOfferings, setNumOfferings] = useState(0)
+  const [numUsers, setNumUsers] = useState(0)
+  const [isFetching, setFetching] = useState(false)
+  const [table, setTable] = useState('Offerings')
+
+  useEffect(() => {
+    const fetchStatsData = async () => {
+      const response = await fetch('api/statistics/admin', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+
+      const result = (await response.json()) as CRAdminStatistics
+      setNumUsers(result.userCount)
+      setNumOfferings(result.offeringsCount)
+      console.log('Admin stats received: ', result)
+    }
+    fetchStatsData().catch(console.error)
+
+    const fetchUserData = async () => {
+      const response = await fetch('/api/admin/users', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+
+      const result = (await response.json()) as DisplayUser[]
+      console.log('Adding %d profiles to display store.', result?.length)
+      result?.forEach((userForDisplay) => {
+        usersForDisplay.addDisplayUser(userForDisplay)
+      })
+
+      console.log(usersForDisplay.displayUsers)
+    }
+    fetchUserData().catch(console.error)
+  }, [])
+
+  const cards = [
+    {
+      name: 'Offerings',
+      icon: CurrencyDollarIcon,
+      amount: numOfferings,
+    },
+    { name: 'Users', icon: UserGroupIcon, amount: numUsers },
+
+    // More items...
+  ]
 
   return (
     <div className="min-h-full">
@@ -155,58 +205,11 @@ export default function ProfilePage() {
                     </div>
                   </div>
                 </div>
-                <div className="mt-6 flex space-x-3 md:mt-0 md:ml-4">
-                  <Link href="/profile/my-info">
-                    <button
-                      type="button"
-                      className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
-                    >
-                      Update Profile Information
-                    </button>
-                  </Link>
-                  <button
-                    type="button"
-                    className="inline-flex items-center rounded-md border border-transparent bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
-                  >
-                    View Account Summary
-                  </button>
-                </div>
               </div>
             </div>
           </div>
 
           <div className="mt-8">
-            <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-              <div className="relative mt-1 rounded-md bg-cr-primary">
-                <div className="mx-auto max-w-7xl py-3 px-3 sm:px-6 lg:px-8">
-                  <div className="pr-16 sm:px-16 sm:text-center">
-                    <p className="font-medium text-white">
-                      <span>Complete your investor sign up.</span>
-
-                      <span className="block sm:ml-2 sm:inline-block">
-                        <a href="#" className="font-bold text-white underline">
-                          {' '}
-                          Click here <span aria-hidden="true">&rarr;</span>
-                        </a>
-                      </span>
-                    </p>
-                  </div>
-                  <div className="absolute inset-y-0 right-0 flex items-start pt-1 pr-1 sm:items-start sm:pt-1 sm:pr-2">
-                    <button
-                      type="button"
-                      className="flex rounded-md p-2 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-white"
-                    >
-                      <span className="sr-only">Dismiss</span>
-                      <XIcon
-                        className="h-6 w-6 text-white"
-                        aria-hidden="true"
-                      />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <div className="mx-auto mt-8 max-w-6xl px-4 sm:px-6 lg:px-8">
               <h2 className="text-lg font-medium leading-6 text-gray-900">
                 Overview
@@ -214,10 +217,7 @@ export default function ProfilePage() {
               <div className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {/* Card */}
                 {cards.map((card) => (
-                  <div
-                    key={card.name}
-                    className="rounded-lg bg-white shadow"
-                  >
+                  <div key={card.name} className="rounded-lg bg-white shadow">
                     <div className="p-5">
                       <div className="flex items-center">
                         <div className="flex-shrink-0">
@@ -242,45 +242,33 @@ export default function ProfilePage() {
                     </div>
                     <div className="bg-gray-50 px-5 py-3">
                       <div className="text-sm">
-                        <a
-                          href={card.href}
+                        <button
                           className="font-medium text-cyan-700 hover:text-cyan-900"
+                          onClick={() => setTable(card.name)}
                         >
                           View all
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>
                 ))}
-
-                <div key="see-more" className="bg-white">
-                  <div className="mx-auto max-w-7xl py-4 px-4 text-center">
-                    <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                      <span className="block">Find New Offerings</span>
-                      
-                    </h2>
-                    <div className="mt-8 flex">
-                      <div className="inline-flex rounded-md shadow mx-auto">
-                        <a
-                          href="#"
-                          className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-5 py-3 text-base font-medium text-white hover:bg-indigo-700"
-                        >
-                          Explore Now!
-                        </a>
-                      </div>
-                      
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
 
-            <h2 className="mx-auto mt-8 max-w-6xl px-4 text-lg font-medium leading-6 text-gray-900 sm:px-6 lg:px-8">
-              Recent activity
-            </h2>
+            <div className="mt-4 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+              {(() => {
+                switch (table) {
+                  case 'Users':
+                    return <UsersTable />
+                  case 'Offerings':
+                    return <OfferingsTable />
+                  default:
+                    return null
+                }
+              })()}
+            </div>
 
-            {/* Activity list (smallest breakpoint only) */}
-            <div className="shadow sm:hidden">
+            {/* <div className="shadow sm:hidden">
               <ul
                 role="list"
                 className="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden"
@@ -341,7 +329,6 @@ export default function ProfilePage() {
               </nav>
             </div>
 
-            {/* Activity table (small breakpoint and up) */}
             <div className="hidden sm:block">
               <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                 <div className="mt-2 flex flex-col">
@@ -418,7 +405,6 @@ export default function ProfilePage() {
                         ))}
                       </tbody>
                     </table>
-                    {/* Pagination */}
                     <nav
                       className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
                       aria-label="Pagination"
@@ -448,7 +434,7 @@ export default function ProfilePage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </main>
       </div>

@@ -44,6 +44,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   userProfile   UserProfile?
+  isAdmin       Boolean      @default(false)
 }
 
 model VerificationToken {
@@ -56,7 +57,7 @@ model VerificationToken {
 
 model UserProfile {
   id        String  @id @default(cuid())
-  userId    String  @unique
+  userId    String? @unique
   ncPartyId String? @unique
 
   firstName           String?
@@ -69,11 +70,12 @@ model UserProfile {
   country             String?
   state               String?
   zipCode             String?
-  email               String?
+  email               String?   @unique
   phone               String?
   accreditationStatus String?   @default("Not Started")
   dob                 DateTime?
   residence           String?
+  accountType         String?
 
   user                        User?                             @relation(fields: [userId], references: [id])
   followedBy                  Follows[]                         @relation("following")
@@ -168,6 +170,8 @@ model UserReaction {
 
 model Organization {
   id          String                   @id @default(cuid())
+  name        String
+  ncIssuerId  String
   ownerId     String
   owner       UserProfile?             @relation(fields: [ownerId], references: [id], onDelete: SetNull)
   memberships OrganizationMembership[]
