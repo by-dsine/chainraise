@@ -170,8 +170,8 @@ model UserReaction {
 
 model Organization {
   id          String                   @id @default(cuid())
-  name        String
-  ncIssuerId  String
+  name        String                   @unique
+  ncIssuerId  String                   @unique
   ownerId     String
   owner       UserProfile?             @relation(fields: [ownerId], references: [id], onDelete: SetNull)
   memberships OrganizationMembership[]
@@ -198,6 +198,7 @@ model OrganizationMembership {
 model Offering {
   id                 String                  @id @default(cuid())
   name               String
+  ncOfferingId       String                  @unique
   organizationId     String
   organization       Organization            @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   startTimestamp     DateTime                @db.Timestamptz(3)

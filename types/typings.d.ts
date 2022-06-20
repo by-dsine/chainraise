@@ -19,6 +19,17 @@ export type DisplayUser = {
   accreditation: string
 }
 
+export type NewOrganizationResponse = {
+  message: string
+  organizationName: string
+  organizationId: string
+}
+
+export type GetOrganizationResponse = {
+  organizationName: string
+  organizationId: string
+}
+
 // Form Types
 export type INewPostForm = {
   body: string
@@ -72,6 +83,22 @@ export type OrganizationPrimaryIssuerForm = {
   lastName: string
   email: string
   phone: string
+}
+
+export type OfferingForm = {
+  organizationId: string
+  offeringName: string
+  startDate: string
+  endDate: string
+  targetAmount: number
+  minimumAmount: number
+  maximumAmount: number
+  issueType: string
+  description: string
+}
+
+export type GetOrganizationForm = {
+  organizationName: string
 }
 
 // North Capital API types
@@ -133,6 +160,16 @@ type IssuerDetails = {
   issuerStatus: string
 }
 
+type OfferingResponse = {
+  statusCode: string
+  statusDesc: string
+  offeringDetails: (boolean | OfferingDetails[])[]
+}
+
+type OfferingDetails = {
+  offeringId: string
+  offeringStatus: string
+}
 // Sanity Types
 export interface Post {
   _id: string

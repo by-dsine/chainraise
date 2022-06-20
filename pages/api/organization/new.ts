@@ -4,7 +4,6 @@ import { prisma } from '../../../lib/db'
 import {
   IssuerDetails,
   IssuerResponse,
-  NCKeyMessage,
 } from '../../../types/typings'
 
 export default async function newIssuerAndOrganization(
@@ -91,6 +90,7 @@ export default async function newIssuerAndOrganization(
   const result = (await response.json()) as IssuerResponse
   console.log('createIssuer result is: ', JSON.stringify(result, null, 4))
 
+  let organizationId = ""
   if (result.statusCode == '101') {
     let issuerIdFromResult = getIssuerIdFromResult(result)
     if (!issuerIdFromResult) {
@@ -108,10 +108,16 @@ export default async function newIssuerAndOrganization(
     if (!organization) {
       return res.status(500).json({ message: 'Organization was not created.' })
     }
+    organizationId = organization.id
+    if (!organizationId) {
+      return res.status(500).json({ message: 'Error populating organization ID field. This is really weird.'})
+    }
   }
 
   return res.status(200).json({
     message: `A new user profile was created for the issuer ${userProfile.firstName} ${userProfile.lastName} and the organization ${organizationName}`,
+    organizationName: organizationName,
+    organizationId: organizationId
   })
 }
 
