@@ -218,6 +218,7 @@ model Offering {
   offeringHistory    OfferingStatusHistory[]
   sections           OfferingSection[]
   userPosts          OfferingUserPost[]
+  documents          OfferingDocument[]
 }
 
 model OfferingParameter {
@@ -264,6 +265,16 @@ model SectionResource {
   location    String
   type        Int
   order       Int
+}
+
+model OfferingDocument {
+  id          String   @id @default(cuid())
+  offeringId  String
+  offering    Offering @relation(fields: [offeringId], references: [id], onDelete: SetNull)
+  title       String
+  description String
+  location    String
+  public      Boolean
 }
 
 model OfferingUserPost {

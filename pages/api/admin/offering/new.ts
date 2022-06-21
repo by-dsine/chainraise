@@ -67,7 +67,7 @@ export default async function newOffering(
     }
 
     // #1 Locate organization to be the owner of this offering
-    var organization = await prisma.userProfile.findUnique({
+    var organization = await prisma.organization.findUnique({
       where: {
         id: organizationId,
       },
@@ -84,7 +84,7 @@ export default async function newOffering(
     const data = new URLSearchParams()
     data.append('clientID', CLIENT_ID)
     data.append('developerAPIKey', DEVELOPER_KEY)
-    data.append('issuerId', organizationId)
+    data.append('issuerId', organization.ncIssuerId!)
     data.append('issueName', offeringName)
     data.append('issueType', issueType)
     data.append('targetAmount', formatAmountForNC(targetAmount))

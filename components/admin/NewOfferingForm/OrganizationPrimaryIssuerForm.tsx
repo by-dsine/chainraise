@@ -77,7 +77,7 @@ export default function NewOrganizationPrimaryIssuerForm() {
 
       })
 
-      const result = (await response.json()) as NewOrganizationResponse
+      const result = (await response.json()) as GetOrganizationResponse
       console.log(result)
       if (response.status == 200) {
         setOrganizationId(result.organizationId)
