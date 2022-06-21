@@ -198,6 +198,7 @@ model OrganizationMembership {
 model Offering {
   id                 String                  @id @default(cuid())
   name               String
+  slug               String?                 @unique
   ncOfferingId       String                  @unique
   organizationId     String
   organization       Organization            @relation(fields: [organizationId], references: [id], onDelete: SetNull)
@@ -206,6 +207,7 @@ model Offering {
   minimumInvestment  Int
   goal               Int
   pledged            Int
+  maxRaise           Int?
   description        String
   shortDescription   String
   disclosure         String
@@ -259,6 +261,7 @@ model SectionResource {
   title       String
   subtitle    String
   description String
+  location    String
   type        Int
   order       Int
 }

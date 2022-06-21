@@ -10,11 +10,13 @@ import { useState } from 'react'
 import { useNewOfferingFormStore } from '../../../lib/zustand/newOfferingStore'
 export default function NewOrganizationPrimaryIssuerForm() {
 
-  const newOfferingFormStore = useNewOfferingFormStore()
+  const organizationId = useNewOfferingFormStore(state => state.organizationId)
+  const setOrganizationId = useNewOfferingFormStore(state => state.setOrganizationId)
 
   // Begin organization name and contact info functions
   const [isNewOrg, setIsNewOrg] = useState(false)
   const [nameChecked, setNameChecked] = useState(false) //TODO: add safety check- if name changed after name checked, require name check again
+  //const [organizationId, setOrganizationId] = useState("")
 
   const organizationPrimaryIssuerSchema = yup.object().shape({
     organizationName: yup
@@ -39,6 +41,7 @@ export default function NewOrganizationPrimaryIssuerForm() {
   const watchOrganizationName = watch('organizationName')
 
   const getOrganizationByName = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
     const fetchData = async () => {
       const organizationName = watchOrganizationName
 
@@ -49,15 +52,14 @@ export default function NewOrganizationPrimaryIssuerForm() {
           method: 'GET',
         }
       )
-      console.log(response)
-      const result = (await response.json()) 
+      const result = (await response.json()) as GetOrganizationResponse
       console.log(result)
 
       setNameChecked(true)
       if (response.status == 404) {
         setIsNewOrg(true)
-      } else if (response.status == 101) {
-        newOfferingFormStore.setOrganizationId(result.organizationId)
+      } else if (response.status == 200) {
+        setOrganizationId(result.organizationId)
         setIsNewOrg(false)
       }
     }
@@ -69,12 +71,16 @@ export default function NewOrganizationPrimaryIssuerForm() {
       const response = await fetch('/api/organization/new', {
         method: 'POST',
         body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+        }
+
       })
 
       const result = (await response.json()) as NewOrganizationResponse
       console.log(result)
       if (response.status == 200) {
-        newOfferingFormStore.setOrganizationId(result.organizationId)
+        setOrganizationId(result.organizationId)
       } else {
         console.log("Error craating new offering: {}", response.body)
       }

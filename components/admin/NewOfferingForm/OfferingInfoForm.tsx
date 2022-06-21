@@ -6,11 +6,9 @@ import { useState } from 'react'
 import { useNewOfferingFormStore } from '../../../lib/zustand/newOfferingStore'
 
 export default function NewOfferingInfoForm() {
-
-  const newOfferingFormStore = useNewOfferingFormStore()
+  const organizationId = useNewOfferingFormStore(store => store.organizationId)
 
   const newOfferingSchema = yup.object().shape({
-    organizationId: yup.string().required("Please enter an organization ID."),
     offeringName: yup.string().required('Please enter an offering name.'),
     startDate: yup.string().required('Please enter a start date.'),
     endDate: yup.string().required('Please enter an end date.'),
@@ -32,12 +30,17 @@ export default function NewOfferingInfoForm() {
   })
 
   const onSubmit: SubmitHandler<OfferingForm> = (data) => {
+    data.organizationId = organizationId
     console.log(data)
-    fetch(`/api/admin/offering/new/`, {
+    fetch("/api/admin/offering/new", {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(data),
     })
-      .then(() => {
+      .then((response) => {
+        console.log(response)
         alert('Sent.')
       })
       .catch((err) => {
@@ -60,24 +63,10 @@ export default function NewOfferingInfoForm() {
             </div>
           </div>
           <div className="mt-5 md:col-span-2 md:mt-0">
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)} action="POST">
               <div className="overflow-hidden shadow sm:rounded-md">
                 <div className="bg-white px-4 py-5 sm:p-6">
                   <div className="grid grid-cols-6 gap-6">
-                  <div className="col-span-6 sm:col-span-2">
-                      <label
-                        htmlFor="organization-id"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Organization ID
-                      </label>
-                      <input
-                        type="text"
-                        {...register('organizationId')}
-                        id="organization-id"
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      />
-                    </div>
                     <div className="col-span-6">
                       <label
                         htmlFor="offering-name"
@@ -162,7 +151,22 @@ export default function NewOfferingInfoForm() {
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       />
                     </div>
-                    <div className="col-span-6">
+                    <div className="col-span-6 sm:col-span-3">
+                      <label
+                        htmlFor="price"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Price
+                      </label>
+                      <input
+                        type="number"
+                        id="price"
+                        {...register('price')}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      />
+                    </div>
+
+                    <div className="col-span-6 sm:col-span-3">
                       <label
                         htmlFor="issue-type"
                         className="block text-sm font-medium text-gray-700"
@@ -173,7 +177,7 @@ export default function NewOfferingInfoForm() {
                         id="Issue Type"
                         {...register('issueType')}
                         autoComplete="issue-type"
-                        className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm"
+                        className="mt-1 block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm"
                       >
                         <option>Equity</option>
                         <option>Debt</option>
@@ -181,6 +185,7 @@ export default function NewOfferingInfoForm() {
                         <option>Fund</option>
                       </select>
                     </div>
+
                     <div className="col-span-6">
                       <label
                         htmlFor="description"

@@ -1,5 +1,5 @@
-import NewOfferingInfoForm from './newOfferingForm/OfferingInfoForm'
-import NewOrganizationPrimaryIssuerForm from './newOfferingForm/OrganizationPrimaryIssuerForm'
+import NewOfferingInfoForm from './NewOfferingForm/OfferingInfoForm'
+import NewOrganizationPrimaryIssuerForm from './NewOfferingForm/OrganizationPrimaryIssuerForm'
 
 export default function NewOffering() {
   return (

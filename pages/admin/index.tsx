@@ -30,11 +30,11 @@ import {
 import Header from '../../components/Header'
 import useOrCreateUserProfile from '../../hooks/useOrCreateUserProfile'
 import Link from 'next/link'
-import { CRAdminStatistics, DisplayUser } from '../../types/typings'
+import { CRAdminStatistics, DisplayAdminInfo, DisplayAdminOffering, DisplayAdminUser } from '../../types/typings'
 import UsersTable from '../../components/admin/UsersTable'
 import { GetServerSideProps } from 'next'
 import { useAllUsersForAdmin } from '../../hooks/users'
-import { useDisplayUserStore } from '../../lib/zustand/displayUserStore'
+import { useDisplayStore } from '../../lib/zustand/displayAdminStore'
 import OfferingsTable from '../../components/admin/OfferingsTable'
 
 const navigation = [
@@ -102,7 +102,11 @@ export default function ProfilePage() {
 
   let { users } = useAllUsersForAdmin()
 
-  const usersForDisplay = useDisplayUserStore()
+  const usersForDisplay = useDisplayStore(store => store.displayUsers)
+  const addUserToDisplayTable = useDisplayStore(store => store.addDisplayUser)
+  const offeringsForDisplay = useDisplayStore(store => store.displayOfferings)
+  const addOfferingToDisplayTable = useDisplayStore(store => store.addDisplayOffering)
+
 
   const [numOfferings, setNumOfferings] = useState(0)
   const [numUsers, setNumUsers] = useState(0)
@@ -126,22 +130,29 @@ export default function ProfilePage() {
     fetchStatsData().catch(console.error)
 
     const fetchUserData = async () => {
-      const response = await fetch('/api/admin/users', {
+      const response = await fetch('/api/admin/display', {
         method: 'GET',
         headers: {
           Accept: 'application/json',
         },
       })
 
-      const result = (await response.json()) as DisplayUser[]
-      console.log('Adding %d profiles to display store.', result?.length)
-      result?.forEach((userForDisplay) => {
-        usersForDisplay.addDisplayUser(userForDisplay)
+      const result = (await response.json()) as DisplayAdminInfo
+      const offerings = result.offerings
+      const users = result.users
+
+      users?.forEach((userForDisplay) => {
+        addUserToDisplayTable(userForDisplay)
       })
 
-      console.log(usersForDisplay.displayUsers)
+      offerings?.forEach((offeringForDisplay) => {
+        addOfferingToDisplayTable(offeringForDisplay)
+      })
+
+      console.log(usersForDisplay)
     }
     fetchUserData().catch(console.error)
+
   }, [])
 
   const cards = [

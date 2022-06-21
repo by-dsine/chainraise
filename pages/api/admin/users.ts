@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react'
 import { NOT_STARTED } from '../../../constants/const'
 import { prisma } from '../../../lib/db'
-import { DisplayUser } from '../../../types/typings'
+import { DisplayAdminUser } from '../../../types/typings'
 
 export default async function users(req: NextApiRequest, res: NextApiResponse) {
   console.log('Fetching session...')
@@ -33,13 +33,13 @@ export default async function users(req: NextApiRequest, res: NextApiResponse) {
       },
   })
 
-  let usersForDisplay: DisplayUser[] = []
+  let usersForDisplay: DisplayAdminUser[] = []
   userProfiles.forEach((userProfile)=> {
     const userForDisplay = {
         uid: userProfile.userId,
         name: userProfile.firstName + " " + userProfile.lastName,
         accountType: userProfile.accountType,
-    } as DisplayUser
+    } as DisplayAdminUser
 
     if(!userProfile.ncPartyId || userProfile.userKYCAML.length == 0) {
         userForDisplay.kycStatus = NOT_STARTED

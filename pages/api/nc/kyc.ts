@@ -10,6 +10,7 @@ import {
 } from '../../../types/typings'
 import { BASE_URL } from '../../../nc'
 import { AUTO_APPROVED, DISAPPROVED } from '../../../constants/const'
+import { convertDateToSimpleString } from '../../../utils/mappers'
 export default async function handleNorthCapital(
   req: NextApiRequest,
   res: NextApiResponse
@@ -280,19 +281,6 @@ function isUSCitizenOrResidentString(residenceStatus: string | null): string {
   return 'false'
 }
 
-function convertDateToSimpleString(dbDate: Date): string {
-  const month = dbDate.getMonth() + 1
-  const day = dbDate.getUTCDate()
-  const year = dbDate.getUTCFullYear()
-
-  return (
-    (month.toString().length == 1 ? '0' + month.toString() : month.toString()) +
-    '-' +
-    day.toString() +
-    '-' +
-    year.toString()
-  )
-}
 
 function getPartyNumberFromResult(result: CreatePartyResponse): string {
   var resultPartyObject = result.partyDetails[1] as PartyDetail[]

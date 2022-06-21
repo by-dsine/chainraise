@@ -60,7 +60,7 @@ export default async function organization(
   }
   console.log(organizationData)
 
-  return res.status(101).json(JSON.stringify(organizationData))
+  return res.status(200).json(organizationData)
 
   
 }

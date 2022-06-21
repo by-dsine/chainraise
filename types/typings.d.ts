@@ -10,13 +10,29 @@ export type CRAdminStatistics = {
   offeringsCount: number
 }
 
-export type DisplayUser = {
+export type DisplayAdminInfo = {
+  offerings: DisplayAdminOffering[]
+  users: DisplayAdminUser[] 
+}
+
+export type DisplayAdminUser = {
   uid: string
   name: string
   accountType: string
   kycStatus: string
   amlStatus: string
   accreditation: string
+}
+
+export type DisplayAdminOffering = {
+  offeringId: string
+  name: string
+  slug: string
+  status: string
+  goal: number
+  pledged: number
+  startDate: string
+  endDate: string
 }
 
 export type NewOrganizationResponse = {
@@ -28,6 +44,38 @@ export type NewOrganizationResponse = {
 export type GetOrganizationResponse = {
   organizationName: string
   organizationId: string
+}
+
+// Offerings 
+export type DisplayOffering = {
+  name: string
+  slug: string
+  status: string
+  goal: string
+  pledged: string
+  startDate: string
+  endDate: string
+  sections: DisplayOfferingSection[]
+}
+
+export type DisplayOfferingSection = {
+  id: string
+  title: string
+  subtitle: string
+  order: number
+  displayOrder: number
+  resources: DisplayOfferingResource[]
+}
+
+export type DisplayOfferingResource = {
+  id: string
+  title: string
+  subtitle: string
+  description: string
+  location: string
+  type: string
+  order: number
+  displayOrder: number
 }
 
 // Form Types
@@ -93,12 +141,27 @@ export type OfferingForm = {
   targetAmount: number
   minimumAmount: number
   maximumAmount: number
+  price: number
   issueType: string
   description: string
 }
 
 export type GetOrganizationForm = {
   organizationName: string
+  organizationId: string
+}
+
+export type AdminEditOffering = {
+  organizationName: string
+  offeringName: string
+  startDate: string
+  endDate: string
+  targetAmount: number
+  minimumAmount: number
+  maximumAmount: number
+  price: number
+  issueType: string
+  description: string
 }
 
 // North Capital API types

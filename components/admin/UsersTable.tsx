@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useDisplayUserStore } from '../../lib/zustand/displayUserStore'
-import { DisplayUser } from '../../types/typings'
+import { useDisplayStore } from '../../lib/zustand/displayAdminStore'
+import { DisplayAdminUser } from '../../types/typings'
 
 /* This example requires Tailwind CSS v2.0+ */
 const people = [
@@ -20,7 +20,7 @@ function classNames(...classes: string[]) {
 
 export default function UsersTable() {
   
-  const usersForDisplay = useDisplayUserStore((state) => state.displayUsers)
+  const usersForDisplay = useDisplayStore((state) => state.displayUsers)
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
