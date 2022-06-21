@@ -40,13 +40,9 @@ export default async function organization(
   }
 
   console.log("Calling db...")
-  // #1 Locate or create a user profile to be the owner
   var organization = await prisma.organization.findUnique({
     where: {
       name: name,
-    },
-    include : {
-      owner: true
     }
   })
 
