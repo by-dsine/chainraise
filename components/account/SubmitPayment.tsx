@@ -1,7 +1,8 @@
 import React from 'react'
 const paymentMethods = [
   { id: 'credit-card', title: 'Credit card' },
-  { id: 'wire', title: 'wire' },
+  { id: 'ach', title: 'ACH' },
+  { id: 'wire', title: 'Wire' },
 ]
 export const SubmitPayment = () => {
   return (

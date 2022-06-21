@@ -13,7 +13,7 @@ const trendingRaises = [
     color: 'Natural',
     price: '$5,000,000',
     options: 'Equity',
-    href: 'offerings/example',
+    href: 'offerings/test',
     imageSrc: 'https://baseballhall.org/sites/default/files/styles/fullscreen_image_popup/public/islandora_images/Johnson%20Randy%2012-2012-971_Act_NBLMangin.jpg?itok=fRyMBHeQ',
     imageAlt: 'Let us pitch the only pest removal service.',
     description: 'Let us pitch the only pest removal service.',
@@ -25,7 +25,7 @@ const trendingRaises = [
     price: '$1,250,000',
     options: 'Equity',
 
-    href: 'offerings/example',
+    href: 'offerings/test',
     imageSrc:
       'https://cdn.roosterteeth.com/image/upload/t_l/f_auto/3/e9afe27a-0a5b-4e37-ad56-69fc51e522f5.jpg/original/sportsballportrait1.jpg',
     imageAlt: 'Sportsball',
@@ -38,7 +38,7 @@ const trendingRaises = [
     price: '$3,045,000',
     options: 'Equity',
 
-    href: 'offerings/example',
+    href: 'offerings/test',
     imageSrc:
       'https://summerofthearts.org/wp-content/uploads/Space-Jam-534x800.jpg',
     imageAlt: 'It\'s the movie nobody asked for but we wanna make it anyways.',
@@ -50,7 +50,7 @@ const trendingRaises = [
     color: 'Natural',
     price: '$250,000',
     options: 'Equity',
-    href: 'offerings/example',
+    href: 'offerings/test',
     imageSrc:
       'https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHNwb3J0c3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=1200&q=60',
     imageAlt: 'Wow they spin so fast.',
@@ -63,7 +63,7 @@ const trendingRaises = [
     price: '$3.50',
     options: 'Equity',
 
-    href: 'offerings/example',
+    href: 'offerings/test',
     imageSrc:
       'https://media.istockphoto.com/photos/abandoned-ghost-net-fish-aggregating-device-polluting-the-ocean-near-picture-id1194423948?b=1&k=20&m=1194423948&s=170667a&w=0&h=JheqDD4oB0UnApCpsqm48GEZDLUnoOtWEZNtQvKs4_w=',
     imageAlt: "Damn that's a nice basket, son.",
@@ -75,7 +75,7 @@ const trendingRaises = [
     color: 'Natural',
     price: '$4,200,000',
     options: 'Equity',
-    href: 'offerings/example',
+    href: 'offerings/test',
     imageSrc:
       'https://images.unsplash.com/photo-1498671546682-94a232c26d17?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Y2FubmFiaXN8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60',
     imageAlt: 'Sheesh this is some dank stuff.',

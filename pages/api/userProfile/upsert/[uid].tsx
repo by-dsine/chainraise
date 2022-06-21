@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { prisma } from '../../../lib/db'
+import { prisma } from '../../../../lib/db'
 
 export default async function getUserProfileByUserId(
   req: NextApiRequest,
@@ -30,5 +30,6 @@ export default async function getUserProfileByUserId(
   if (!userProfile) {
     return res.status(404).json({ message: 'User not found.' })
   }
+  
   return res.status(201).json(userProfile)
 }

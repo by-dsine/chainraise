@@ -44,6 +44,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   userProfile   UserProfile?
+  isAdmin       Boolean      @default(false)
 }
 
 model VerificationToken {
@@ -55,18 +56,26 @@ model VerificationToken {
 }
 
 model UserProfile {
-  id     String @id @default(cuid())
-  userId String @unique
+  id        String  @id @default(cuid())
+  userId    String? @unique
+  ncPartyId String? @unique
 
-  firstName String?
-  lastName  String?
-  username  String? @unique
-  bio       String?
-  address   String?
-  city      String?
-  state     String?
-  zipCode   String?
-  phone     String?
+  firstName           String?
+  middleName          String?
+  lastName            String?
+  username            String?   @unique
+  bio                 String?
+  address             String?
+  city                String?
+  country             String?
+  state               String?
+  zipCode             String?
+  email               String?   @unique
+  phone               String?
+  accreditationStatus String?   @default("Not Started")
+  dob                 DateTime?
+  residence           String?
+  accountType         String?
 
   user                        User?                             @relation(fields: [userId], references: [id])
   followedBy                  Follows[]                         @relation("following")
@@ -81,15 +90,16 @@ model UserProfile {
   offeringPostComments        OfferingUserPostComment[]
   offeringPostReactions       OfferingUserPostReaction[]
   offeringPostCommentReaction OfferingUserPostCommentReaction[]
-  PlatformRole                PlatformRole[]
+  platformRoles               PlatformRole[]
+  userKYCAML                  UserKYCAML[]
 }
 
 model PlatformRole {
-  id     String         @id @default(cuid())
-  userId String
-  user   UserProfile    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  roleId Int
-  role   RolePermission @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  id            String         @id @default(cuid())
+  userProfileId String
+  userProfile   UserProfile    @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
+  roleId        Int
+  role          RolePermission @relation(fields: [roleId], references: [id], onDelete: Cascade)
 }
 
 model RolePermission {
@@ -160,6 +170,8 @@ model UserReaction {
 
 model Organization {
   id          String                   @id @default(cuid())
+  name        String                   @unique
+  ncIssuerId  String                   @unique
   ownerId     String
   owner       UserProfile?             @relation(fields: [ownerId], references: [id], onDelete: SetNull)
   memberships OrganizationMembership[]
@@ -177,8 +189,8 @@ model OrganizationMembership {
   id             String           @id @default(cuid())
   organizationId String
   organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: SetNull)
-  userId         String
-  user           UserProfile      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userProfileId  String
+  userProfile    UserProfile      @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
   roleId         Int
   role           OrganizationRole @relation(fields: [roleId], references: [id], onDelete: Cascade)
 }
@@ -186,6 +198,8 @@ model OrganizationMembership {
 model Offering {
   id                 String                  @id @default(cuid())
   name               String
+  slug               String?                 @unique
+  ncOfferingId       String                  @unique
   organizationId     String
   organization       Organization            @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   startTimestamp     DateTime                @db.Timestamptz(3)
@@ -193,6 +207,7 @@ model Offering {
   minimumInvestment  Int
   goal               Int
   pledged            Int
+  maxRaise           Int?
   description        String
   shortDescription   String
   disclosure         String
@@ -246,27 +261,28 @@ model SectionResource {
   title       String
   subtitle    String
   description String
+  location    String
   type        Int
   order       Int
 }
 
 model OfferingUserPost {
-  id         String                     @id @default(cuid())
-  offeringId String
-  offering   Offering                   @relation(fields: [offeringId], references: [id], onDelete: SetNull)
-  userId     String
-  user       UserProfile                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  body       String
-  comments   OfferingUserPostComment[]
-  reactions  OfferingUserPostReaction[]
+  id            String                     @id @default(cuid())
+  offeringId    String
+  offering      Offering                   @relation(fields: [offeringId], references: [id], onDelete: SetNull)
+  userProfileId String
+  userProfile   UserProfile                @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
+  body          String
+  comments      OfferingUserPostComment[]
+  reactions     OfferingUserPostReaction[]
 }
 
 model OfferingUserPostReaction {
   id             String           @id @default(cuid())
   offeringPostId String
   offeringPost   OfferingUserPost @relation(fields: [offeringPostId], references: [id], onDelete: SetNull)
-  userId         String
-  user           UserProfile      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userProfileId  String
+  userProfile    UserProfile      @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
   reactionId     Int
   reaction       UserReaction     @relation(fields: [reactionId], references: [id], onDelete: SetNull)
 }
@@ -275,8 +291,8 @@ model OfferingUserPostComment {
   id             String                            @id @default(cuid())
   offeringPostId String
   offeringPost   OfferingUserPost                  @relation(fields: [offeringPostId], references: [id], onDelete: SetNull)
-  userId         String
-  user           UserProfile                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userProfileId  String
+  userProfile    UserProfile                       @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
   body           String
   reactions      OfferingUserPostCommentReaction[]
 }
@@ -285,8 +301,18 @@ model OfferingUserPostCommentReaction {
   id                    String                  @id @default(cuid())
   offeringPostCommentId String
   offeringPostComment   OfferingUserPostComment @relation(fields: [offeringPostCommentId], references: [id], onDelete: SetNull)
-  userId                String
-  user                  UserProfile             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userProfileId         String
+  userProfile           UserProfile             @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
   reactionId            Int
   reaction              UserReaction            @relation(fields: [reactionId], references: [id], onDelete: SetNull)
+}
+
+model UserKYCAML {
+  id            String      @id @default(cuid())
+  userProfileId String
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
+  timestamp     DateTime    @default(now()) @db.Timestamptz(3)
+  kycStatus     String?     @default("Not Started")
+  amlStatus     String?     @default("Not Started")
+  response      Json?
 }

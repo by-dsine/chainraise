@@ -6,7 +6,7 @@ import { fetcher } from '../lib/prisma'
 export default function useOrCreateUserProfile() {
   const { data: session } = useSession()
 
-  const { data, error } = useSWR<UserProfile>(() => `/api/userProfile/${session!.user.uid}`, fetcher)
+  const { data, error } = useSWR<UserProfile>(() => `/api/userProfile/upsert/${session!.user.uid}`, fetcher)
 
   return {
     userProfile: data,

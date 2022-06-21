@@ -2,7 +2,7 @@ import Header from '../../components/Header'
 import { GetStaticProps, NextApiRequest } from 'next'
 import { sanityClient } from '../../sanity'
 import { getSession, useSession } from 'next-auth/react'
-import { IPersonalInformationForm } from '../../types/typings'
+import { PersonalInformationForm } from '../../types/typings'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Fragment, useEffect, useState } from 'react'
 import { Disclosure, Menu, Switch, Transition } from '@headlessui/react'
@@ -58,10 +58,8 @@ export default function Account() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IPersonalInformationForm>({
+  } = useForm<PersonalInformationForm>({
     defaultValues: {
-      userId: "",
-      bio: "",
       firstName: "",
       lastName: "",
       address: "",
@@ -87,7 +85,7 @@ export default function Account() {
     reset(defaults)
   }, [userProfile, reset])
 
-  const onSubmit: SubmitHandler<IPersonalInformationForm> = (data) => {
+  const onSubmit: SubmitHandler<PersonalInformationForm> = (data) => {
     console.log(data)
     fetch('/api/userProfile/updateProfile', {
       method: 'POST',
@@ -144,7 +142,6 @@ export default function Account() {
                 action="#"
                 method="POST"
               >
-                <input hidden type="text" {...register('userId')}/>
                 
                 {/* Profile section */}
                 <div className="py-6 px-4 sm:p-6 lg:pb-8">
@@ -189,7 +186,6 @@ export default function Account() {
                         <div className="mt-1">
                           <textarea
                             id="bio"
-                            {...register('bio')}
                             rows={3}
                             className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                             defaultValue={userProfile?.bio || ''}

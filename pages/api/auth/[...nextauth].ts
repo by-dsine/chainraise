@@ -26,19 +26,15 @@ export default NextAuth({
       return true
     },
     async session({ session, user }) {
-      if (!session.user.uid) {
-        const getUser = await prisma.user.findFirst({
-          where: {
-            email: session!.user!.email,
-          },
-        })
-        session.user.uid = getUser?.id
-      }
+      session.user.admin = false
 
-      session.user.username = session!
-        .user!.name!.split(' ')
-        .join('')
-        .toLocaleLowerCase()
+      const getUser = await prisma.user.findFirst({
+        where: {
+          email: session!.user!.email,
+        },
+      })
+      session.user.uid = getUser?.id
+      session.user.admin = getUser?.isAdmin!
 
       return session
     },
