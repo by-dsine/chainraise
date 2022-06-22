@@ -13,7 +13,7 @@ const trendingRaises = [
     color: 'Natural',
     price: '$5,000,000',
     options: 'Equity',
-    href: '#',
+    href: '/offerings/test-offering',
     imageSrc:
       'https://images.unsplash.com/photo-1558661091-5cc1b64d0dc5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8aG91c2UlMjBjb25zdHJ1Y3Rpb258ZW58MHx8MHx8&auto=format&fit=crop&w=1200&q=60',
     imageAlt: 'The creative real estate fund for everyone.',

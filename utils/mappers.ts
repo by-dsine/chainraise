@@ -18,6 +18,10 @@ export function mapStatusId(statusId: number): string {
   switch (statusId) {
     case 1:
       return 'Created'
+    case 2:
+      return 'Ready to Launch'
+    case 3:
+      return 'Active'
     default:
       return 'Invalid status'
   }

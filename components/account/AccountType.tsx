@@ -15,10 +15,12 @@ type setting = {
 const settings = [
   {
     name: 'individual',
+    displayName: 'Individual',
     description: 'You represent yourself. Good for you. Carpe those diems.',
   },
   {
     name:'entity',
+    displayName: 'Entity',
     description:
       "You're investing for an entity or organization such as a Family Office or an IRA.",
   },
@@ -144,7 +146,7 @@ export default function AccountType() {
                             'block text-sm font-medium'
                           )}
                         >
-                          {setting.name}
+                          {setting.displayName}
                         </RadioGroup.Label>
                         <RadioGroup.Description
                           as="span"

@@ -59,7 +59,7 @@ export const PersonalInformation = ({ userProfile }: Props) => {
       middleName: userProfile?.middleName || '',
       lastName: userProfile?.lastName || '',
       email: userProfile?.email || '',
-      phone: userProfile?.phone || '',
+      phoneNumber: userProfile?.phone || '',
       country: userProfile?.country || '',
       streetAddress: userProfile?.address || '',
       city: userProfile?.city || '',
