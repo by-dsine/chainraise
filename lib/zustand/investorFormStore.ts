@@ -33,6 +33,9 @@ interface investorFormStore {
   title: string
   setTitle: (title: string) => void
 
+  email: string
+  setEmail: (email: string) => void
+
   phoneNumber: string
   setPhoneNumber: (phoneNumber: string) => void
 
@@ -123,6 +126,13 @@ export const useInvestorForm = create<investorFormStore>((set) => ({
     set((state) => ({
       ...state,
       title: value,
+    }))
+  },
+  email: '',
+  setEmail: (value) => {
+    set((state) => ({
+      ...state,
+      email: value,
     }))
   },
   phoneNumber: '',

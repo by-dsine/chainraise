@@ -4,11 +4,14 @@ import Link from 'next/link'
 import { Tab } from '@headlessui/react'
 import Header from '../../components/Header'
 import AccountType from '../../components/account/AccountType'
-import PersonalInformation from '../../components/account/PersonalInformation'
+import { PersonalInformation } from '../../components/account/PersonalInformation'
 import AccreditationStatus from '../../components/account/AccreditationStatus'
 import SignDocuments from '../../components/account/SignDocuments'
 import { SubmitPayment } from '../../components/account/SubmitPayment'
 import { useInvestorForm } from '../../lib/zustand/investorFormStore'
+import { GetServerSideProps } from 'next'
+import useUserProfile from '../../hooks/useUserProfile'
+import { UserProfile } from '@prisma/client'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -16,6 +19,15 @@ function classNames(...classes: string[]) {
 
 export default function Investor() {
   const investorForm = useInvestorForm()
+  const user = useUserProfile()
+  console.log(user)
+
+  useEffect(() => {
+    if(user.userProfile?.accountType){
+      investorForm.setAccountType(user.userProfile?.accountType)
+      investorForm.setStepNumber(1)
+    }
+  }, [])
 
   return (
     <>
@@ -54,7 +66,7 @@ export default function Investor() {
               >
                 Personal Information
               </Tab>
-              <Tab
+              {/* <Tab
                 className={({ selected }) =>
                   classNames(
                     selected
@@ -65,7 +77,7 @@ export default function Investor() {
                 }
               >
                 Accreditation Status
-              </Tab>
+              </Tab> */}
               <Tab
                 className={({ selected }) =>
                   classNames(
@@ -100,13 +112,13 @@ export default function Investor() {
 
             <Tab.Panel className="text-sm text-gray-500">
               <h3 className="sr-only">Personal Information</h3>
-              <PersonalInformation />
+              <PersonalInformation userProfile={user?.userProfile as UserProfile}/>
             </Tab.Panel>
 
-            <Tab.Panel className="pt-10">
+            {/* <Tab.Panel className="pt-10">
               <h3 className="sr-only">Accreditation Status</h3>
               <AccreditationStatus />
-            </Tab.Panel>
+            </Tab.Panel> */}
 
             <Tab.Panel className="pt-10">
               <h3 className="sr-only">Sign Documents</h3>

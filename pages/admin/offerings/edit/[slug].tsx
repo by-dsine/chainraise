@@ -14,6 +14,9 @@ import {
 } from '../../../../utils/mappers'
 import { formatter } from '../../../../utils/formatters'
 import { useEffect, useState } from 'react'
+import { PaperClipIcon, PlusIcon } from '@heroicons/react/solid'
+import { NewSectionResource } from '../../../../components/admin/EditOffering/NewSectionResource'
+import { makeID } from '../../../../utils/utils'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -24,17 +27,15 @@ type Props = {
 }
 
 export default function EditOfferingPage({ offeringForDisplay }: Props) {
-  const [offeringSections, setOfferingSections] = useState<
-    DisplayOfferingSection[]
-  >([])
+  const [offeringSections, setOfferingSections] = useState<DisplayOfferingSection[]>([])
 
   const createNewSection = () => {
     offeringSections.forEach((section) => {
       section.displayOrder++
     })
     let blankSection = {
-      id: '',
-      title: '',
+      id: makeID(5),
+      title: 'New Section',
       subtitle: '',
       order: 0,
       displayOrder: 0,
@@ -49,6 +50,12 @@ export default function EditOfferingPage({ offeringForDisplay }: Props) {
     )
 
     setOfferingSections(currentOfferingSections)
+  }
+
+  function deleteOfferingSection(id: string) {
+    setOfferingSections(offeringSections.filter(function(value, _index, _arr){
+      return value.id != id
+    }))
   }
 
   return (
@@ -120,11 +127,70 @@ export default function EditOfferingPage({ offeringForDisplay }: Props) {
 
           <div className="bg-white lg:min-w-0 lg:flex-1">
             <div className="h-full py-6 px-4 sm:px-6 lg:px-8">
+              {/* {offeringSections.length > 0 && ( */}
               <>
                 {offeringSections.map((section, sectionIdx) => {
                   return (
-                    <div className="bg-gray-300" key={section.displayOrder}>
-                      <p className="text-lg">{section.title}</p>
+                    <div
+                      className="my-4 block rounded-lg border-2 border-dashed border-gray-300 bg-gray-200"
+                      key={section.displayOrder}
+                    >
+                      <div className="border-b border-gray-200 px-4 py-5 sm:px-6">
+                        <div className="-ml-4 -mt-2 flex flex-wrap items-center justify-between sm:flex-nowrap">
+                          <div className="ml-4 mt-2">
+                            <h3 className="text-lg font-medium leading-6 text-gray-900">
+                              New Offering Section
+                            </h3>
+                          </div>
+                          <div className="ml-4 mt-2 flex-shrink-0">
+                            <button
+                              onClick={() => deleteOfferingSection(section.id)}
+                              type="button"
+                              className="relative mr-2 inline-flex items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                            >
+                              Delete
+                            </button>
+                            <button
+                              type="button"
+                              className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            >
+                              Save
+                            </button>
+                          </div>
+                        </div>
+                      </div>{' '}
+                      <input
+                        className="block w-full rounded-md sm:text-sm"
+                        type="text"
+                        name="section-title"
+                        placeholder="Section Title"
+                      />
+                      <input
+                        className="block w-full rounded-md sm:text-sm"
+                        type="text"
+                        name="section-subtitle"
+                        placeholder="Section Subtitle"
+                      />
+                      <textarea
+                        className="block w-full resize-y rounded-md sm:text-sm"
+                        rows={2}
+                        name="section-description"
+                        placeholder="Section Description"
+                      />
+                      <div className="grid w-full grid-cols-4 p-2">
+                        <div className="col-span-1">
+                          <NewSectionResource />
+                        </div>
+                        <div className="col-span-1">
+                          <NewSectionResource />
+                        </div>
+                        <div className="col-span-1">
+                          <NewSectionResource />
+                        </div>
+                        <div className="col-span-1">
+                          <NewSectionResource />
+                        </div>
+                      </div>
                     </div>
                   )
                 })}
@@ -159,11 +225,68 @@ export default function EditOfferingPage({ offeringForDisplay }: Props) {
           </div>
         </div>
 
-        <div className="bg-gray-50 pr-4 sm:pr-6 lg:flex-shrink-0 lg:border-l lg:border-gray-200 lg:pr-8 xl:pr-0">
+        <div className="pr-4 sm:pr-6 lg:flex-shrink-0 lg:border-l lg:border-gray-200 lg:pr-8 xl:pr-0">
           <div className="h-full py-6 pl-6 lg:w-80">
             {/* Start right column area */}
-            <div className="relative h-full" style={{ minHeight: '16rem' }}>
-              <div className="absolute inset-0 rounded-lg border-2 border-dashed border-gray-200" />
+            <div className="border-b border-gray-200 pb-5 sm:flex sm:items-center sm:justify-between">
+              <h3 className="text-lg font-medium leading-6 text-gray-900">
+                Documents
+              </h3>
+              <div className="mt-3 flex sm:mt-0 sm:ml-4">
+                <button
+                  type="button"
+                  className="ml-3 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+            <div className="flex py-4">
+              <dd className="mt-1 w-full text-sm text-gray-900 sm:mt-0">
+                <ul
+                  role="list"
+                  className="divide-y divide-gray-200 rounded-md border border-gray-200"
+                >
+                  <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                    <div className="flex w-0 flex-1 items-center">
+                      <PaperClipIcon
+                        className="h-5 w-5 flex-shrink-0 text-gray-400"
+                        aria-hidden="true"
+                      />
+                      <span className="ml-2 w-0 flex-1 truncate">
+                        form_c.pdf
+                      </span>
+                    </div>
+                    <div className="ml-4 flex flex-shrink-0 space-x-4">
+                      <button
+                        type="button"
+                        className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </li>
+                  <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                    <div className="flex w-0 flex-1 items-center">
+                      <PaperClipIcon
+                        className="h-5 w-5 flex-shrink-0 text-gray-400"
+                        aria-hidden="true"
+                      />
+                      <span className="ml-2 w-0 flex-1 truncate">
+                        articles.pdf
+                      </span>
+                    </div>
+                    <div className="ml-4 flex flex-shrink-0 space-x-4">
+                      <button
+                        type="button"
+                        className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </dd>
             </div>
             {/* End right column area */}
           </div>
@@ -248,3 +371,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   }
 }
+
+

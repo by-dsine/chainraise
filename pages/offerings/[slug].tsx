@@ -780,9 +780,10 @@ export default function OfferingPage({ offeringForDisplay }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  var offering = await prisma.offering.findUnique({
+  var offering = await prisma.offering.findFirst({
     where: {
       slug: context.params?.slug as string,
+      statusId: 3
     },
     include: {
       sections: {

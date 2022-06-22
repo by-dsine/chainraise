@@ -92,6 +92,7 @@ model UserProfile {
   offeringPostCommentReaction OfferingUserPostCommentReaction[]
   platformRoles               PlatformRole[]
   userKYCAML                  UserKYCAML[]
+  Transaction                 Transaction[]
 }
 
 model PlatformRole {
@@ -208,9 +209,11 @@ model Offering {
   goal               Int
   pledged            Int
   maxRaise           Int?
+  industry           String?
   description        String
   shortDescription   String
   disclosure         String
+  type               String?
   summary            String
   statusId           Int
   status             Status                  @relation(fields: [statusId], references: [id], onDelete: SetNull)
@@ -219,6 +222,7 @@ model Offering {
   sections           OfferingSection[]
   userPosts          OfferingUserPost[]
   resources          OfferingResource[]
+  Transaction        Transaction[]
 }
 
 model OfferingParameter {
@@ -251,6 +255,7 @@ model OfferingSection {
   offering   Offering          @relation(fields: [offeringId], references: [id], onDelete: SetNull)
   title      String
   subtitle   String
+  body       String
   order      Int
   resources  SectionResource[]
 }
@@ -328,4 +333,18 @@ model UserKYCAML {
   kycStatus     String?     @default("Not Started")
   amlStatus     String?     @default("Not Started")
   response      Json?
+}
+
+model Transaction {
+  id               String      @id @default(cuid())
+  ncTradeId        String
+  userProfileId    String
+  userProfile      UserProfile @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
+  offeringId       String
+  offering         Offering    @relation(fields: [offeringId], references: [id], onDelete: SetNull)
+  transactionType  String
+  transactionUnits Int
+  notes            String?
+  status           String
+  timestamp        DateTime    @default(now()) @db.Timestamptz(3)
 }

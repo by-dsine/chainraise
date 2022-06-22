@@ -1,20 +1,4 @@
-/*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RadioGroup } from '@headlessui/react'
 import { useInvestorForm } from '../../lib/zustand/investorFormStore'
 import { useRouter } from 'next/router'
@@ -30,11 +14,11 @@ type setting = {
 
 const settings = [
   {
-    name: 'Individual',
+    name: 'individual',
     description: 'You represent yourself. Good for you. Carpe those diems.',
   },
   {
-    name: 'Entity',
+    name:'entity',
     description:
       "You're investing for an entity or organization such as a Family Office or an IRA.",
   },
@@ -46,37 +30,50 @@ function classNames(...classes: string[]) {
 
 export default function AccountType() {
   const [selected, setSelected] = useState(settings[0])
-  const investorForm = useInvestorForm()
+  const accountType = useInvestorForm(store => store.accountType)
+  const setAccountType = useInvestorForm(store => store.setAccountType)
+  const entityName = useInvestorForm(store => store.entityName)
+  const setEntityName = useInvestorForm(store => store.setEntityName)
+  const setStepNumber = useInvestorForm(store => store.setStepNumber)
+
   const router = useRouter()
 
   let schema = yup.object().shape({
     accountType: yup
       .string()
-      .oneOf(['Individual', 'Entity'], "Please select an account type.")
+      .oneOf(['individual', 'entity'], "Please select an account type.")
       .required('Please select an account type.'),
     entityName: yup.string().nullable(),
   })
 
   const {
     control,
-    reset,
-    register,
     handleSubmit,
-    watch,
+    register,
+    reset,
     setError,
+    setValue,
+    trigger,
+    watch,
     formState: { errors },
   } = useForm<AccountTypeForm>({
     defaultValues: {
-      accountType: 'entity',
+      accountType: 'individual',
       entityName: undefined,
     },
     resolver: yupResolver(schema),
   })
 
+  useEffect(() => {
+    if(accountType == 'individual' || accountType == 'entity') {
+      setValue('accountType', accountType)
+    } 
+  }, [])
+
   const watchType = watch("accountType")
 
   const onSubmit = handleSubmit((data) => {
-    const isEntity = data.accountType == 'Entity'
+    const isEntity = data.accountType == 'entity'
     let hasEntityName =
       /^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$|\w+/.test(
         data.entityName
@@ -89,12 +86,11 @@ export default function AccountType() {
     }
 
     if (!errors.accountType && !errors.entityName && !entityError) {
-      investorForm.setAccountType(data.accountType)
-      investorForm.setEntityName(data.entityName)
-      investorForm.setStepNumber(1)
+      setAccountType(data.accountType)
+      setEntityName(data.entityName)
+      setStepNumber(1)
     }
     console.log("end")
-    console.log(investorForm.stepNumber)
   })
 
   return (
@@ -177,7 +173,7 @@ export default function AccountType() {
         </div>
       )}
 
-      {watchType == 'Entity' && (
+      {watchType == 'entity' && (
         <div className=" relative mx-auto mt-3 max-w-xl rounded-md border border-gray-300 px-3 py-2 shadow-sm focus-within:border-cr-primary focus-within:ring-1 focus-within:ring-cr-primary">
           <label
             htmlFor="entityName"
@@ -194,7 +190,7 @@ export default function AccountType() {
           />
         </div>
       )}
-      {watchType == 'Entity' && errors?.entityName && (
+      {watchType == 'entity' && errors?.entityName && (
         <div className='flex'>
         <p className="mt-2 mx-auto text-sm text-red-600">
           {errors.entityName.message}
