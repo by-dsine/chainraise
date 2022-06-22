@@ -1,21 +1,4 @@
-/*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/typography'),
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
-*/
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import {
   DotsVerticalIcon,
   EyeIcon,
@@ -26,6 +9,16 @@ import { Tab } from '@headlessui/react'
 import Header from '../../components/Header'
 import Link from 'next/link'
 import { DownloadIcon, QuestionMarkCircleIcon } from '@heroicons/react/outline'
+import { DisplayOffering, DisplayOfferingResource, DisplayOfferingSection, InvestmentAmountForm } from '../../types/typings'
+import { GetServerSideProps } from 'next'
+import { prisma } from '../../lib/db'
+import { convertDateToSimpleString, mapResourceType, mapStatusId } from '../../utils/mappers'
+import { formatter } from '../../utils/formatters'
+import { useForm } from 'react-hook-form'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useRouter } from 'next/router'
+import { useInvestorForm } from '../../lib/zustand/investorFormStore'
 
 const product = {
   name: 'Multivest',
@@ -199,12 +192,54 @@ const documents = [
     bgColor: 'bg-green-500',
   },
 ]
-
+type Props = {
+  offeringForDisplay: DisplayOffering
+}
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function OfferingPage({ offeringForDisplay }: Props) {
+
+  const router = useRouter()
+  const { slug } = router.query
+  const investorForm = useInvestorForm()
+
+  useEffect(() => {
+    investorForm.setOfferingSlug(slug as string)
+    console.log(slug as string)
+  }, [])
+
+  let schema = yup.object().shape({
+    investmentAmount: yup
+      .number()
+      .moreThan(
+        offeringForDisplay.minimum - 1,
+        'Your investment must satisfy the minimum.'
+      )
+      .required('Please enter an amount.'),
+  })
+
+  const {
+    reset,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<InvestmentAmountForm>({
+    defaultValues: {
+      investmentAmount: 0,
+    },
+    resolver: yupResolver(schema),
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    if (!errors.investmentAmount) {
+      investorForm.setInvestmentAmount(data.investmentAmount)
+      router.push('/invest')
+    }
+  })
+
+
   return (
     <>
       <Header />
@@ -669,3 +704,81 @@ export default function Example() {
     </>
   )
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  var offering = await prisma.offering.findUnique({
+    where: {
+      slug: context.params?.slug as string,
+    },
+    include: {
+      sections: {
+        include: {
+          resources: true,
+        },
+      },
+      offeringParameters: true,
+      offeringHistory: true,
+    },
+  })
+
+  if (!offering) {
+    console.log('not found')
+    return {
+      props: {},
+    }
+  }
+
+  // #1 Create main display object
+  let offeringForDisplay = {
+    name: offering.name,
+    slug: offering.slug,
+    status: mapStatusId(offering.statusId),
+    goal: formatter.format(offering.goal),
+    pledged: formatter.format(offering.pledged),
+    startDate: convertDateToSimpleString(offering.startTimestamp),
+    endDate: convertDateToSimpleString(offering.endTimestamp),
+  } as DisplayOffering
+
+  // #2 Create sections
+  offering.sections.forEach((section) => {
+    let sectionForOffering = {
+      id: section.id,
+      title: section.title,
+      subtitle: section.subtitle,
+      order: section.order,
+      displayOrder: section.order,
+    } as DisplayOfferingSection
+
+    section.resources.forEach((resource) => {
+      let resourceForSection = {
+        id: resource.id,
+        title: resource.title,
+        subtitle: resource.subtitle,
+        description: resource.description,
+        location: resource.location,
+        type: mapResourceType(resource.type),
+        order: resource.order,
+      } as DisplayOfferingResource
+
+      sectionForOffering.resources.push(resourceForSection)
+    })
+
+    // list section resources by order
+    sectionForOffering.resources?.sort((a, b) =>
+      a.displayOrder > b.displayOrder ? 1 : -1
+    )
+    offeringForDisplay.sections.push(sectionForOffering)
+  })
+
+  // list sections by order
+  offeringForDisplay.sections?.sort((a, b) =>
+    a.displayOrder > b.displayOrder ? 1 : -1
+  )
+
+  return {
+    props: {
+      offeringForDisplay,
+    },
+  }
+}
+

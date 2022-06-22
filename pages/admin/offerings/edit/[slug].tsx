@@ -3,6 +3,7 @@ import {
   DisplayOffering,
   DisplayOfferingResource,
   DisplayOfferingSection,
+  DisplayOfferingSectionResource,
 } from '../../../../types/typings'
 import { prisma } from '../../../../lib/db'
 import { GetServerSideProps } from 'next/types'
@@ -23,7 +24,9 @@ type Props = {
 }
 
 export default function EditOfferingPage({ offeringForDisplay }: Props) {
-  const [offeringSections, setOfferingSections] = useState<DisplayOfferingSection[]>([])
+  const [offeringSections, setOfferingSections] = useState<
+    DisplayOfferingSection[]
+  >([])
 
   const createNewSection = () => {
     offeringSections.forEach((section) => {
@@ -41,7 +44,9 @@ export default function EditOfferingPage({ offeringForDisplay }: Props) {
     // have to do this funky way of setting state to get component to re-render
     var currentOfferingSections = offeringSections.slice()
     currentOfferingSections.push(blankSection)
-    currentOfferingSections.sort((a, b) => (a.displayOrder > b.displayOrder ? 1 : -1))
+    currentOfferingSections.sort((a, b) =>
+      a.displayOrder > b.displayOrder ? 1 : -1
+    )
 
     setOfferingSections(currentOfferingSections)
   }
@@ -117,9 +122,11 @@ export default function EditOfferingPage({ offeringForDisplay }: Props) {
             <div className="h-full py-6 px-4 sm:px-6 lg:px-8">
               <>
                 {offeringSections.map((section, sectionIdx) => {
-                  <div className="bg-gray-300">
-                    <p className='text-lg'>Hello!</p>
-                  </div>
+                  return (
+                    <div className="bg-gray-300" key={section.displayOrder}>
+                      <p className="text-lg">{section.title}</p>
+                    </div>
+                  )
                 })}
                 {/* Start main area*/}
                 <button
@@ -218,18 +225,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         location: resource.location,
         type: mapResourceType(resource.type),
         order: resource.order,
-      } as DisplayOfferingResource
+      } as DisplayOfferingSectionResource
 
       sectionForOffering.resources.push(resourceForSection)
     })
 
     // list section resources by order
-    sectionForOffering.resources?.sort((a, b) => (a.displayOrder > b.displayOrder ? 1 : -1))
+    sectionForOffering.resources?.sort((a, b) =>
+      a.displayOrder > b.displayOrder ? 1 : -1
+    )
     offeringForDisplay.sections.push(sectionForOffering)
   })
 
   // list sections by order
-  offeringForDisplay.sections?.sort((a, b) => (a.displayOrder > b.displayOrder ? 1 : -1))
+  offeringForDisplay.sections?.sort((a, b) =>
+    a.displayOrder > b.displayOrder ? 1 : -1
+  )
 
   return {
     props: {

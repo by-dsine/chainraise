@@ -16,7 +16,7 @@
 */
 import { useState } from 'react'
 import { RadioGroup } from '@headlessui/react'
-import { useInvestorForm } from '../../zustand'
+import { useInvestorForm } from '../../lib/zustand/investorFormStore'
 import { useRouter } from 'next/router'
 import { Controller, useForm } from 'react-hook-form'
 import { AccountTypeForm } from '../../types/typings'

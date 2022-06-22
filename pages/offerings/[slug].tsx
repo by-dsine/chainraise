@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Disclosure, Menu, Popover, Transition } from '@headlessui/react'
 import {
   ChevronDownIcon,
@@ -12,145 +12,26 @@ import Header from '../../components/Header'
 import { Tab } from '@headlessui/react'
 import { DownloadIcon, QuestionMarkCircleIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
-import { useInvestorForm } from '../../zustand'
+import { useInvestorForm } from '../../lib/zustand/investorFormStore'
 import { useRouter } from 'next/router'
-import { InvestmentAmountForm } from '../../types/typings'
+import {
+  DisplayOffering,
+  DisplayOfferingResource,
+  DisplayOfferingSection,
+  DisplayOfferingSectionResource,
+  InvestmentAmountForm,
+} from '../../types/typings'
 import { useForm } from 'react-hook-form'
-import * as yup from "yup"
-import { yupResolver } from '@hookform/resolvers/yup';
-
-const trendingRaises = [
-  {
-    id: 1,
-    name: 'Mainvest',
-    color: 'Natural',
-    price: '$5,000,000',
-    options: 'Equity',
-    href: '#',
-    imageSrc:
-      'https://images.unsplash.com/photo-1558661091-5cc1b64d0dc5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8aG91c2UlMjBjb25zdHJ1Y3Rpb258ZW58MHx8MHx8&auto=format&fit=crop&w=1200&q=60',
-    imageAlt: 'The creative real estate fund for everyone.',
-    description: 'The creative real estate fund for everyone.',
-  },
-  {
-    id: 2,
-    name: 'Accelerator Growths',
-    color: 'Natural',
-    price: '$1,250,000',
-    options: 'Equity',
-
-    href: '#',
-    imageSrc:
-      'https://media.istockphoto.com/photos/metaverse-virtual-reality-picture-id1353445926?b=1&k=20&m=1353445926&s=170667a&w=0&h=9qj7HGyLdgGDPNhvLHBC6QpA9TgN__fchJATnNCkzNg=',
-    imageAlt: 'We grow like really fast.',
-    description: 'We grow like really fast.',
-  },
-  {
-    id: 3,
-    name: '3-D Printed Houses',
-    color: 'Natural',
-    price: '$3,045,000',
-    options: 'Equity',
-
-    href: '#',
-    imageSrc:
-      'https://media.istockphoto.com/photos/african-american-worker-working-on-installing-solar-panel-on-the-of-picture-id1310242633?b=1&k=20&m=1310242633&s=170667a&w=0&h=3DfRLwuGkVBm-OCbpGrlmCN9CAOsOfx58YAOzFv0g0Q=',
-    imageAlt: 'There will be a house where there was not.',
-    description: 'There will be a house where there was not.',
-  },
-  {
-    id: 4,
-    name: 'Pocket Mustaches',
-    color: 'Natural',
-    price: '$250,000',
-    options: 'Equity',
-    href: '#',
-    imageSrc:
-      'https://media.istockphoto.com/photos/mustache-selfie-picture-id619058004?b=1&k=20&m=619058004&s=170667a&w=0&h=BjS8pK7u4NAFK5g_pXJrclevz2Mi5xtsQilxykseAUs=',
-    imageAlt: 'Hand stitched, organic, zero waste mustaches.',
-    description: 'Hand stitched, organic, zero waste mustaches.',
-  },
-  {
-    id: 5,
-    name: 'Underwater Basketweaving International',
-    color: 'Natural',
-    price: '$3.50',
-    options: 'Equity',
-
-    href: '#',
-    imageSrc:
-      'https://media.istockphoto.com/photos/abandoned-ghost-net-fish-aggregating-device-polluting-the-ocean-near-picture-id1194423948?b=1&k=20&m=1194423948&s=170667a&w=0&h=JheqDD4oB0UnApCpsqm48GEZDLUnoOtWEZNtQvKs4_w=',
-    imageAlt: "Damn that's a nice basket, son.",
-    description: "Damn that's a nice basket, son.",
-  },
-  {
-    id: 6,
-    name: 'Weed',
-    color: 'Natural',
-    price: '$4,200,000',
-    options: 'Equity',
-    href: '#',
-    imageSrc:
-      'https://images.unsplash.com/photo-1498671546682-94a232c26d17?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Y2FubmFiaXN8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60',
-    imageAlt: 'Sheesh this is some dank stuff.',
-    description: 'Sheesh this is some dank stuff.',
-  },
-  // More raises...
-]
-
-const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Ending Soon', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-  { name: 'Minimum: Low to High', href: '#', current: false },
-  { name: 'Minimum: High to Low', href: '#', current: false },
-]
-
-const subCategories = [
-  { name: 'Energy', href: '#' },
-  { name: 'Fintech & Finance', href: '#' },
-  { name: 'Media', href: '#' },
-  { name: 'Real Estate', href: '#' },
-  { name: 'Technology', href: '#' },
-]
-
-const filters = [
-  {
-    id: 'minimum',
-    name: 'Minimum Investment',
-    options: [
-      { value: '250', label: '250', checked: false },
-      { value: '500', label: '500', checked: false },
-      { value: '1000', label: '1000', checked: true },
-      { value: '2500', label: '2500', checked: false },
-      { value: '5000', label: '5000', checked: false },
-      { value: '10000', label: '10000', checked: false },
-    ],
-  },
-  {
-    id: 'category',
-    name: 'Category',
-    options: [
-      { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-      { value: 'sale', label: 'Sale', checked: false },
-      { value: 'travel', label: 'Travel', checked: true },
-      { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
-    ],
-  },
-  {
-    id: 'size',
-    name: 'Size',
-    options: [
-      { value: '2l', label: '2L', checked: false },
-      { value: '6l', label: '6L', checked: false },
-      { value: '12l', label: '12L', checked: false },
-      { value: '18l', label: '18L', checked: false },
-      { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true },
-    ],
-  },
-]
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import {
+  convertDateToSimpleString,
+  mapResourceType,
+  mapStatusId,
+} from '../../utils/mappers'
+import { formatter } from '../../utils/formatters'
+import { GetServerSideProps } from 'next'
+import { prisma } from '../../lib/db'
 
 const product = {
   name: 'Multivest',
@@ -312,21 +193,45 @@ const features = [
   { name: 'Offering Type', description: 'Reg CF' },
 ]
 
+type Props = {
+  offeringForDisplay: DisplayOffering
+}
+
+type HeroMedia = {
+  title: string
+  description: string
+  location: string
+  type: string
+  order: number
+}
+
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function OfferingPage() {
+export default function OfferingPage({ offeringForDisplay }: Props) {
+  console.log(offeringForDisplay)
+
   const router = useRouter()
-  const {slug} = router.query
-  const investorForm = useInvestorForm();
+  const { slug } = router.query
+  const investorForm = useInvestorForm()
+  const [heroMedia, setHeroMedia] = useState<HeroMedia[]>([])
 
   useEffect(() => {
-    investorForm.setOid(slug as string)
+    investorForm.setOfferingSlug(slug as string)
+    console.log(slug as string)
+
+    getAllHeroMedia(offeringForDisplay.resources)
   }, [])
 
   let schema = yup.object().shape({
-    investmentAmount: yup.number().moreThan(product.minimum - 1, "Your investment must satisfy the minimum.").required("Please enter an amount.")
+    investmentAmount: yup
+      .number()
+      .moreThan(
+        product.minimum - 1,
+        'Your investment must satisfy the minimum.'
+      )
+      .required('Please enter an amount.'),
   })
 
   const {
@@ -336,17 +241,32 @@ export default function OfferingPage() {
     formState: { errors },
   } = useForm<InvestmentAmountForm>({
     defaultValues: {
-      investmentAmount: 0
+      investmentAmount: 0,
     },
-    resolver: yupResolver(schema) 
+    resolver: yupResolver(schema),
   })
 
   const onSubmit = handleSubmit((data) => {
     if (!errors.investmentAmount) {
       investorForm.setInvestmentAmount(data.investmentAmount)
-      router.push("/invest")
+      router.push({
+        pathname: '/invest',
+        query: { offering: slug as string, amount: data.investmentAmount },
+      })
     }
   })
+
+  const getAllHeroMedia = (resources: DisplayOfferingResource[]) => {
+    let heroResources: DisplayOfferingResource[] = []
+    resources.forEach((resource) => {
+      if (resource.type == 'hero-img' || resource.type == 'hero-vid') {
+        heroResources.push(resource)
+      }
+    })
+    heroResources.sort((a, b) => (a.displayOrder > b.displayOrder ? 1 : -1))
+    console.log(heroResources)
+    setHeroMedia(heroResources)
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -357,11 +277,17 @@ export default function OfferingPage() {
           <main className="lg:col-span-8">
             <div className="flex flex-col">
               <div className="aspect-w-4 aspect-h-3 overflow-hidden rounded-lg bg-gray-100">
-                <img
-                  src={product.imageSrc}
-                  alt={product.imageAlt}
-                  className="object-contain object-center"
-                />
+                <>
+                  {heroMedia.map((resource) => {
+                    return (
+                      <img
+                        src={resource.location}
+                        alt={resource.description}
+                        className="object-contain object-center"
+                      />
+                    )
+                  })}
+                </>
               </div>
 
               {/* Product details */}
@@ -426,7 +352,7 @@ export default function OfferingPage() {
 
                       <div className="mt-10">
                         <div className="prose prose-sm mt-4 text-gray-500">
-                          {product.pitch.summary}
+                          {offeringForDisplay.summary}
                         </div>
                       </div>
 
@@ -697,7 +623,7 @@ export default function OfferingPage() {
                 <div className="flex flex-col-reverse">
                   <div className="mt-4">
                     <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-                      {product.name}
+                      {offeringForDisplay.name}
                     </h1>
 
                     <h2 id="information-heading" className="sr-only">
@@ -706,7 +632,7 @@ export default function OfferingPage() {
                   </div>
                 </div>
 
-                <p className="mt-6 text-gray-500">{product.description}</p>
+                <p className="mt-6 text-gray-500">{offeringForDisplay.description}</p>
                 <dl className="mt-4 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 sm:gap-y-4 lg:gap-x-4">
                   {features.map((feature) => (
                     <div
@@ -724,38 +650,49 @@ export default function OfferingPage() {
                 </dl>
 
                 <div className="mt-10">
-                  <form className='grid grid-cols-2 gap-x-6 gap-y-4 items-center' onSubmit={onSubmit}>
-                  <div className='col-span-1'>
-                    <div className="relative mt-1 rounded-md shadow-sm">
-                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                        <span className="text-gray-500 sm:text-sm">$</span>
-                      </div>
-                      <input
-                        type="number"
-                        {...register('investmentAmount')}
-                        id="investmentAmount"
-                        className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        placeholder="0.00"
-                        aria-describedby="investment-amount"
-                        onChange={(event) => investorForm.setInvestmentAmount(event.target.valueAsNumber)}
-                      />
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                        <span
-                          className="text-gray-500 sm:text-sm"
-                          id="investment-amount"
-                        >
-                          USD
-                        </span>
+                  <form
+                    className="grid grid-cols-2 items-center gap-x-6 gap-y-4"
+                    onSubmit={onSubmit}
+                  >
+                    <div className="col-span-1">
+                      <div className="relative mt-1 rounded-md shadow-sm">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                          <span className="text-gray-500 sm:text-sm">$</span>
+                        </div>
+                        <input
+                          type="number"
+                          {...register('investmentAmount')}
+                          id="investmentAmount"
+                          className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          placeholder="0.00"
+                          aria-describedby="investment-amount"
+                          onChange={(event) =>
+                            investorForm.setInvestmentAmount(
+                              event.target.valueAsNumber
+                            )
+                          }
+                        />
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                          <span
+                            className="text-gray-500 sm:text-sm"
+                            id="investment-amount"
+                          >
+                            USD
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
                     <button
                       type="submit"
                       className="flex w-full items-center justify-center rounded-md border border-transparent bg-cr-primary py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-cr-primary focus:ring-offset-2 focus:ring-offset-gray-50"
                     >
                       Invest
                     </button>
-                    {errors?.investmentAmount && <p className='mx-auto col-span-2 text-sm text-red-600'>{errors.investmentAmount.message}</p>}
+                    {errors?.investmentAmount && (
+                      <p className="col-span-2 mx-auto text-sm text-red-600">
+                        {errors.investmentAmount.message}
+                      </p>
+                    )}
                   </form>
                 </div>
 
@@ -840,4 +777,114 @@ export default function OfferingPage() {
       </div>
     </div>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  var offering = await prisma.offering.findUnique({
+    where: {
+      slug: context.params?.slug as string,
+    },
+    include: {
+      sections: {
+        include: {
+          resources: true,
+        },
+      },
+      offeringParameters: true,
+      offeringHistory: true,
+      resources: true,
+    },
+  })
+
+  if (!offering) {
+    console.log('not found')
+    return {
+      props: {},
+    }
+  }
+
+  // #1 Create main display object
+  let offeringForDisplay = {
+    name: offering.name,
+    summary: offering.summary,
+    description: offering.description,
+    slug: offering.slug,
+    status: mapStatusId(offering.statusId),
+    goal: formatter.format(offering.goal),
+    pledged: formatter.format(offering.pledged),
+    startDate: convertDateToSimpleString(offering.startTimestamp),
+    endDate: convertDateToSimpleString(offering.endTimestamp),
+    sections: [] as DisplayOfferingSection[],
+    resources: [] as DisplayOfferingResource[],
+  } as DisplayOffering
+
+  // #2 Create sections
+  offering.sections.forEach((section) => {
+    let sectionForOffering = {
+      id: section.id,
+      title: section.title,
+      subtitle: section.subtitle,
+      order: section.order,
+      displayOrder: section.order,
+    } as DisplayOfferingSection
+
+    section.resources.forEach((resource) => {
+      let resourceForSection = {
+        id: resource.id,
+        title: resource.title,
+        subtitle: resource.subtitle,
+        description: resource.description,
+        location: resource.location,
+        type: mapResourceType(resource.type),
+        order: resource.order,
+      } as DisplayOfferingSectionResource
+
+      sectionForOffering.resources.push(resourceForSection)
+    })
+
+    // list section resources by order
+    sectionForOffering.resources?.sort((a, b) =>
+      a.displayOrder > b.displayOrder ? 1 : -1
+    )
+    offeringForDisplay.sections.push(sectionForOffering)
+  })
+
+  // #3 Create resources
+  offering.resources.forEach(async (resource) => {
+    // TODO finish this getting a presigned URL
+    // https://www.youtube.com/watch?v=2mvrzVo6zN4
+    // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getSignedUrlPromise-property
+    // await fetch('/api/resources/download', 
+    //   {
+    //     body: JSON.stringify(data),
+    //     method: 'POST',
+    //   }
+    // )
+
+    let resourceForOffering = {
+      id: resource.id,
+      title: resource.title,
+      description: resource.description,
+      location: resource.location,
+      type: resource.type,
+      order: resource.order,
+    } as DisplayOfferingResource
+
+    offeringForDisplay.resources.push(resourceForOffering)
+  })
+
+  // #4 Sort sections and resources
+  offeringForDisplay.sections?.sort((a, b) =>
+    a.displayOrder > b.displayOrder ? 1 : -1
+  )
+
+  offeringForDisplay.resources?.sort((a, b) =>
+    a.displayOrder > b.displayOrder ? 1 : -1
+  )
+
+  return {
+    props: {
+      offeringForDisplay,
+    },
+  }
 }

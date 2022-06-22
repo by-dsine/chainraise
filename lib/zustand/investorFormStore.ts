@@ -7,8 +7,8 @@ interface investorFormStore {
   stepNumber: number
   setStepNumber: (stepNumber: number) => void
 
-  oid: string
-  setOid: (oid: string) => void
+  offeringSlug: string
+  setOfferingSlug: (offeringSlug: string) => void
 
   investmentAmount: number
   setInvestmentAmount: (investmentAmount: number) => void
@@ -69,8 +69,8 @@ export const useInvestorForm = create<investorFormStore>((set) => ({
       stepNumber: value,
     }))
   },
-  oid: '',
-  setOid: (value) => {
+  offeringSlug: '',
+  setOfferingSlug: (value) => {
     set((state) => ({
       ...state,
       oid: value,

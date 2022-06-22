@@ -49,13 +49,17 @@ export type GetOrganizationResponse = {
 // Offerings 
 export type DisplayOffering = {
   name: string
+  summary: string
+  description: string
   slug: string
   status: string
   goal: string
   pledged: string
+  minimum: number
   startDate: string
   endDate: string
   sections: DisplayOfferingSection[]
+  resources: DisplayOfferingResource[]
 }
 
 export type DisplayOfferingSection = {
@@ -64,13 +68,23 @@ export type DisplayOfferingSection = {
   subtitle: string
   order: number
   displayOrder: number
-  resources: DisplayOfferingResource[]
+  resources: DisplayOfferingSectionResource[]
+}
+
+export type DisplayOfferingSectionResource = {
+  id: string
+  title: string
+  subtitle: string
+  description: string
+  location: string
+  type: string
+  order: number
+  displayOrder: number
 }
 
 export type DisplayOfferingResource = {
   id: string
   title: string
-  subtitle: string
   description: string
   location: string
   type: string

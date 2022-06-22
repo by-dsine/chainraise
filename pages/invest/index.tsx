@@ -8,7 +8,7 @@ import PersonalInformation from '../../components/account/PersonalInformation'
 import AccreditationStatus from '../../components/account/AccreditationStatus'
 import SignDocuments from '../../components/account/SignDocuments'
 import { SubmitPayment } from '../../components/account/SubmitPayment'
-import { useInvestorForm } from '../../zustand'
+import { useInvestorForm } from '../../lib/zustand/investorFormStore'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')

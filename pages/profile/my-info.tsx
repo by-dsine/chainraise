@@ -61,7 +61,7 @@ import { KYCAMLStatus, PersonalInformationForm } from '../../types/typings'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import KYCModal from '../../components/profile/KYCModal'
-import { useKycModal } from '../../zustand'
+import { useKycModal } from '../../lib/zustand/investorFormStore'
 import { AUTO_APPROVED } from '../../constants/const'
 
 const navigation = [

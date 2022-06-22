@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { ContactInformationForm } from '../../types/typings'
-import { useInvestorForm } from '../../zustand'
+import { useInvestorForm } from '../../lib/zustand/investorFormStore'
 import * as yup from "yup"
 import { yupResolver } from '@hookform/resolvers/yup';
 

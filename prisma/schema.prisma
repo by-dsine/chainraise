@@ -218,7 +218,7 @@ model Offering {
   offeringHistory    OfferingStatusHistory[]
   sections           OfferingSection[]
   userPosts          OfferingUserPost[]
-  documents          OfferingDocument[]
+  resources          OfferingResource[]
 }
 
 model OfferingParameter {
@@ -267,14 +267,16 @@ model SectionResource {
   order       Int
 }
 
-model OfferingDocument {
+model OfferingResource {
   id          String   @id @default(cuid())
   offeringId  String
   offering    Offering @relation(fields: [offeringId], references: [id], onDelete: SetNull)
   title       String
   description String
   location    String
+  type        String
   public      Boolean
+  order       Int?
 }
 
 model OfferingUserPost {
