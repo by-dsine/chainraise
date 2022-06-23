@@ -355,6 +355,7 @@ model Transaction {
   offering         Offering    @relation(fields: [offeringId], references: [id], onDelete: SetNull)
   transactionType  String
   transactionUnits Int
+  totalAmount      Int
   notes            String?
   status           String
   timestamp        DateTime    @default(now()) @db.Timestamptz(3)

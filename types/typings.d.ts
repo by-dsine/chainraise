@@ -179,6 +179,14 @@ export type AdminEditOffering = {
   description: string
 }
 
+export type AdminDisplayTransaction = {
+  id: string
+  totalAmount: number
+  type: string
+  units: number
+  purchaserName: string
+}
+
 // North Capital API types
 // createParty
 type CreatePartyResponse = {

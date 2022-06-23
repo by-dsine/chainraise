@@ -32,7 +32,7 @@ export default function NewOfferingInfoForm() {
   const onSubmit: SubmitHandler<OfferingForm> = (data) => {
     data.organizationId = organizationId
     console.log(data)
-    fetch("/api/admin/offering/new", {
+    fetch("/api/admin/offerings/new", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

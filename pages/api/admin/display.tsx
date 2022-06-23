@@ -90,5 +90,43 @@ export default async function display(
     offeringsForDisplay.push(offeringForDisplay)
   })
 
+  const transactions = await prisma.transaction.findMany({
+    select: {
+      id: true,
+      totalAmount: true,
+      transactionType: true,
+      transactionUnits: true,
+      userProfile: {
+        select: {
+          firstName: true,
+          lastName: true,
+        }
+      },
+      offering: {
+        select: {
+          name: true,
+        }
+      }
+    }
+  })
+
+  // TODO: convert transactions to display model and add to response object
+
+  const organizations = await prisma.organization.findMany({
+    select : {
+      id: true,
+      ncIssuerId: true,
+      owner: true,
+      offerings: {
+        select: {
+          name: true,
+          slug: true
+        }
+      }
+    }
+  })
+
+  // TODO: convert organizations to display model and add to response object
+
   return res.status(201).json({offerings: offeringsForDisplay, users: usersForDisplay})
 }
