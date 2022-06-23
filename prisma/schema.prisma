@@ -93,6 +93,7 @@ model UserProfile {
   platformRoles               PlatformRole[]
   userKYCAML                  UserKYCAML[]
   Transaction                 Transaction[]
+  OfferingUpdate              OfferingUpdate[]
 }
 
 model PlatformRole {
@@ -153,7 +154,6 @@ model UserPostCommentReaction {
   id              String          @id @default(cuid())
   authorId        String?
   author          UserProfile?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
-  body            String
   commentId       String
   userPostComment UserPostComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
   reactionId      Int
@@ -222,7 +222,18 @@ model Offering {
   sections           OfferingSection[]
   userPosts          OfferingUserPost[]
   resources          OfferingResource[]
-  Transaction        Transaction[]
+  transactions       Transaction[]
+  updates            OfferingUpdate[]
+}
+
+model OfferingUpdate {
+  id            String      @id @default(cuid())
+  offeringId    String
+  offering      Offering    @relation(fields: [offeringId], references: [id], onDelete: SetNull)
+  userProfileId String
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
+  body          String
+  timestamp     DateTime    @db.Timestamptz(3)
 }
 
 model OfferingParameter {

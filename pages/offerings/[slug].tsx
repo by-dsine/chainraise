@@ -32,6 +32,7 @@ import {
 import { formatter } from '../../utils/formatters'
 import { GetServerSideProps } from 'next'
 import { prisma } from '../../lib/db'
+import useUserProfile from '../../hooks/useUserProfile'
 
 const product = {
   name: 'Multivest',
@@ -212,6 +213,7 @@ function classNames(...classes: string[]) {
 export default function OfferingPage({ offeringForDisplay }: Props) {
   console.log(offeringForDisplay)
 
+  const { userProfile } = useUserProfile()
   const router = useRouter()
   const { slug } = router.query
   const investorForm = useInvestorForm()
@@ -223,6 +225,90 @@ export default function OfferingPage({ offeringForDisplay }: Props) {
 
     getAllHeroMedia(offeringForDisplay.resources)
   }, [])
+
+  // Query for fetching posts and comments for discussions tab
+  // useEffect(() => {
+  // const fetchData = async () => {
+  //   var offering = await prisma.offeringUserPost.findFirst({
+  //     where: {
+  //       offeringId: offeringForDisplay.offeringId,
+  //     },
+  //     include: {
+  //       comments: {
+  //         include: {
+  //           reactions: true,
+  //         },
+  //       },
+  //       reactions: true,
+  //     },
+  //   })
+  // }
+
+  //   fetchData()
+  //     // make sure to catch any error
+  //     .catch(console.error)
+  // })
+
+  // Query for creating a discussion post
+  // const createPost = () => {
+  //   const fetchData = async () => {
+  //     var offering = await prisma.offeringUserPost.create({
+  //       data: {
+  //         offeringId: offeringForDisplay.offeringId,
+  //         userProfileId: userProfile?.id!,
+  //         body: ""
+  //       }
+  //     })
+  //   }
+  // fetchData()
+  //     // make sure to catch any error
+  //     .catch(console.error)
+  // }
+
+  // const createPostComment = (postId: string, body: string) => {
+  //   const fetchData = async () => {
+  //     var offeringPostComment = await prisma.offeringUserPostComment.create({
+  //       data: {
+  //         offeringPostId: postId,
+  //         userProfileId: userProfile?.id!,
+  //         body: body
+  //       }
+  //     })
+  //   }
+  // fetchData()
+  //     // make sure to catch any error
+  //     .catch(console.error)
+  // }
+
+  // const createPostReaction = (postId: string, reactionId: number) => {
+  //   const fetchData = async () => {
+  //     var offeringPostReaction = await prisma.offeringUserPostReaction.create({
+  //       data: {
+  //         offeringPostId: postId,
+  //         userProfileId: userProfile?.id!,
+  //         reactionId: reactionId
+  //       }
+  //     })
+  //   }
+  // fetchData()
+  //     // make sure to catch any error
+  //     .catch(console.error)
+  // }
+
+  //  const createCommentReaction = (commentId: string, reactionId: number) => {
+  //   const fetchData = async () => {
+  //     var offeringPostReaction = await prisma.offeringUserPostCommentReaction.create({
+  //       data: {
+  //         offeringPostCommentId: commentId,
+  //         userProfileId: userProfile?.id!,
+  //         reactionId: reactionId
+  //       }
+  //     })
+  //   }
+  // fetchData()
+  //     // make sure to catch any error
+  //     .catch(console.error)
+  // }
 
   let schema = yup.object().shape({
     investmentAmount: yup
@@ -632,7 +718,9 @@ export default function OfferingPage({ offeringForDisplay }: Props) {
                   </div>
                 </div>
 
-                <p className="mt-6 text-gray-500">{offeringForDisplay.description}</p>
+                <p className="mt-6 text-gray-500">
+                  {offeringForDisplay.description}
+                </p>
                 <dl className="mt-4 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 sm:gap-y-4 lg:gap-x-4">
                   {features.map((feature) => (
                     <div
@@ -783,7 +871,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   var offering = await prisma.offering.findFirst({
     where: {
       slug: context.params?.slug as string,
-      statusId: 3
+      statusId: 3, // "Active" status
     },
     include: {
       sections: {
@@ -794,6 +882,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       offeringParameters: true,
       offeringHistory: true,
       resources: true,
+      updates: true,
     },
   })
 
@@ -806,6 +895,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   // #1 Create main display object
   let offeringForDisplay = {
+    offeringId: offering.id,
     name: offering.name,
     summary: offering.summary,
     description: offering.description,
@@ -855,7 +945,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     // TODO finish this getting a presigned URL
     // https://www.youtube.com/watch?v=2mvrzVo6zN4
     // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getSignedUrlPromise-property
-    // await fetch('/api/resources/download', 
+    // await fetch('/api/resources/download',
     //   {
     //     body: JSON.stringify(data),
     //     method: 'POST',

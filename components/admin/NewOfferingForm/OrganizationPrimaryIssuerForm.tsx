@@ -8,6 +8,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 import { useNewOfferingFormStore } from '../../../lib/zustand/newOfferingStore'
+import { CheckCircleIcon } from '@heroicons/react/outline'
 export default function NewOrganizationPrimaryIssuerForm() {
 
   const organizationId = useNewOfferingFormStore(state => state.organizationId)
@@ -95,12 +96,10 @@ export default function NewOrganizationPrimaryIssuerForm() {
         <div className="md:col-span-1">
           <div className="px-4 sm:px-0">
             <h3 className="text-lg font-medium leading-6 text-gray-900">
-              Contact Information
+              Organization
             </h3>
             <p className="mt-1 text-sm text-gray-600">
-              This is the primary contact of this issuer. They will be the admin
-              of the offering and the organization. These settings can be
-              changed later.
+              Select an organization to host this offering
             </p>
           </div>
         </div>
@@ -109,7 +108,7 @@ export default function NewOrganizationPrimaryIssuerForm() {
             <div className="overflow-hidden shadow sm:rounded-md">
               <div className="bg-white px-4 py-5 sm:p-6">
                 <div className="grid grid-cols-6 gap-6">
-                  <div className="col-span-6 sm:col-span-4">
+                  <div className="col-span-6 sm:col-span-3">
                     <label
                       htmlFor="last-name"
                       className="block text-sm font-medium text-gray-700"
@@ -137,7 +136,12 @@ export default function NewOrganizationPrimaryIssuerForm() {
                     >
                       Check Name
                     </button>
+                
+                    <CheckCircleIcon className='text-cr-primary inline-flex ml-4 h-8 w-8'/>
+
                   </div>
+
+                  
 
                   {isNewOrg && (
                     <>

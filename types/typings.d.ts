@@ -48,6 +48,7 @@ export type GetOrganizationResponse = {
 
 // Offerings 
 export type DisplayOffering = {
+  offeringId: string
   name: string
   summary: string
   description: string
