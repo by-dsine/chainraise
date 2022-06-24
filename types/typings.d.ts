@@ -159,6 +159,7 @@ export type OfferingForm = {
   price: number
   issueType: string
   description: string
+  shortDescription: string
 }
 
 export type GetOrganizationForm = {
