@@ -22,15 +22,15 @@ const navigation = {
           name: 'New Offerings',
           href: '/offerings',
           imageSrc:
-            'https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg',
+            '/logomark.png',
           imageAlt:
             'Models sitting back to back, wearing Basic Tee in black and bone.',
         },
         {
           name: 'Clubs',
-          href: '#',
+          href: '/clubs',
           imageSrc:
-            'https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg',
+            'https://images.unsplash.com/photo-1550304952-9d1e3444f713?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2x1YiUyMHNhbmR3aWNofGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=1200&q=60',
           imageAlt:
             'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
         },
@@ -38,15 +38,15 @@ const navigation = {
           name: 'Organizations',
           href: '/organizations',
           imageSrc:
-            'https://tailwindui.com/img/ecommerce-images/mega-menu-category-03.jpg',
+            'https://media.istockphoto.com/photos/stack-of-hands-unity-and-teamwork-concept-picture-id1289963489?b=1&k=20&m=1289963489&s=170667a&w=0&h=5RZ6cQ5UWYgyjK52ele9lSmyIBem2uMIR66S-1faWSs=',
           imageAlt:
             'Model wearing minimalist watch with black wristband and white watch face.',
         },
         {
           name: 'Content',
-          href: '#',
+          href: '/blog',
           imageSrc:
-            'https://tailwindui.com/img/ecommerce-images/mega-menu-category-04.jpg',
+            'https://images.unsplash.com/photo-1513705153361-9bc726c8db67?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cGlsZSUyMG9mJTIwcGFwZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=1200&q=60',
           imageAlt:
             'Model opening tan leather long wallet with credit card pockets and cash pouch.',
         },
@@ -336,7 +336,7 @@ export default function Header() {
                                               aria-hidden="true"
                                               className="mt-1"
                                             >
-                                              Shop now
+                                              View now
                                             </p>
                                           </div>
                                         ))}

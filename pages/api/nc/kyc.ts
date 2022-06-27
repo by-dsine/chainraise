@@ -11,6 +11,7 @@ import {
 import { BASE_URL } from '../../../nc'
 import { AUTO_APPROVED, DISAPPROVED } from '../../../constants/const'
 import { convertDateToSimpleString } from '../../../utils/mappers'
+import { getPartyNumberFromResult } from '../../../lib/nc'
 export default async function handleNorthCapital(
   req: NextApiRequest,
   res: NextApiResponse
@@ -40,10 +41,21 @@ export default async function handleNorthCapital(
     return res.status(500).json({ message: 'No NC parameters found.' })
   }
 
+  const { userId } = req.query
+
+  var idToQuery = ""
+  if (typeof userId !== 'string' && !session.user.uid) {
+    return res.status(400).json({ message: 'Nobody to perform KYC on'})
+  } else if (typeof userId == 'string') {
+    idToQuery = userId
+  } else if (session.user.uid) {
+    idToQuery = session.user.uid
+  }
+
   // use prisma to get user information
   const userProfile = await prisma.userProfile.findUnique({
     where: {
-      userId: session.user.uid,
+      userId: idToQuery,
     },
     include: {
       userKYCAML: {
@@ -101,7 +113,7 @@ export default async function handleNorthCapital(
           data.append('lastName', userProfile.lastName!)
           data.append('dob', convertDateToSimpleString(userProfile.dob!))
           data.append('primCountry', userProfile.country!)
-          data.append('primAddress1', userProfile.address!)
+          data.append('primAddress1', userProfile.address1!)
           data.append('primCity', userProfile.city!)
           data.append('primState', userProfile.state!)
           data.append('primZip', userProfile.zipCode!)
@@ -187,8 +199,7 @@ export default async function handleNorthCapital(
       // #3 try basic kyc/aml auto verification
       if (
         partyId &&
-        currentKYCStatus != AUTO_APPROVED &&
-        currentKYCStatus != DISAPPROVED
+        currentKYCStatus != AUTO_APPROVED
       ) {
         const performKYCURL =
           'https://api-sandboxdash.norcapsecurities.com/tapiv3/index.php/v3/performKycAmlBasic'
@@ -248,7 +259,7 @@ export default async function handleNorthCapital(
 
       return res
         .status(400)
-        .end(`Bad request. No actions were performed on any account.`)
+        .json({message: 'No actions were taken on the account.'})
 
     default:
       return res.status(405).end(`Method ${req.method} not allowed`)
@@ -263,7 +274,8 @@ function isUserProfileComplete(userProfile: UserProfile): boolean {
     !userProfile.lastName ||
     !userProfile.dob ||
     !userProfile.country ||
-    !userProfile.address ||
+    !userProfile.address1 ||
+    !userProfile.phone ||
     !userProfile.city ||
     !userProfile.state ||
     !userProfile.zipCode ||
@@ -272,21 +284,4 @@ function isUserProfileComplete(userProfile: UserProfile): boolean {
     return false
   }
   return true
-}
-
-function isUSCitizenOrResidentString(residenceStatus: string | null): string {
-  if (residenceStatus == 'U.S. Citizen' || residenceStatus == 'U.S. Resident') {
-    return 'true'
-  }
-  return 'false'
-}
-
-
-function getPartyNumberFromResult(result: CreatePartyResponse): string {
-  var resultPartyObject = result.partyDetails[1] as PartyDetail[]
-  if (!resultPartyObject || !resultPartyObject[0].partyId) {
-    console.log('Failed to get partyId', resultPartyObject)
-    return ''
-  }
-  return resultPartyObject[0].partyId
 }

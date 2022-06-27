@@ -6,17 +6,43 @@ import { useState } from 'react'
 import { useNewOfferingFormStore } from '../../../lib/zustand/newOfferingStore'
 
 export default function NewOfferingInfoForm() {
-  const organizationId = useNewOfferingFormStore(store => store.organizationId)
+  const organizationId = useNewOfferingFormStore(
+    (store) => store.organizationId
+  )
 
   const newOfferingSchema = yup.object().shape({
     offeringName: yup.string().required('Please enter an offering name.'),
     startDate: yup.string().required('Please enter a start date.'),
     endDate: yup.string().required('Please enter an end date.'),
     targetAmount: yup.number().required('Please enter a target name.'),
-    minimumAmount: yup.number().required('Please enter a minimum name.'),
-    maximumAmount: yup.number().required('Please enter a maxmium name.'),
+    minimumAmount: yup
+      .number()
+      .lessThan(
+        yup.ref('targetAmount'),
+        'Minimum amount must be smaller than target amount.'
+      )
+      .required('Please enter a minimum name.'),
+    maximumAmount: yup
+      .number()
+      .moreThan(
+        yup.ref('minimumAmount'),
+        'Maximum amount must be larger than minimum amount.'
+      )
+      .moreThan(
+        yup.ref('targetAmount'),
+        'Maximum amount must be larger than target amount.'
+      )
+      .required('Please enter a maxmium amount.'),
     issueType: yup.string().required('Please select an issue type'),
+    price: yup
+      .number()
+      .lessThan(
+        yup.ref('minimumAmount'),
+        'Price per unit should probably be a little less.'
+      )
+      .required('Please enter a prie per unit.'),
     description: yup.string().required('Please enter a description.'),
+    shortDescription: yup.string().required('Please enter a description.'),
   })
 
   const {
@@ -32,10 +58,10 @@ export default function NewOfferingInfoForm() {
   const onSubmit: SubmitHandler<OfferingForm> = (data) => {
     data.organizationId = organizationId
     console.log(data)
-    fetch("/api/admin/offering/new", {
+    fetch('/api/admin/offerings/new', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     })
@@ -151,12 +177,34 @@ export default function NewOfferingInfoForm() {
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       />
                     </div>
+                    {(errors.targetAmount ||
+                      errors.minimumAmount ||
+                      errors.maximumAmount) && (
+                      <div className="col-span-6 flex flex-col">
+                        {errors.targetAmount && (
+                          <p className="mx-auto text-sm text-red-600">
+                            {errors.targetAmount.message}
+                          </p>
+                        )}
+                        {errors.minimumAmount && (
+                          <p className="mx-auto text-sm text-red-600">
+                            {errors.minimumAmount.message}
+                          </p>
+                        )}
+                        {errors.maximumAmount && (
+                          <p className="mx-auto text-sm text-red-600">
+                            {errors.maximumAmount.message}
+                          </p>
+                        )}
+                      </div>
+                    )}
+
                     <div className="col-span-6 sm:col-span-3">
                       <label
                         htmlFor="price"
                         className="block text-sm font-medium text-gray-700"
                       >
-                        Price
+                        Price per unit
                       </label>
                       <input
                         type="number"
@@ -164,6 +212,11 @@ export default function NewOfferingInfoForm() {
                         {...register('price')}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       />
+                      {errors.price && (
+                        <p className="mx-auto text-sm text-red-600">
+                          {errors.price.message}
+                        </p>
+                      )}
                     </div>
 
                     <div className="col-span-6 sm:col-span-3">
@@ -184,6 +237,11 @@ export default function NewOfferingInfoForm() {
                         <option>Hybrid</option>
                         <option>Fund</option>
                       </select>
+                      {errors.issueType && (
+                        <p className="mx-auto text-sm text-red-600">
+                          {errors.issueType.message}
+                        </p>
+                      )}
                     </div>
 
                     <div className="col-span-6">
@@ -193,12 +251,41 @@ export default function NewOfferingInfoForm() {
                       >
                         Description
                       </label>
+
                       <input
                         type="text"
                         id="description"
                         {...register('description')}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       />
+                      {errors.description && (
+                        <p className="mx-auto text-sm text-red-600">
+                          {errors.description.message}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="col-span-6">
+                      <label
+                        htmlFor="short-description"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Short Description
+                      </label>
+                      <p className="text-sm text-gray-500">
+                        This will be used for advertising cards on the website.
+                      </p>
+                      <input
+                        type="text"
+                        id="short-description"
+                        {...register('shortDescription')}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      />
+                      {errors.shortDescription && (
+                        <p className="mx-auto text-sm text-red-600">
+                          {errors.shortDescription.message}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>

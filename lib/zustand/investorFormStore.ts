@@ -7,8 +7,8 @@ interface investorFormStore {
   stepNumber: number
   setStepNumber: (stepNumber: number) => void
 
-  oid: string
-  setOid: (oid: string) => void
+  offeringSlug: string
+  setOfferingSlug: (offeringSlug: string) => void
 
   investmentAmount: number
   setInvestmentAmount: (investmentAmount: number) => void
@@ -33,14 +33,20 @@ interface investorFormStore {
   title: string
   setTitle: (title: string) => void
 
-  phoneNumber: string
-  setPhoneNumber: (phoneNumber: string) => void
+  email: string
+  setEmail: (email: string) => void
+
+  phone: string
+  setPhone: (phone: string) => void
 
   dateOfBirth: string
   setDateOfBirth: (dateOfBirth: string) => void
 
-  streetAddress: string
-  setStreetAddress: (streetAddress: string) => void
+  address1: string
+  setAddress1: (address1: string) => void
+
+  address2: string
+  setAddress2: (address2: string) => void
 
   unit: string
   setUnit: (unit: string) => void
@@ -51,14 +57,21 @@ interface investorFormStore {
   state: string
   setState: (state: string) => void
 
-  postalCode: string
-  setPostalCode: (postalCode: string) => void
+  zipCode: string
+  setZipCode: (zipCode: string) => void
 
-  nationality: string
-  setNationality: (nationality: string) => void
+  residence: string
+  setResidence: (residence: string) => void
 
   countryOfResidence: string
   setCountryOfResidence: (countryOfResidence: string) => void
+
+  // step 3
+  kycStatus: string
+  setKycStatus: (kycStatus: string) => void
+
+  amlStatus: string
+  setAmlStatus: (amlStatus: string) => void
 }
 
 export const useInvestorForm = create<investorFormStore>((set) => ({
@@ -69,8 +82,8 @@ export const useInvestorForm = create<investorFormStore>((set) => ({
       stepNumber: value,
     }))
   },
-  oid: '',
-  setOid: (value) => {
+  offeringSlug: '',
+  setOfferingSlug: (value) => {
     set((state) => ({
       ...state,
       oid: value,
@@ -125,11 +138,18 @@ export const useInvestorForm = create<investorFormStore>((set) => ({
       title: value,
     }))
   },
-  phoneNumber: '',
-  setPhoneNumber: (value) => {
+  email: '',
+  setEmail: (value) => {
     set((state) => ({
       ...state,
-      phoneNumber: value,
+      email: value,
+    }))
+  },
+  phone: '',
+  setPhone: (value) => {
+    set((state) => ({
+      ...state,
+      phone: value,
     }))
   },
   dateOfBirth: '',
@@ -139,11 +159,18 @@ export const useInvestorForm = create<investorFormStore>((set) => ({
       dateOfBirth: value,
     }))
   },
-  streetAddress: '',
-  setStreetAddress: (value) => {
+  address1: '',
+  setAddress1: (value) => {
     set((state) => ({
       ...state,
-      streetAddress: value,
+      address1: value,
+    }))
+  },
+  address2: '',
+  setAddress2: (value) => {
+    set((state) => ({
+      ...state,
+      address1: value,
     }))
   },
   unit: '',
@@ -167,18 +194,18 @@ export const useInvestorForm = create<investorFormStore>((set) => ({
       state: value,
     }))
   },
-  postalCode: '',
-  setPostalCode: (value) => {
+  zipCode: '',
+  setZipCode: (value) => {
     set((state) => ({
       ...state,
-      postalCode: value,
+      zipCode: value,
     }))
   },
-  nationality: '',
-  setNationality: (value) => {
+  residence: '',
+  setResidence: (value) => {
     set((state) => ({
       ...state,
-      nationality: value,
+      residence: value,
     }))
   },
   countryOfResidence: '',
@@ -186,6 +213,20 @@ export const useInvestorForm = create<investorFormStore>((set) => ({
     set((state) => ({
       ...state,
       countryOfResidence: value,
+    }))
+  },
+  kycStatus: '',
+  setKycStatus: (value) => {
+    set((state) => ({
+      ...state,
+      kycStatus: value,
+    }))
+  },
+  amlStatus: '',
+  setAmlStatus: (value) => {
+    set((state) => ({
+      ...state,
+      amlStatus: value,
     }))
   },
 }))

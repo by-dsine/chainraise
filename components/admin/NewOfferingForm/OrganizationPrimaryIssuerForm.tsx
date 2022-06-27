@@ -6,18 +6,20 @@ import {
 } from '../../../types/typings'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNewOfferingFormStore } from '../../../lib/zustand/newOfferingStore'
+import { CheckCircleIcon } from '@heroicons/react/outline'
 export default function NewOrganizationPrimaryIssuerForm() {
-
-  const organizationId = useNewOfferingFormStore(state => state.organizationId)
-  const setOrganizationId = useNewOfferingFormStore(state => state.setOrganizationId)
+  const organizationId = useNewOfferingFormStore(
+    (state) => state.organizationId
+  )
+  const setOrganizationId = useNewOfferingFormStore(
+    (state) => state.setOrganizationId
+  )
 
   // Begin organization name and contact info functions
   const [isNewOrg, setIsNewOrg] = useState(false)
   const [nameChecked, setNameChecked] = useState(false) //TODO: add safety check- if name changed after name checked, require name check again
-  //const [organizationId, setOrganizationId] = useState("")
-
   const organizationPrimaryIssuerSchema = yup.object().shape({
     organizationName: yup
       .string()
@@ -40,7 +42,19 @@ export default function NewOrganizationPrimaryIssuerForm() {
 
   const watchOrganizationName = watch('organizationName')
 
-  const getOrganizationByName = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const resetOrganizationName = (event: React.FormEvent<HTMLInputElement>) => {
+    setNameChecked(false)
+  }
+
+  useEffect(() => {
+    setNameChecked(false)
+    setIsNewOrg(false)
+    setOrganizationId("")
+  }, [watchOrganizationName])
+
+  const getOrganizationByName = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault()
     const fetchData = async () => {
       const organizationName = watchOrganizationName
@@ -73,8 +87,7 @@ export default function NewOrganizationPrimaryIssuerForm() {
         body: JSON.stringify(data),
         headers: {
           'Content-Type': 'application/json',
-        }
-
+        },
       })
 
       const result = (await response.json()) as GetOrganizationResponse
@@ -82,7 +95,7 @@ export default function NewOrganizationPrimaryIssuerForm() {
       if (response.status == 200) {
         setOrganizationId(result.organizationId)
       } else {
-        console.log("Error craating new offering: {}", response.body)
+        console.log('Error craating new offering: {}', response.body)
       }
     }
     fetchData().catch(console.error)
@@ -95,12 +108,10 @@ export default function NewOrganizationPrimaryIssuerForm() {
         <div className="md:col-span-1">
           <div className="px-4 sm:px-0">
             <h3 className="text-lg font-medium leading-6 text-gray-900">
-              Contact Information
+              Organization
             </h3>
             <p className="mt-1 text-sm text-gray-600">
-              This is the primary contact of this issuer. They will be the admin
-              of the offering and the organization. These settings can be
-              changed later.
+              Select an organization to host this offering
             </p>
           </div>
         </div>
@@ -109,7 +120,7 @@ export default function NewOrganizationPrimaryIssuerForm() {
             <div className="overflow-hidden shadow sm:rounded-md">
               <div className="bg-white px-4 py-5 sm:p-6">
                 <div className="grid grid-cols-6 gap-6">
-                  <div className="col-span-6 sm:col-span-4">
+                  <div className="col-span-6 sm:col-span-3">
                     <label
                       htmlFor="last-name"
                       className="block text-sm font-medium text-gray-700"
@@ -137,6 +148,10 @@ export default function NewOrganizationPrimaryIssuerForm() {
                     >
                       Check Name
                     </button>
+
+                    {nameChecked && !isNewOrg && (
+                      <CheckCircleIcon className="ml-4 inline-flex h-8 w-8 text-cr-primary" />
+                    )}
                   </div>
 
                   {isNewOrg && (
@@ -222,6 +237,13 @@ export default function NewOrganizationPrimaryIssuerForm() {
                         )}
                       </div>
                     </>
+                  )}
+
+                  {organizationId && (
+                    <div className="col-span-6 flex">
+                      <p className='flex-1'>Organization ID:</p>
+                      <p className='flex-1'>{organizationId}</p>
+                    </div>
                   )}
                 </div>
               </div>

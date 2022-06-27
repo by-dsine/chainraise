@@ -20,7 +20,7 @@ export default async function getUserById(
 
   const userProfile = await prisma.userProfile.findUnique({
     where: {
-      id: uid,
+      userId: uid,
     },
     include: {
         platformRoles: {

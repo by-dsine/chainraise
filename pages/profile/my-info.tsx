@@ -1,28 +1,3 @@
-/*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  const colors = require('tailwindcss/colors')
-  
-  module.exports = {
-    // ...
-    theme: {
-      extend: {
-        colors: {
-          cyan: colors.cyan,
-        },
-      },
-    },
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
@@ -61,74 +36,8 @@ import { KYCAMLStatus, PersonalInformationForm } from '../../types/typings'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import KYCModal from '../../components/profile/KYCModal'
-import { useKycModal } from '../../zustand'
+import { useKycModal } from '../../lib/zustand/investorFormStore'
 import { AUTO_APPROVED } from '../../constants/const'
-
-const navigation = [
-  { name: 'Home', href: '#', icon: HomeIcon, current: true },
-  { name: 'History', href: '#', icon: ClockIcon, current: false },
-  { name: 'Balances', href: '#', icon: ScaleIcon, current: false },
-  { name: 'Cards', href: '#', icon: CreditCardIcon, current: false },
-  { name: 'Recipients', href: '#', icon: UserGroupIcon, current: false },
-  { name: 'Reports', href: '#', icon: DocumentReportIcon, current: false },
-]
-const secondaryNavigation = [
-  { name: 'Settings', href: '#', icon: CogIcon },
-  { name: 'Help', href: '#', icon: QuestionMarkCircleIcon },
-  { name: 'Privacy', href: '#', icon: ShieldCheckIcon },
-]
-const cards = [
-  {
-    name: 'Investments',
-    href: '#',
-    icon: CurrencyDollarIcon,
-    amount: '1',
-  },
-  { name: 'Saved Offerings', href: '#', icon: UserGroupIcon, amount: '42' },
-
-  // More items...
-]
-
-const actions = [
-  { name: 'Complete Investor Flow', href: '#', icon: ExclamationCircleIcon },
-]
-const transactions = [
-  {
-    id: 1,
-    name: 'Payment to Multivest',
-    href: '#',
-    amount: '$20,000',
-    currency: 'USD',
-    status: 'success',
-    date: 'July 11, 2022',
-    datetime: '2022-07-11',
-  },
-  {
-    id: 2,
-    name: 'Payment to Super Cool Business',
-    href: '#',
-    amount: '$10,000',
-    currency: 'USD',
-    status: 'success',
-    date: 'July 23, 2022',
-    datetime: '2022-07-23',
-  },
-  {
-    id: 3,
-    name: 'Payment to ChainRaise',
-    href: '#',
-    amount: '$15,000',
-    currency: 'USD',
-    status: 'success',
-    date: 'July 30, 2022',
-    datetime: '2022-07-30',
-  },
-]
-const statusStyles = {
-  success: 'bg-green-100 text-green-800',
-  processing: 'bg-yellow-100 text-yellow-800',
-  failed: 'bg-gray-100 text-gray-800',
-}
 
 const residenceOptions = [
   { id: 'us-citizen', title: 'U.S. Citizen' },
@@ -606,7 +515,7 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <div className="mt-12">
+          {/* <div className="mt-12">
             <div className="px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8">
               <div>
                 <h3 className="text-lg font-medium leading-6 text-gray-900">
@@ -710,7 +619,7 @@ export default function ProfilePage() {
                 </dl>
               </div>
             </div>
-          </div>
+          </div> */}
         </main>
       </div>
     </div>

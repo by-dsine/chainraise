@@ -175,7 +175,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="mt-8">
-            <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            {/* <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
               <div className="relative mt-1 rounded-md bg-cr-primary">
                 <div className="mx-auto max-w-7xl py-3 px-3 sm:px-6 lg:px-8">
                   <div className="pr-16 sm:px-16 sm:text-center">
@@ -204,7 +204,7 @@ export default function ProfilePage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="mx-auto mt-8 max-w-6xl px-4 sm:px-6 lg:px-8">
               <h2 className="text-lg font-medium leading-6 text-gray-900">
@@ -252,25 +252,6 @@ export default function ProfilePage() {
                   </div>
                 ))}
 
-                <div key="see-more" className="bg-white">
-                  <div className="mx-auto max-w-7xl py-4 px-4 text-center">
-                    <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                      <span className="block">Find New Offerings</span>
-                      
-                    </h2>
-                    <div className="mt-8 flex">
-                      <div className="inline-flex rounded-md shadow mx-auto">
-                        <a
-                          href="#"
-                          className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-5 py-3 text-base font-medium text-white hover:bg-indigo-700"
-                        >
-                          Explore Now!
-                        </a>
-                      </div>
-                      
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
 

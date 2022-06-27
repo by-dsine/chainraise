@@ -2,7 +2,7 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationIcon } from '@heroicons/react/outline'
-import { useKycModal } from '../../zustand'
+import { useKycModal } from '../../lib/zustand/investorFormStore'
 import { NOT_STARTED, PARTY_CREATED } from '../../constants/const'
 import { UserProfile } from '@prisma/client'
 import { KYCAMLStatus } from '../../types/typings'

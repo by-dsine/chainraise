@@ -56,16 +56,19 @@ model VerificationToken {
 }
 
 model UserProfile {
-  id        String  @id @default(cuid())
-  userId    String? @unique
-  ncPartyId String? @unique
-
+  id                  String    @id @default(cuid())
+  userId              String?   @unique
+  ncPartyId           String?   @unique
+  ncAccountId         String?   @unique
+  ncLinkId            String?
   firstName           String?
   middleName          String?
   lastName            String?
   username            String?   @unique
   bio                 String?
-  address             String?
+  address1            String?
+  address2            String?
+  unit                String?
   city                String?
   country             String?
   state               String?
@@ -76,6 +79,7 @@ model UserProfile {
   dob                 DateTime?
   residence           String?
   accountType         String?
+  entityName          String?
 
   user                        User?                             @relation(fields: [userId], references: [id])
   followedBy                  Follows[]                         @relation("following")
@@ -92,6 +96,8 @@ model UserProfile {
   offeringPostCommentReaction OfferingUserPostCommentReaction[]
   platformRoles               PlatformRole[]
   userKYCAML                  UserKYCAML[]
+  Transaction                 Transaction[]
+  OfferingUpdate              OfferingUpdate[]
 }
 
 model PlatformRole {
@@ -152,7 +158,6 @@ model UserPostCommentReaction {
   id              String          @id @default(cuid())
   authorId        String?
   author          UserProfile?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
-  body            String
   commentId       String
   userPostComment UserPostComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
   reactionId      Int
@@ -171,7 +176,7 @@ model UserReaction {
 model Organization {
   id          String                   @id @default(cuid())
   name        String                   @unique
-  ncIssuerId  String                   @unique
+  ncIssuerId  String?                  @unique
   ownerId     String
   owner       UserProfile?             @relation(fields: [ownerId], references: [id], onDelete: SetNull)
   memberships OrganizationMembership[]
@@ -199,7 +204,7 @@ model Offering {
   id                 String                  @id @default(cuid())
   name               String
   slug               String?                 @unique
-  ncOfferingId       String                  @unique
+  ncOfferingId       String?                 @unique
   organizationId     String
   organization       Organization            @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   startTimestamp     DateTime                @db.Timestamptz(3)
@@ -208,9 +213,11 @@ model Offering {
   goal               Int
   pledged            Int
   maxRaise           Int?
+  industry           String?
   description        String
   shortDescription   String
   disclosure         String
+  type               String?
   summary            String
   statusId           Int
   status             Status                  @relation(fields: [statusId], references: [id], onDelete: SetNull)
@@ -218,7 +225,19 @@ model Offering {
   offeringHistory    OfferingStatusHistory[]
   sections           OfferingSection[]
   userPosts          OfferingUserPost[]
-  documents          OfferingDocument[]
+  resources          OfferingResource[]
+  transactions       Transaction[]
+  updates            OfferingUpdate[]
+}
+
+model OfferingUpdate {
+  id            String      @id @default(cuid())
+  offeringId    String
+  offering      Offering    @relation(fields: [offeringId], references: [id], onDelete: SetNull)
+  userProfileId String
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
+  body          String
+  timestamp     DateTime    @db.Timestamptz(3)
 }
 
 model OfferingParameter {
@@ -251,6 +270,7 @@ model OfferingSection {
   offering   Offering          @relation(fields: [offeringId], references: [id], onDelete: SetNull)
   title      String
   subtitle   String
+  body       String
   order      Int
   resources  SectionResource[]
 }
@@ -267,14 +287,16 @@ model SectionResource {
   order       Int
 }
 
-model OfferingDocument {
+model OfferingResource {
   id          String   @id @default(cuid())
   offeringId  String
   offering    Offering @relation(fields: [offeringId], references: [id], onDelete: SetNull)
   title       String
   description String
   location    String
+  type        String
   public      Boolean
+  order       Int?
 }
 
 model OfferingUserPost {
@@ -326,4 +348,19 @@ model UserKYCAML {
   kycStatus     String?     @default("Not Started")
   amlStatus     String?     @default("Not Started")
   response      Json?
+}
+
+model Transaction {
+  id               String      @id @default(cuid())
+  ncTradeId        String
+  userProfileId    String
+  userProfile      UserProfile @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
+  offeringId       String
+  offering         Offering    @relation(fields: [offeringId], references: [id], onDelete: SetNull)
+  transactionType  String
+  transactionUnits Int
+  totalAmount      Int
+  notes            String?
+  status           String
+  timestamp        DateTime    @default(now()) @db.Timestamptz(3)
 }

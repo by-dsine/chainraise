@@ -1,24 +1,10 @@
-/*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { Fragment } from 'react'
 import { Disclosure, Menu, Popover, Transition } from '@headlessui/react'
 import { ChevronDownIcon, SearchIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/solid'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
 import Header from '../../components/Header'
+import { GetStaticProps } from 'next'
+import { prisma } from '../../lib/db'
 
 const trendingRaises = [
   {
@@ -27,7 +13,7 @@ const trendingRaises = [
     color: 'Natural',
     price: '$5,000,000',
     options: 'Equity',
-    href: '#',
+    href: '/offerings/test-offering',
     imageSrc:
       'https://images.unsplash.com/photo-1558661091-5cc1b64d0dc5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8aG91c2UlMjBjb25zdHJ1Y3Rpb258ZW58MHx8MHx8&auto=format&fit=crop&w=1200&q=60',
     imageAlt: 'The creative real estate fund for everyone.',
@@ -84,19 +70,6 @@ const trendingRaises = [
     imageAlt: 'Damn that\'s a nice basket, son.',
     description: 'Damn that\'s a nice basket, son.',
   },
-  {
-    id: 6,
-    name: 'Weed',
-    color: 'Natural',
-    price: '$4,200,000',
-    options: 'Equity',
-    href: '#',
-    imageSrc:
-      'https://images.unsplash.com/photo-1498671546682-94a232c26d17?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Y2FubmFiaXN8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60',
-    imageAlt: 'Sheesh this is some dank stuff.',
-    description: 'Sheesh this is some dank stuff.',
-  },
-  // More raises...
 ]
 
 const sortOptions = [
@@ -114,6 +87,7 @@ const subCategories = [
   { name: 'Real Estate', href: '#' },
   { name: 'Technology', href: '#' },
 ]
+
 const filters = [
   {
     id: 'minimum',
@@ -127,29 +101,6 @@ const filters = [
       { value: '10000', label: '10000', checked: false },
     ],
   },
-  {
-    id: 'category',
-    name: 'Category',
-    options: [
-      { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-      { value: 'sale', label: 'Sale', checked: false },
-      { value: 'travel', label: 'Travel', checked: true },
-      { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
-    ],
-  },
-  {
-    id: 'size',
-    name: 'Size',
-    options: [
-      { value: '2l', label: '2L', checked: false },
-      { value: '6l', label: '6L', checked: false },
-      { value: '12l', label: '12L', checked: false },
-      { value: '18l', label: '18L', checked: false },
-      { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true },
-    ],
-  },
 ]
 
 function classNames(...classes: string[]) {
@@ -157,6 +108,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function OfferingLanding() {
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
@@ -316,7 +268,7 @@ export default function OfferingLanding() {
                                   id={`filter-${section.id}-${optionIdx}`}
                                   name={`${section.id}[]`}
                                   defaultValue={option.value}
-                                  type="checkbox"
+                                  type="radio"
                                   defaultChecked={option.checked}
                                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                 />
@@ -342,3 +294,26 @@ export default function OfferingLanding() {
     </div>
   )
 }
+
+export const getStaticProps: GetStaticProps = async () => {
+  var offerings = await prisma.offering.findFirst({
+    where: {
+      statusId: 3 // "active" status
+    },
+    select: {
+      name: true,
+      shortDescription: true,
+      slug: true,
+      type: true,
+      goal: true,
+      minimumInvestment: true,
+    },
+  })
+
+  return {
+    props: {
+      
+    },
+    revalidate: 60
+  }
+} 

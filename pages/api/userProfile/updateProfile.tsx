@@ -24,7 +24,7 @@ export default async function postUpdateToUserProfile(
         firstName: data.firstName,
         middleName: data.middleName,
         lastName: data.lastName,
-        address: data.address,
+        address1: data.address,
         city: data.city,
         state: data.state,
         country: data.country,

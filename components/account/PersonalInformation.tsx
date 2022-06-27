@@ -1,30 +1,55 @@
 import { useForm } from 'react-hook-form'
 import { ContactInformationForm } from '../../types/typings'
-import { useInvestorForm } from '../../zustand'
-import * as yup from "yup"
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useInvestorForm } from '../../lib/zustand/investorFormStore'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useEffect } from 'react'
+import { UserProfile } from '@prisma/client'
+import {
+  convertDateToSimpleString,
+  mapDatabaseTimestampToDateFormat,
+} from '../../utils/mappers'
 
-export default function PersonalInformation() {
+const residenceOptions = [
+  { id: 'us-citizen', title: 'U.S. Citizen' },
+  { id: 'us-resident', title: 'U.S. Resident' },
+  { id: 'non-resident', title: 'Non-resident' },
+]
+
+type Props = {
+  userProfile: UserProfile
+}
+
+export const PersonalInformation = ({ userProfile }: Props) => {
   const investorForm = useInvestorForm()
-  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
-// https://www.sitepoint.com/community/t/phone-number-regular-expression-validation/2204/10
+  const phoneRegExp =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+  // https://www.sitepoint.com/community/t/phone-number-regular-expression-validation/2204/10
   let schema = yup.object().shape({
-    firstName: yup.string().required("Please enter a first name."),
+    firstName: yup.string().required('Please enter a first name.'),
     middleName: yup.string(),
-    lastName: yup.string().required("Please emter a last name."),
-    email: yup.string().email().required("Please enter an email."),
-    phoneNumber: yup.string().matches(phoneRegExp, 'Phone number is not valid').required("Please enter a valid phone number."),
-    country: yup.string().required("Please select a country."),
-    streetAddress: yup.string().required("Please enter a valid address."),
-    city: yup.string().required("Please enter a city."),
-    state: yup.string().required("Please enter a state."),
-    zipCode: yup.string().required("Please enter a zip code.")
+    lastName: yup.string().required('Please emter a last name.'),
+    email: yup.string().email().required('Please enter an email.'),
+    phone: yup
+      .string()
+      .matches(phoneRegExp, 'Phone number is not valid')
+      .required('Please enter a valid phone number.'),
+    country: yup.string().required('Please select a country.'),
+    address1: yup.string().required('Please enter a valid address.'),
+    address2: yup.string(),
+    city: yup.string().required('Please enter a city.'),
+    state: yup.string().required('Please enter a state.'),
+    zipCode: yup.string().required('Please enter a zip code.'),
+    dob: yup.string().required('Please enter a date of birth.'),
+    residence: yup.string().required('Please select a residence option.'),
   })
 
   const {
-    reset,
-    register,
     handleSubmit,
+    register,
+    reset,
+    trigger,
+    watch,
     formState: { errors },
   } = useForm<ContactInformationForm>({
     defaultValues: {
@@ -32,31 +57,114 @@ export default function PersonalInformation() {
       middleName: '',
       lastName: '',
       email: '',
-      phoneNumber: '',
+      phone: '',
       country: '',
-      streetAddress: '',
+      address1: '',
+      address2: '',
+      unit: '',
       city: '',
       state: '',
       zipCode: '',
+      dob: '',
+      residence: '',
     },
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
+  })
+
+  useEffect(() => {
+    let defaults = {
+      firstName: userProfile?.firstName || '',
+      middleName: userProfile?.middleName || '',
+      lastName: userProfile?.lastName || '',
+      email: userProfile?.email || '',
+      phone: userProfile?.phone || '',
+      country: userProfile?.country || '',
+      address1: userProfile?.address1 || '',
+      address2: userProfile?.address2 || '',
+      unit: userProfile?.unit || '',
+      city: userProfile?.city || '',
+      state: userProfile?.state || '',
+      zipCode: userProfile?.zipCode || '',
+      residence: userProfile?.residence || '',
+      dob: mapDatabaseTimestampToDateFormat(userProfile?.dob) || '',
+    }
+    reset(defaults)
+  }, [userProfile, reset])
+
+  const onSubmit = handleSubmit((data) => {
+    console.log('User submitted info for KYC check...')
+    if (
+      !errors.firstName &&
+      !errors.lastName &&
+      !errors.email &&
+      !errors.phone &&
+      !errors.country &&
+      !errors.address1 &&
+      !errors.address2 &&
+      !errors.unit &&
+      !errors.city &&
+      !errors.zipCode &&
+      !errors.state
+    ) {
+      investorForm.setFirstName(data.firstName)
+      investorForm.setMiddleName(data.middleName)
+      investorForm.setLastName(data.lastName)
+      investorForm.setEmail(data.email)
+      investorForm.setPhone(data.phone)
+      investorForm.setCountryOfResidence(data.country)
+      investorForm.setAddress1(data.address1)
+      investorForm.setAddress2(data.address2)
+      investorForm.setUnit(data.unit)
+      investorForm.setResidence(data.residence)
+      investorForm.setDateOfBirth(data.dob)
+      investorForm.setCity(data.city)
+      investorForm.setZipCode(data.zipCode)
+      investorForm.setState(data.state)
+      investorForm.setStepNumber(2)
+      console.log('Submit successful')
+
+      const requestBody: ContactInformationForm = {
+        firstName: data.firstName,
+        middleName: data.middleName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        country: data.country,
+        address1: data.address1,
+        address2: data.address2,
+        unit: data.unit,
+        city: data.city,
+        state: data.state,
+        zipCode: data.zipCode,
+        dob: data.dob,
+        residence: data.residence
+      }
+      const updateProfile = async () => {
+        const response = await fetch('/api/profile/self', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody)
+        })
+      }
+      
+      updateProfile().catch(console.error)
+    }
   })
 
   return (
     <>
-      <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-        <div className="space-y-6 pt-8 sm:space-y-5 sm:pt-10">
-          <div>
-            <h3 className="text-lg font-medium leading-6 text-gray-900">
-              Personal Information
-            </h3>
-            <p className="mt-1 max-w-2xl text-sm text-gray-500">
-              Use a permanent address where you can receive mail.
-            </p>
-          </div>
-          <div className="space-y-6 sm:space-y-5">
-            <div className="mt-5 md:col-span-2 md:mt-0">
-              <form action="#" method="POST">
+      <form onSubmit={onSubmit}>
+        <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+          <div className="space-y-6 pt-8 sm:space-y-5 sm:pt-10">
+            <div>
+              <h3 className="text-lg font-medium leading-6 text-gray-900">
+                Personal Information
+              </h3>
+            </div>
+            <div className="space-y-6 sm:space-y-5">
+              <div className="mt-5 md:col-span-2 md:mt-0">
                 <div className="grid grid-cols-6 gap-6">
                   <div className="col-span-6 sm:col-span-2">
                     <label
@@ -67,11 +175,16 @@ export default function PersonalInformation() {
                     </label>
                     <input
                       type="text"
-                      name="first-name"
+                      {...register('firstName')}
                       id="first-name"
                       autoComplete="given-name"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
+                    {errors.firstName && (
+                      <p className="mx-auto mt-2 text-sm text-red-600">
+                        {errors.firstName.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="col-span-6 sm:col-span-2">
@@ -86,11 +199,16 @@ export default function PersonalInformation() {
                     </label>
                     <input
                       type="text"
-                      name="middle-name"
+                      {...register('middleName')}
                       id="middle-name"
                       autoComplete="middle-name"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
+                    {errors.middleName && (
+                      <p className="mx-auto mt-2 text-sm text-red-600">
+                        {errors.middleName.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="col-span-6 sm:col-span-2">
@@ -102,11 +220,16 @@ export default function PersonalInformation() {
                     </label>
                     <input
                       type="text"
-                      name="last-name"
+                      {...register('lastName')}
                       id="last-name"
                       autoComplete="family-name"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
+                    {errors.lastName && (
+                      <p className="mx-auto mt-2 text-sm text-red-600">
+                        {errors.lastName.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="col-span-6 sm:col-span-4">
@@ -118,11 +241,16 @@ export default function PersonalInformation() {
                     </label>
                     <input
                       type="text"
-                      name="email-address"
+                      {...register('email')}
                       id="email-address"
                       autoComplete="email"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
+                    {errors.email && (
+                      <p className="mx-auto mt-2 text-sm text-red-600">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="col-span-6 sm:col-span-2">
@@ -134,12 +262,28 @@ export default function PersonalInformation() {
                     </label>
                     <input
                       type="tel"
-                      name="phone-number"
+                      {...register('phone')}
                       id="phone-number"
+                      pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                       autoComplete="phone-number"
+                      placeholder="123-456-7890"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
+                    {errors.phone && (
+                      <p className="mx-auto mt-2 text-sm text-red-600">
+                        {errors.phone.message}
+                      </p>
+                    )}
                   </div>
+
+                  {investorForm.accountType == 'entity' && (
+                    <div className="col-span-6">
+                      <div className="w-full border-t border-gray-300" />
+                      <h3 className="mt-4 text-lg font-medium leading-6 text-gray-900">
+                        Entity Information
+                      </h3>
+                    </div>
+                  )}
 
                   <div className="col-span-6 sm:col-span-3">
                     <label
@@ -150,7 +294,7 @@ export default function PersonalInformation() {
                     </label>
                     <select
                       id="country"
-                      name="country"
+                      {...register('country')}
                       autoComplete="country-name"
                       className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                     >
@@ -158,9 +302,14 @@ export default function PersonalInformation() {
                       <option>Canada</option>
                       <option>Mexico</option>
                     </select>
+                    {errors.country && (
+                      <p className="mx-auto mt-2 text-sm text-red-600">
+                        {errors.country.message}
+                      </p>
+                    )}
                   </div>
 
-                  <div className="col-span-6">
+                  <div className="col-span-6 md:col-span-4">
                     <label
                       htmlFor="street-address"
                       className="block text-sm font-medium text-gray-700"
@@ -169,11 +318,61 @@ export default function PersonalInformation() {
                     </label>
                     <input
                       type="text"
-                      name="street-address"
+                      {...register('address1')}
                       id="street-address"
                       autoComplete="street-address"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
+                    {errors.address1 && (
+                      <p className="mx-auto mt-2 text-sm text-red-600">
+                        {errors.address1.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="col-span-6 md:col-span-2">
+                    <label
+                      htmlFor="unit"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Unit
+                    </label>
+                    <input
+                      type="text"
+                      {...register('unit')}
+                      id="unit"
+                      autoComplete="unit"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
+                    {errors.unit && (
+                      <p className="mx-auto mt-2 text-sm text-red-600">
+                        {errors.unit.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="col-span-6">
+                    <label
+                      htmlFor="street-address-2"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Street address 2{' '}
+                      <span className="items-center text-xs">
+                        {'(optional)'}
+                      </span>{' '}
+                    </label>
+                    <input
+                      type="text"
+                      {...register('address2')}
+                      id="street-address-2"
+                      autoComplete="street-address-2"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
+                    {errors.address2 && (
+                      <p className="mx-auto mt-2 text-sm text-red-600">
+                        {errors.address2.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="col-span-6 sm:col-span-6 lg:col-span-2">
@@ -185,11 +384,16 @@ export default function PersonalInformation() {
                     </label>
                     <input
                       type="text"
-                      name="city"
+                      {...register('city')}
                       id="city"
-                      autoComplete="address-level2"
+                      autoComplete="city"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
+                    {errors.city && (
+                      <p className="mx-auto mt-2 text-sm text-red-600">
+                        {errors.city.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="col-span-6 sm:col-span-3 lg:col-span-2">
@@ -201,11 +405,16 @@ export default function PersonalInformation() {
                     </label>
                     <input
                       type="text"
-                      name="region"
+                      {...register('state')}
                       id="region"
                       autoComplete="address-level1"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
+                    {errors.state && (
+                      <p className="mx-auto mt-2 text-sm text-red-600">
+                        {errors.state.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="col-span-6 sm:col-span-3 lg:col-span-2">
@@ -217,35 +426,107 @@ export default function PersonalInformation() {
                     </label>
                     <input
                       type="text"
-                      name="postal-code"
+                      {...register('zipCode')}
                       id="postal-code"
                       autoComplete="postal-code"
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
+                    {errors.zipCode && (
+                      <p className="mx-auto mt-2 text-sm text-red-600">
+                        {errors.zipCode.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      htmlFor="region"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Date of Birth
+                    </label>
+                    <input
+                      type="date"
+                      {...register('dob')}
+                      id="dob"
+                      autoComplete="address-level1"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
+                    {errors.dob && (
+                      <p className="mx-auto mt-2 text-sm text-red-600">
+                        {errors.dob.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="col-span-6 sm:col-span-3">
+                    <label className=" text-sm font-medium text-gray-700">
+                      Residence
+                    </label>
+                    <fieldset className="mt-4">
+                      <legend className="sr-only">Notification method</legend>
+                      <div className="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
+                        {residenceOptions.map((residenceOption) => (
+                          <div
+                            key={residenceOption.id}
+                            className="flex items-center"
+                          >
+                            <input
+                              id={residenceOption.id}
+                              {...register('residence')}
+                              value={residenceOption.id}
+                              type="radio"
+                              className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                            />
+                            <label
+                              htmlFor={residenceOption.id}
+                              className="ml-3 block text-sm font-medium text-gray-700"
+                            >
+                              {residenceOption.title}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </fieldset>
+                    {errors.residence && (
+                      <p className="mx-auto mt-2 text-sm text-red-600">
+                        {errors.residence.message}
+                      </p>
+                    )}
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="py-5">
-        <div className="flex justify-end">
-          <button
-            type="button"
-            className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        <div className="relative py-5">
+          <div
+            className="absolute inset-0 flex items-center"
+            aria-hidden="true"
           >
-            Previous
-          </button>
-          <button
-            type="submit"
-            className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            Next
-          </button>
+            <div className="w-full border-t border-gray-300" />
+          </div>
+          
         </div>
-      </div>
+
+        <div className="pb-10">
+          <div className="flex justify-end">
+            <button
+              type="button"
+              className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              Previous
+            </button>
+            <button
+              type="submit"
+              className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </form>
     </>
   )
 }

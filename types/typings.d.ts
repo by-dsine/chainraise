@@ -48,14 +48,19 @@ export type GetOrganizationResponse = {
 
 // Offerings 
 export type DisplayOffering = {
+  offeringId: string
   name: string
+  summary: string
+  description: string
   slug: string
   status: string
   goal: string
   pledged: string
+  minimum: number
   startDate: string
   endDate: string
   sections: DisplayOfferingSection[]
+  resources: DisplayOfferingResource[]
 }
 
 export type DisplayOfferingSection = {
@@ -64,13 +69,23 @@ export type DisplayOfferingSection = {
   subtitle: string
   order: number
   displayOrder: number
-  resources: DisplayOfferingResource[]
+  resources: DisplayOfferingSectionResource[]
+}
+
+export type DisplayOfferingSectionResource = {
+  id: string
+  title: string
+  subtitle: string
+  description: string
+  location: string
+  type: string
+  order: number
+  displayOrder: number
 }
 
 export type DisplayOfferingResource = {
   id: string
   title: string
-  subtitle: string
   description: string
   location: string
   type: string
@@ -112,17 +127,39 @@ export type PersonalInformationForm = {
   residence?: string
 }
 
+// same as above form but everything is required
 export type ContactInformationForm = {
+  firstName: string
+  middleName: string
+  lastName: string
+  email: string
+  phone: string
+  country: string
+  address1: string
+  address2: string
+  unit: string
+  city: string
+  state: string
+  zipCode: string
+  dob: string
+  residence: string
+}
+
+export type KYCAMLForm = {
   firstName: string
   middleName: string
   lastName: string
   email: string
   phoneNumber: string
   country: string
-  streetAddress: string
+  address1: string
+  address2: string
+  unit: string
   city: string
   state: string
   zipCode: string
+  dob: string
+  residence: string
 }
 
 export type OrganizationPrimaryIssuerForm = {
@@ -144,6 +181,7 @@ export type OfferingForm = {
   price: number
   issueType: string
   description: string
+  shortDescription: string
 }
 
 export type GetOrganizationForm = {
@@ -162,6 +200,14 @@ export type AdminEditOffering = {
   price: number
   issueType: string
   description: string
+}
+
+export type AdminDisplayTransaction = {
+  id: string
+  totalAmount: number
+  type: string
+  units: number
+  purchaserName: string
 }
 
 // North Capital API types
@@ -233,6 +279,37 @@ type OfferingDetails = {
   offeringId: string
   offeringStatus: string
 }
+
+type CreateAccountResponse = {
+  statusCode: string
+  statusDesc: string
+  accountDetails: AccountIdResponse[]
+}
+
+type AccountIdResponse = {
+  accountId: string
+}
+
+type onboardStatus = {
+  partyId: string
+  accountId: string
+}
+
+type CreateLinkResponse = {
+  statusCode: string
+  statusDesc: string
+  linkDetails: (boolean | LinkDetail[])[]
+}
+
+type LinkDetail = {
+  id: string
+}
+
+type NCResponse = {
+  statusCode: string
+  statusDesc: string
+}
+
 // Sanity Types
 export interface Post {
   _id: string
