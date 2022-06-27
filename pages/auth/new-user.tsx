@@ -6,23 +6,28 @@ import {
   TerminalIcon,
 } from '@heroicons/react/outline'
 import Link from 'next/link'
+import { useEffect } from 'react'
+import { prisma } from '../../lib/db'
+import { useSession } from 'next-auth/react'
+import { GetServerSideProps } from 'next'
+import useOrCreateUserProfile from '../../hooks/useOrCreateUserProfile'
 
 const items = [
   {
     name: 'Submit your contact information',
     description:
       'Get your identity verified prior to completing an investment.',
-    href: '#',
+    href: '/profile/my-info',
     iconColor: 'bg-green-500',
     icon: BadgeCheckIcon,
   },
-  {
-    name: 'Verify your accreditation status',
-    description: 'Select your accreditation status and submit any necessary documentation.',
-    href: '#',
-    iconColor: 'bg-purple-500',
-    icon: TerminalIcon,
-  },
+  // {
+  //   name: 'Verify your accreditation status',
+  //   description: 'Select your accreditation status and submit any necessary documentation.',
+  //   href: '#',
+  //   iconColor: 'bg-purple-500',
+  //   icon: TerminalIcon,
+  // },
 ]
 
 function classNames(...classes: string[]) {
@@ -30,6 +35,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function NewUser() {
+  
   return (
     <>
       <div className="mx-auto mt-24 max-w-lg">
@@ -90,3 +96,19 @@ export default function NewUser() {
     </>
   )
 }
+
+
+    // const createProfile = async () => {
+    //   await prisma.userProfile.upsert({
+    //     where: {
+    //       userId: session?.user.uid
+    //     },
+    //     update: {
+    //       userId: session?.user.uid
+    //     },
+    //     create: {
+    //       userId: session?.user.uid
+    //     }
+    //   })
+    // }    
+  

@@ -6,6 +6,8 @@ import { Controller, useForm } from 'react-hook-form'
 import { AccountTypeForm } from '../../types/typings'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useSession } from 'next-auth/react'
+import { UserProfile } from '@prisma/client'
 
 type setting = {
   name: string
@@ -19,7 +21,7 @@ const settings = [
     description: 'You represent yourself. Good for you. Carpe those diems.',
   },
   {
-    name:'entity',
+    name: 'entity',
     displayName: 'Entity',
     description:
       "You're investing for an entity or organization such as a Family Office or an IRA.",
@@ -30,20 +32,24 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function AccountType() {
+type Props = {
+  userProfile: UserProfile
+}
+
+export default function AccountType({ userProfile }: Props) {
   const [selected, setSelected] = useState(settings[0])
-  const accountType = useInvestorForm(store => store.accountType)
-  const setAccountType = useInvestorForm(store => store.setAccountType)
-  const entityName = useInvestorForm(store => store.entityName)
-  const setEntityName = useInvestorForm(store => store.setEntityName)
-  const setStepNumber = useInvestorForm(store => store.setStepNumber)
+  const accountType = useInvestorForm((store) => store.accountType)
+  const setAccountType = useInvestorForm((store) => store.setAccountType)
+  const entityName = useInvestorForm((store) => store.entityName)
+  const setEntityName = useInvestorForm((store) => store.setEntityName)
+  const setStepNumber = useInvestorForm((store) => store.setStepNumber)
 
   const router = useRouter()
 
   let schema = yup.object().shape({
     accountType: yup
       .string()
-      .oneOf(['individual', 'entity'], "Please select an account type.")
+      .oneOf(['individual', 'entity'], 'Please select an account type.')
       .required('Please select an account type.'),
     entityName: yup.string().nullable(),
   })
@@ -67,12 +73,18 @@ export default function AccountType() {
   })
 
   useEffect(() => {
-    if(accountType == 'individual' || accountType == 'entity') {
+    if (accountType == 'individual' || accountType == 'entity') {
       setValue('accountType', accountType)
-    } 
+    }
   }, [])
 
-  const watchType = watch("accountType")
+  // useEffect(() => {
+  //   let defaults = {
+  //     accountType: userProfile.accountType?,
+  //   }
+  // }, [userProfile, watch])
+
+  const watchType = watch('accountType')
 
   const onSubmit = handleSubmit((data) => {
     const isEntity = data.accountType == 'entity'
@@ -84,7 +96,10 @@ export default function AccountType() {
     const entityError = isEntity && !hasEntityName
 
     if (entityError) {
-      setError('entityName', {type: "custom", message: "Please enter a name for your entity."})
+      setError('entityName', {
+        type: 'custom',
+        message: 'Please enter a name for your entity.',
+      })
     }
 
     if (!errors.accountType && !errors.entityName && !entityError) {
@@ -92,7 +107,7 @@ export default function AccountType() {
       setEntityName(data.entityName)
       setStepNumber(1)
     }
-    console.log("end")
+    console.log('end')
   })
 
   return (
@@ -168,10 +183,10 @@ export default function AccountType() {
       />
 
       {errors?.accountType && (
-        <div className='flex'>
-        <p className="mt-2 mx-auto text-sm text-red-600">
-          {errors.accountType.message}
-        </p>
+        <div className="flex">
+          <p className="mx-auto mt-2 text-sm text-red-600">
+            {errors.accountType.message}
+          </p>
         </div>
       )}
 
@@ -193,10 +208,10 @@ export default function AccountType() {
         </div>
       )}
       {watchType == 'entity' && errors?.entityName && (
-        <div className='flex'>
-        <p className="mt-2 mx-auto text-sm text-red-600">
-          {errors.entityName.message}
-        </p>
+        <div className="flex">
+          <p className="mx-auto mt-2 text-sm text-red-600">
+            {errors.entityName.message}
+          </p>
         </div>
       )}
       <div className="py-5">

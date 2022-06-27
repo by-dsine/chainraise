@@ -18,16 +18,7 @@ export default NextAuth({
     newUser: '/auth/new-user',
   },
   callbacks: {
-    async signIn({ user }) {
-      // Users must have an email so we can send them compliance notices
-      if (!user.email) {
-        return false
-      }
-      return true
-    },
     async session({ session, user }) {
-      session.user.admin = false
-
       const getUser = await prisma.user.findFirst({
         where: {
           email: session!.user!.email,

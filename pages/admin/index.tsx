@@ -1,14 +1,9 @@
 import { useEffect, useState } from 'react'
-import {
-  CurrencyDollarIcon,
-} from '@heroicons/react/outline'
-import {
-  CheckCircleIcon,
-  UserGroupIcon,
-} from '@heroicons/react/solid'
+import { CurrencyDollarIcon } from '@heroicons/react/outline'
+import { CheckCircleIcon, UserGroupIcon } from '@heroicons/react/solid'
 import Header from '../../components/Header'
 import useOrCreateUserProfile from '../../hooks/useOrCreateUserProfile'
-import { CRAdminStatistics, DisplayAdminInfo} from '../../types/typings'
+import { CRAdminStatistics, DisplayAdminInfo } from '../../types/typings'
 import UsersTable from '../../components/admin/UsersTable'
 import { useDisplayStore } from '../../lib/zustand/displayAdminStore'
 import OfferingsTable from '../../components/admin/OfferingsTable'
@@ -16,8 +11,10 @@ import OfferingsTable from '../../components/admin/OfferingsTable'
 export default function AdminPage() {
   const { userProfile, session, isLoading, isError } = useOrCreateUserProfile()
 
-  const addUserToDisplayTable = useDisplayStore(store => store.addDisplayUser)
-  const addOfferingToDisplayTable = useDisplayStore(store => store.addDisplayOffering)
+  const addUserToDisplayTable = useDisplayStore((store) => store.addDisplayUser)
+  const addOfferingToDisplayTable = useDisplayStore(
+    (store) => store.addDisplayOffering
+  )
 
   const [numOfferings, setNumOfferings] = useState(0)
   const [numUsers, setNumUsers] = useState(0)
@@ -60,8 +57,16 @@ export default function AdminPage() {
       })
     }
     fetchUserData().catch(console.error)
-
   }, [])
+
+  const seedDatabase = () => {
+    const seedPost = async () => {
+      await fetch('api/admin/seed', {
+        method: 'POST',
+      })
+    }
+    seedPost().catch(console.error)
+  }
 
   const cards = [
     {
@@ -128,6 +133,7 @@ export default function AdminPage() {
 
           <div className="mt-8">
             <div className="mx-auto mt-8 max-w-6xl px-4 sm:px-6 lg:px-8">
+              
               <h2 className="text-lg font-medium leading-6 text-gray-900">
                 Overview
               </h2>
@@ -172,7 +178,7 @@ export default function AdminPage() {
               </div>
             </div>
 
-            <div className="mt-4 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto mt-4 max-w-6xl px-4 sm:px-6 lg:px-8">
               {(() => {
                 switch (table) {
                   case 'Users':

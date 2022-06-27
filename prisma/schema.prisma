@@ -56,16 +56,19 @@ model VerificationToken {
 }
 
 model UserProfile {
-  id        String  @id @default(cuid())
-  userId    String? @unique
-  ncPartyId String? @unique
-
+  id                  String    @id @default(cuid())
+  userId              String?   @unique
+  ncPartyId           String?   @unique
+  ncAccountId         String?   @unique
+  ncLinkId            String?
   firstName           String?
   middleName          String?
   lastName            String?
   username            String?   @unique
   bio                 String?
-  address             String?
+  address1            String?
+  address2            String?
+  unit                String?
   city                String?
   country             String?
   state               String?
@@ -76,6 +79,7 @@ model UserProfile {
   dob                 DateTime?
   residence           String?
   accountType         String?
+  entityName          String?
 
   user                        User?                             @relation(fields: [userId], references: [id])
   followedBy                  Follows[]                         @relation("following")
@@ -172,7 +176,7 @@ model UserReaction {
 model Organization {
   id          String                   @id @default(cuid())
   name        String                   @unique
-  ncIssuerId  String                   @unique
+  ncIssuerId  String?                  @unique
   ownerId     String
   owner       UserProfile?             @relation(fields: [ownerId], references: [id], onDelete: SetNull)
   memberships OrganizationMembership[]
@@ -200,7 +204,7 @@ model Offering {
   id                 String                  @id @default(cuid())
   name               String
   slug               String?                 @unique
-  ncOfferingId       String                  @unique
+  ncOfferingId       String?                 @unique
   organizationId     String
   organization       Organization            @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   startTimestamp     DateTime                @db.Timestamptz(3)
