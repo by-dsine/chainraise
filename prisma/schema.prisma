@@ -213,6 +213,7 @@ model Offering {
   goal               Int
   pledged            Int
   maxRaise           Int?
+  pricePerUnit        Int?
   industry           String?
   description        String
   shortDescription   String
@@ -352,7 +353,7 @@ model UserKYCAML {
 
 model Transaction {
   id               String      @id @default(cuid())
-  ncTradeId        String
+  ncTradeId        String?
   userProfileId    String
   userProfile      UserProfile @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
   offeringId       String

@@ -3,11 +3,11 @@ import { CheckIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { Tab } from '@headlessui/react'
 import Header from '../../components/Header'
-import AccountType from '../../components/account/AccountType'
-import { PersonalInformation } from '../../components/account/PersonalInformation'
-import AccreditationStatus from '../../components/account/AccreditationStatus'
-import SignDocuments from '../../components/account/SignDocuments'
-import { SubmitPayment } from '../../components/account/SubmitPayment'
+import AccountType from '../../components/invest/AccountType'
+import { PersonalInformation } from '../../components/invest/PersonalInformation'
+import AccreditationStatus from '../../components/invest/AccreditationStatus'
+import SignDocuments from '../../components/invest/SignDocuments'
+import { SubmitPayment } from '../../components/invest/SubmitPayment'
 import { useInvestorForm } from '../../lib/zustand/investorFormStore'
 import { GetServerSideProps } from 'next'
 import useUserProfile from '../../hooks/useUserProfile'
@@ -15,6 +15,7 @@ import { UserProfile } from '@prisma/client'
 import useOrCreateUserProfile from '../../hooks/useOrCreateUserProfile'
 import { KYCAMLInvestorFlow } from '../../components/invest/KYCAMLInvestorFlow'
 import { convertDateToSimpleString, mapDatabaseTimestampToDateFormat } from '../../utils/mappers'
+import { useRouter } from 'next/router'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -74,6 +75,7 @@ export default function Invest() {
       investorForm.setResidence(userProfile.residence)
     }
   }, [userProfile])
+
 
   return (
     <>

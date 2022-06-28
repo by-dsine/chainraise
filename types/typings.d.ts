@@ -12,7 +12,7 @@ export type CRAdminStatistics = {
 
 export type DisplayAdminInfo = {
   offerings: DisplayAdminOffering[]
-  users: DisplayAdminUser[] 
+  users: DisplayAdminUser[]
 }
 
 export type DisplayAdminUser = {
@@ -46,7 +46,7 @@ export type GetOrganizationResponse = {
   organizationId: string
 }
 
-// Offerings 
+// Offerings
 export type DisplayOffering = {
   offeringId: string
   name: string
@@ -189,6 +189,31 @@ export type GetOrganizationForm = {
   organizationId: string
 }
 
+export type PaymentMethodForm = {
+  offeringSlug: string
+  paymentMethod: string // [“cc”, “ach”, “wire”]
+  transactionAmount: number // in dollars
+  cc: CCPayment | null
+  ach: ExternalBankAccountInfo | null
+}
+
+export type CCPayment = {
+  ownerName: string
+  cardNumber: number
+  expirationDate: string // MM/YY format
+  cvvNumber: number
+  cardType: string // [“VI”,”MC”,”DI”]
+}
+
+export type ExternalBankAccountInfo = {
+  accountHolderName: string
+  accountName: string
+  routingNumber: number
+  accountNumber: number
+  bankName: string
+  accountType: string // checking vs saving
+}
+
 export type AdminEditOffering = {
   organizationName: string
   offeringName: string
@@ -308,6 +333,32 @@ type LinkDetail = {
 type NCResponse = {
   statusCode: string
   statusDesc: string
+}
+
+type CreateTradeResponse = {
+  statusCode: string
+  statusDesc: string
+  purchaseDetails: (boolean | PurchaseDetail[])[]
+}
+
+type PurchaseDetail = {
+  tradeId: string
+  transactionId: string
+  transactionAmount: string
+  transactionDate: string
+  transactionStatus: string
+  RRApprovalStatus: string
+  RRName: string
+  RRApprovalDate: string
+  PrincipalApprovalStatus: string
+  PrincipalName: string
+  PrincipalDate: string
+}
+
+type CreateCardResponse = {
+  statusCode: string
+  statusDesc: string
+  creditcardDetails: string
 }
 
 // Sanity Types
