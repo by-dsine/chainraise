@@ -1,3 +1,16 @@
+export const mapPaymentMethodtoTransactionType = (paymentMethod: string): string => {
+  switch(paymentMethod){
+    case "cc":
+      return "CREDITCARD"
+    case "ach":
+      return "ACH"
+    case "wire":
+      return "Wire"
+  }
+
+  return "error"
+}
+
 // date functions
 // there are probably better ways to do this crap but alas I have not heard of them
 export function convertDateToSimpleString(dbDate: any): string {

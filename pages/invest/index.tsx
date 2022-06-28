@@ -15,6 +15,7 @@ import { UserProfile } from '@prisma/client'
 import useOrCreateUserProfile from '../../hooks/useOrCreateUserProfile'
 import { KYCAMLInvestorFlow } from '../../components/invest/KYCAMLInvestorFlow'
 import { convertDateToSimpleString, mapDatabaseTimestampToDateFormat } from '../../utils/mappers'
+import { useRouter } from 'next/router'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -74,6 +75,7 @@ export default function Invest() {
       investorForm.setResidence(userProfile.residence)
     }
   }, [userProfile])
+
 
   return (
     <>

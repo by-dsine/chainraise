@@ -6,12 +6,10 @@ import {
 } from '../../../../constants/const'
 import { prisma } from '../../../../lib/db'
 import {
-  IssuerDetails,
-  IssuerResponse,
   OfferingDetails,
   OfferingResponse,
 } from '../../../../types/typings'
-import { convertDateToSimpleString, convertInputDateToDateTime, convertInputDateToNCFormat, formatAmountForNC } from '../../../../utils/mappers'
+import { convertInputDateToDateTime, convertInputDateToNCFormat, formatAmountForNC } from '../../../../utils/mappers'
 
 export default async function newOffering(
   req: NextApiRequest,
@@ -162,6 +160,8 @@ export default async function newOffering(
       return res
         .status(200)
         .json({ message: 'Offering created.', offeringId: offering.id })
+    } else {
+      return res.status(500).json({message: 'error: ' + result.statusDesc})
     }
     return res.status(500).json({ message: 'Something went wrong' })
   } else {

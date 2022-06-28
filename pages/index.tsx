@@ -1,10 +1,8 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { ChevronRightIcon } from '@heroicons/react/solid'
-import { signIn, useSession } from 'next-auth/react'
-import LoginCard from '../components/LoginCard'
-import AdCard from '../components/AdCard'
+import { useRouter } from 'next/router'
 
 const trendingRaises = [
   {
@@ -112,9 +110,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function Home() {
-  const { data: session } = useSession()
-
-  return (
+    return (
     <div className="relative overflow-hidden bg-white">
       <Header />
 
