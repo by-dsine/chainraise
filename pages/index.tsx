@@ -1,6 +1,9 @@
 import Header from '../components/navigation/Header'
 import Footer from '../components/navigation/Footer'
 import { ChevronRightIcon } from '@heroicons/react/solid'
+import { GetServerSideProps } from 'next'
+import { prisma } from '../lib/db'
+import { OfferingPreview } from '../types/typings'
 
 const trendingRaises = [
   {
@@ -107,7 +110,11 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Home() {
+type HomePageProps = {
+  offerings: OfferingPreview[]
+}
+
+export const Home = ({offerings}: HomePageProps) => {
     return (
     <div className="relative overflow-hidden bg-white">
       <Header />
@@ -277,4 +284,16 @@ export default function Home() {
       <Footer />
     </div>
   )
+}
+
+export default Home
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  let offeringPreviews: OfferingPreview[] = []
+
+  return {
+    props: {
+      offerings: offeringPreviews
+    }
+  }
 }

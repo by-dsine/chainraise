@@ -47,6 +47,17 @@ export type GetOrganizationResponse = {
 }
 
 // Offerings
+export type OfferingPreview = {
+  offeringName: string
+  offeringSlug: string
+  offeringShortDesc: string
+  offeringEndDate: string
+  offeringGoal: string
+  offeringAmountPledged: string
+  offeringType: string
+  offeringImageSrc: string
+}
+
 export type DisplayOffering = {
   offeringId: string
   name: string
