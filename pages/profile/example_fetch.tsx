@@ -18,7 +18,7 @@ import {
   XIcon,
   CogIcon,
 } from '@heroicons/react/outline'
-import useOrCreateUserProfile from '../../hooks/useOrCreateUserProfile'
+import useOrCreateProfile from '../../hooks/useOrCreateProfile'
 
 const navigation = [
   { name: 'Account', href: '#', icon: UserCircleIcon, current: true },
@@ -50,8 +50,8 @@ function classNames(...classes: string[]) {
 }
 
 export default function Account() {
-  const [ stateUserProfile, setUserProfile] = useState(null)
-  const { userProfile, session, isLoading, isError } = useOrCreateUserProfile()
+  const [ stateProfile, setProfile] = useState(null)
+  const { profile, session, isLoading, isError } = useOrCreateProfile()
 
   const {
     reset,
@@ -72,22 +72,22 @@ export default function Account() {
 
   useEffect(() => {
     let defaults = {
-      userId: userProfile?.userId || "",
-      bio: userProfile?.bio || "",
-      firstName: userProfile?.firstName || "",
-      lastName: userProfile?.lastName || "",
-      address: userProfile?.address || "",
-      city: userProfile?.city || "",
-      state: userProfile?.state || "",
-      zipCode: userProfile?.zipCode || "",
-      phone: userProfile?.phone || "",
+      userId: profile?.userId || "",
+      bio: profile?.bio || "",
+      firstName: profile?.firstName || "",
+      lastName: profile?.lastName || "",
+      address: profile?.address || "",
+      city: profile?.city || "",
+      state: profile?.state || "",
+      zipCode: profile?.zipCode || "",
+      phone: profile?.phone || "",
     }
     reset(defaults)
-  }, [userProfile, reset])
+  }, [profile, reset])
 
   const onSubmit: SubmitHandler<PersonalInformationForm> = (data) => {
     console.log(data)
-    fetch('/api/userProfile/updateProfile', {
+    fetch('/api/profile/updateProfile', {
       method: 'POST',
       body: JSON.stringify(data),
     })
@@ -170,7 +170,7 @@ export default function Account() {
                             id="username"
                             autoComplete="username"
                             className="block w-full min-w-0 flex-grow rounded-md border-gray-300 focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-                            defaultValue={userProfile?.username || ''}
+                            defaultValue={profile?.username || ''}
                             {...register('username')}
                           />
                         </div>
@@ -188,7 +188,7 @@ export default function Account() {
                             id="bio"
                             rows={3}
                             className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-                            defaultValue={userProfile?.bio || ''}
+                            defaultValue={profile?.bio || ''}
                           />
                         </div>
                         <p className="mt-2 text-sm text-gray-500">
@@ -212,7 +212,7 @@ export default function Account() {
                           >
                             <img
                               className="h-full w-full rounded-full"
-                              src={userProfile?.user}
+                              src={profile?.user}
                               alt=""
                             />
                           </div>
@@ -272,7 +272,7 @@ export default function Account() {
                         autoComplete="given-name"
                         className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
                         {...register('firstName')}
-                        defaultValue={userProfile?.firstName || ''}
+                        defaultValue={profile?.firstName || ''}
                       />
                     </div>
 
@@ -289,7 +289,7 @@ export default function Account() {
                         autoComplete="family-name"
                         className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
                         {...register('lastName')}
-                        defaultValue={userProfile?.lastName || ''}
+                        defaultValue={profile?.lastName || ''}
                       />
                     </div>
 
@@ -307,7 +307,7 @@ export default function Account() {
                           autoComplete="street-address"
                           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                           {...register('address')}
-                          defaultValue={userProfile?.address || ''}
+                          defaultValue={profile?.address || ''}
                         />
                       </div>
                     </div>
@@ -326,7 +326,7 @@ export default function Account() {
                           autoComplete="address-level2"
                           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                           {...register('city')}
-                          defaultValue={userProfile?.city || ''}
+                          defaultValue={profile?.city || ''}
                         />
                       </div>
                     </div>
@@ -342,7 +342,7 @@ export default function Account() {
                         <input
                           type="text"
                           {...register('state')}
-                          defaultValue={userProfile?.state || ''}
+                          defaultValue={profile?.state || ''}
                           id="region"
                           autoComplete="address-level1"
                           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -361,7 +361,7 @@ export default function Account() {
                         <input
                           type="text"
                           {...register('zipCode')}
-                          defaultValue={userProfile?.zipCode || ''}
+                          defaultValue={profile?.zipCode || ''}
                           id="postal-code"
                           autoComplete="postal-code"
                           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"

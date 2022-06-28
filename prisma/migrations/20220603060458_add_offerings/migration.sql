@@ -158,13 +158,13 @@ ALTER TABLE "OfferingSection" ADD CONSTRAINT "OfferingSection_offeringId_fkey" F
 ALTER TABLE "SectionResource" ADD CONSTRAINT "SectionResource_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "OfferingSection"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "OfferingUserPost" ADD CONSTRAINT "OfferingUserPost_userId_fkey" FOREIGN KEY ("userId") REFERENCES "UserProfile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "OfferingUserPost" ADD CONSTRAINT "OfferingUserPost_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Profile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "OfferingUserPost" ADD CONSTRAINT "OfferingUserPost_offeringId_fkey" FOREIGN KEY ("offeringId") REFERENCES "Offering"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "OfferingUserPostReaction" ADD CONSTRAINT "OfferingUserPostReaction_userId_fkey" FOREIGN KEY ("userId") REFERENCES "UserProfile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "OfferingUserPostReaction" ADD CONSTRAINT "OfferingUserPostReaction_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Profile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "OfferingUserPostReaction" ADD CONSTRAINT "OfferingUserPostReaction_reactionId_fkey" FOREIGN KEY ("reactionId") REFERENCES "UserReaction"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -173,13 +173,13 @@ ALTER TABLE "OfferingUserPostReaction" ADD CONSTRAINT "OfferingUserPostReaction_
 ALTER TABLE "OfferingUserPostReaction" ADD CONSTRAINT "OfferingUserPostReaction_offeringPostId_fkey" FOREIGN KEY ("offeringPostId") REFERENCES "OfferingUserPost"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "OfferingUserPostComment" ADD CONSTRAINT "OfferingUserPostComment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "UserProfile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "OfferingUserPostComment" ADD CONSTRAINT "OfferingUserPostComment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Profile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "OfferingUserPostComment" ADD CONSTRAINT "OfferingUserPostComment_offeringPostId_fkey" FOREIGN KEY ("offeringPostId") REFERENCES "OfferingUserPost"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "OfferingUserPostCommentReaction" ADD CONSTRAINT "OfferingUserPostCommentReaction_userId_fkey" FOREIGN KEY ("userId") REFERENCES "UserProfile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "OfferingUserPostCommentReaction" ADD CONSTRAINT "OfferingUserPostCommentReaction_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Profile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "OfferingUserPostCommentReaction" ADD CONSTRAINT "OfferingUserPostCommentReaction_reactionId_fkey" FOREIGN KEY ("reactionId") REFERENCES "UserReaction"("id") ON DELETE SET NULL ON UPDATE CASCADE;

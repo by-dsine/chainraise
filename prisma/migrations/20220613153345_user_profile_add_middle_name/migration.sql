@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "UserProfile" ADD COLUMN     "middleName" TEXT;
+ALTER TABLE "Profile" ADD COLUMN     "middleName" TEXT;

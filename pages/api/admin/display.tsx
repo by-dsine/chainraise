@@ -26,7 +26,7 @@ export default async function display(
   }
 
   console.log('Fetching user profiles')
-  const userProfiles = await prisma.userProfile.findMany({
+  const profiles = await prisma.profile.findMany({
     include: {
       userKYCAML: {
         orderBy: {
@@ -37,22 +37,22 @@ export default async function display(
   })
 
   let usersForDisplay: DisplayAdminUser[] = []
-  userProfiles.forEach((userProfile) => {
+  profiles.forEach((profile) => {
     const userForDisplay = {
-      uid: userProfile.userId,
-      name: userProfile.firstName + ' ' + userProfile.lastName,
-      accountType: userProfile.accountType,
+      uid: profile.userId,
+      name: profile.firstName + ' ' + profile.lastName,
+      accountType: profile.accountType,
     } as DisplayAdminUser
 
-    if (!userProfile.ncPartyId || userProfile.userKYCAML.length == 0) {
+    if (!profile.ncPartyId || profile.userKYCAML.length == 0) {
       userForDisplay.kycStatus = NOT_STARTED
       userForDisplay.amlStatus = NOT_STARTED
     } else {
-      userProfile.userKYCAML[0].kycStatus
-        ? (userForDisplay.kycStatus = userProfile.userKYCAML[0].kycStatus)
+      profile.userKYCAML[0].kycStatus
+        ? (userForDisplay.kycStatus = profile.userKYCAML[0].kycStatus)
         : (userForDisplay.kycStatus = NOT_STARTED)
-      userProfile.userKYCAML[0].amlStatus
-        ? (userForDisplay.amlStatus = userProfile.userKYCAML[0].amlStatus)
+      profile.userKYCAML[0].amlStatus
+        ? (userForDisplay.amlStatus = profile.userKYCAML[0].amlStatus)
         : (userForDisplay.amlStatus = NOT_STARTED)
     }
 
@@ -96,7 +96,7 @@ export default async function display(
       totalAmount: true,
       transactionType: true,
       transactionUnits: true,
-      userProfile: {
+      profile: {
         select: {
           firstName: true,
           lastName: true,
@@ -116,7 +116,7 @@ export default async function display(
     select : {
       id: true,
       ncIssuerId: true,
-      owner: true,
+      contact: true,
       offerings: {
         select: {
           name: true,

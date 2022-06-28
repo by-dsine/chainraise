@@ -4,7 +4,7 @@ import { useInvestorForm } from '../../lib/zustand/investorFormStore'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect } from 'react'
-import { UserProfile } from '@prisma/client'
+import { Profile } from '@prisma/client'
 import {
   convertDateToSimpleString,
   mapDatabaseTimestampToDateFormat,
@@ -17,10 +17,10 @@ const residenceOptions = [
 ]
 
 type Props = {
-  userProfile: UserProfile
+  profile: Profile
 }
 
-export const PersonalInformation = ({ userProfile }: Props) => {
+export const PersonalInformation = ({ profile }: Props) => {
   const investorForm = useInvestorForm()
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
@@ -73,23 +73,23 @@ export const PersonalInformation = ({ userProfile }: Props) => {
 
   useEffect(() => {
     let defaults = {
-      firstName: userProfile?.firstName || '',
-      middleName: userProfile?.middleName || '',
-      lastName: userProfile?.lastName || '',
-      email: userProfile?.email || '',
-      phone: userProfile?.phone || '',
-      country: userProfile?.country || '',
-      address1: userProfile?.address1 || '',
-      address2: userProfile?.address2 || '',
-      unit: userProfile?.unit || '',
-      city: userProfile?.city || '',
-      state: userProfile?.state || '',
-      zipCode: userProfile?.zipCode || '',
-      residence: userProfile?.residence || '',
-      dob: mapDatabaseTimestampToDateFormat(userProfile?.dob) || '',
+      firstName: profile?.firstName || '',
+      middleName: profile?.middleName || '',
+      lastName: profile?.lastName || '',
+      email: profile?.email || '',
+      phone: profile?.phone || '',
+      country: profile?.country || '',
+      address1: profile?.address1 || '',
+      address2: profile?.address2 || '',
+      unit: profile?.unit || '',
+      city: profile?.city || '',
+      state: profile?.state || '',
+      zipCode: profile?.zipCode || '',
+      residence: profile?.residence || '',
+      dob: mapDatabaseTimestampToDateFormat(profile?.dob) || '',
     }
     reset(defaults)
-  }, [userProfile, reset])
+  }, [profile, reset])
 
   const onSubmit = handleSubmit((data) => {
     console.log('User submitted info for KYC check...')

@@ -2,7 +2,7 @@
 CREATE TABLE "Transaction" (
     "id" TEXT NOT NULL,
     "ncTradeId" TEXT NOT NULL,
-    "userProfileId" TEXT NOT NULL,
+    "profileId" TEXT NOT NULL,
     "offeringId" TEXT NOT NULL,
     "transactionType" TEXT NOT NULL,
     "transactionUnits" INTEGER NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE "Transaction" (
 );
 
 -- AddForeignKey
-ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_userProfileId_fkey" FOREIGN KEY ("userProfileId") REFERENCES "UserProfile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_offeringId_fkey" FOREIGN KEY ("offeringId") REFERENCES "Offering"("id") ON DELETE SET NULL ON UPDATE CASCADE;

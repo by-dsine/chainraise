@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/react'
 import { prisma } from '../../../lib/db'
 import { PersonalInformationForm } from '../../../types/typings'
 
-export default async function postUpdateToUserProfile(
+export default async function postUpdateToProfile(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -15,7 +15,7 @@ export default async function postUpdateToUserProfile(
     return res.status(500).json({ message: 'No user id found.' })
   }
 
-  const userProfile = await prisma.userProfile.update({
+  const profile = await prisma.profile.update({
     where: {
       userId: session?.user?.uid
     },
@@ -36,8 +36,8 @@ export default async function postUpdateToUserProfile(
     }
   })
 
-  if (!userProfile) {
+  if (!profile) {
     return res.status(404).json({ message: 'User not found.' })
   }
-  return res.status(201).json(userProfile)
+  return res.status(201).json(profile)
 }

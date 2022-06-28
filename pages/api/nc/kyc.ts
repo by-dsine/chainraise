@@ -1,4 +1,4 @@
-import { UserProfile } from '@prisma/client'
+import { Profile } from '@prisma/client'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react'
 import { normalizeConfig } from 'next/dist/server/config-shared'
@@ -53,7 +53,7 @@ export default async function handleNorthCapital(
   }
 
   // use prisma to get user information
-  const userProfile = await prisma.userProfile.findUnique({
+  const profile = await prisma.profile.findUnique({
     where: {
       userId: idToQuery,
     },
@@ -65,38 +65,38 @@ export default async function handleNorthCapital(
       },
     },
   })
-  if (!userProfile) {
+  if (!profile) {
     return res.status(404).json({ message: 'User profile not found.' })
   }
 
   switch (req.method) {
     case 'GET':
-      if (userProfile.userKYCAML.length == 0) {
+      if (profile.userKYCAML.length == 0) {
         return res.status(200).json({
           kycStatus: 'Not Started',
           amlStatus: 'Not Started',
         })
       }
       return res.status(200).json({
-        kycStatus: userProfile.userKYCAML[0].kycStatus,
-        amlStatus: userProfile.userKYCAML[0].amlStatus,
+        kycStatus: profile.userKYCAML[0].kycStatus,
+        amlStatus: profile.userKYCAML[0].amlStatus,
       })
 
     case 'PUT':
       // #1 verify user profile has required fields for KYC/AML
-      if (!isUserProfileComplete(userProfile)) {
+      if (!isProfileComplete(profile)) {
         return res.status(400).json({ message: 'User profile is incomplete.' })
       }
 
       var currentKYCStatus = ''
       var currentAMLStatus = ''
 
-      if (userProfile.userKYCAML.length > 0) {
-        currentKYCStatus = userProfile.userKYCAML[0].kycStatus!
-        currentAMLStatus = userProfile.userKYCAML[0].amlStatus!
+      if (profile.userKYCAML.length > 0) {
+        currentKYCStatus = profile.userKYCAML[0].kycStatus!
+        currentAMLStatus = profile.userKYCAML[0].amlStatus!
       }
       // #2 check for party id
-      let partyId = userProfile.ncPartyId
+      let partyId = profile.ncPartyId
       // Not started means party has not been created
       if (currentKYCStatus == 'Not Started' || !currentKYCStatus || !partyId) {
         console.log('Attempting to create party.')
@@ -108,16 +108,16 @@ export default async function handleNorthCapital(
           const data = new URLSearchParams()
           data.append('clientID', CLIENT_ID)
           data.append('developerAPIKey', DEVELOPER_KEY)
-          data.append('domicile', userProfile.residence!)
-          data.append('firstName', userProfile.firstName!)
-          data.append('lastName', userProfile.lastName!)
-          data.append('dob', convertDateToSimpleString(userProfile.dob!))
-          data.append('primCountry', userProfile.country!)
-          data.append('primAddress1', userProfile.address1!)
-          data.append('primCity', userProfile.city!)
-          data.append('primState', userProfile.state!)
-          data.append('primZip', userProfile.zipCode!)
-          data.append('emailAddress', userProfile.email!)
+          data.append('domicile', profile.residence!)
+          data.append('firstName', profile.firstName!)
+          data.append('lastName', profile.lastName!)
+          data.append('dob', convertDateToSimpleString(profile.dob!))
+          data.append('primCountry', profile.country!)
+          data.append('primAddress1', profile.address1!)
+          data.append('primCity', profile.city!)
+          data.append('primState', profile.state!)
+          data.append('primZip', profile.zipCode!)
+          data.append('emailAddress', profile.email!)
           console.log('CreateParty request with parameters: ', data)
 
           const response = await fetch(createPartyURL, {
@@ -147,20 +147,20 @@ export default async function handleNorthCapital(
               console.log('Party ID obtained ', partyIdAsNumber)
             }
             console.log(
-              "Updating UserProfile with NC Party ID and new KYC Status: 'Party Created'"
+              "Updating Profile with NC Party ID and new KYC Status: 'Party Created'"
             )
             // update statuses
             const userKYCAMLRecord = await prisma.userKYCAML.create({
               data: {
                 kycStatus: 'Party Created',
                 amlStatus: 'Not Started',
-                userProfileId: userProfile.id,
+                profileId: profile.id,
                 timestamp: new Date(),
               },
             })
 
             // update party id
-            const userWithParty = await prisma.userProfile.update({
+            const userWithParty = await prisma.profile.update({
               where: {
                 userId: session?.user?.uid,
               },
@@ -170,7 +170,7 @@ export default async function handleNorthCapital(
             })
             if (!userWithParty || !userWithParty.ncPartyId) {
               console.log(
-                'This UserProfile object caused an issue: ',
+                'This Profile object caused an issue: ',
                 userWithParty
               )
               return res.status(500).json({
@@ -233,13 +233,13 @@ export default async function handleNorthCapital(
             })
           }
           console.log(
-            `Updating UserProfile with NC KYC Status: ${KYCresult} and AML Status: ${AMLresult}`
+            `Updating Profile with NC KYC Status: ${KYCresult} and AML Status: ${AMLresult}`
           )
           const userKYCAMLRecord = await prisma.userKYCAML.create({
             data: {
               kycStatus: KYCresult,
               amlStatus: AMLresult,
-              userProfileId: userProfile.id,
+              profileId: profile.id,
               timestamp: new Date(),
               response: result.kyc,
             },
@@ -267,19 +267,19 @@ export default async function handleNorthCapital(
 }
 
 // helper function
-function isUserProfileComplete(userProfile: UserProfile): boolean {
+function isProfileComplete(profile: Profile): boolean {
   if (
-    !userProfile.residence ||
-    !userProfile.firstName ||
-    !userProfile.lastName ||
-    !userProfile.dob ||
-    !userProfile.country ||
-    !userProfile.address1 ||
-    !userProfile.phone ||
-    !userProfile.city ||
-    !userProfile.state ||
-    !userProfile.zipCode ||
-    !userProfile.email
+    !profile.residence ||
+    !profile.firstName ||
+    !profile.lastName ||
+    !profile.dob ||
+    !profile.country ||
+    !profile.address1 ||
+    !profile.phone ||
+    !profile.city ||
+    !profile.state ||
+    !profile.zipCode ||
+    !profile.email
   ) {
     return false
   }

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../../../lib/db'
 
-export default async function getUserProfileByUserId(
+export default async function getProfileByUserId(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -15,7 +15,7 @@ export default async function getUserProfileByUserId(
       message: 'User id was not received as a string. Please try reformatting.',
     })
   }
-  const userProfile = await prisma.userProfile.upsert({
+  const profile = await prisma.profile.upsert({
     where: {
       userId: uid
     },
@@ -27,9 +27,9 @@ export default async function getUserProfileByUserId(
     }
   })
 
-  if (!userProfile) {
+  if (!profile) {
     return res.status(404).json({ message: 'User not found.' })
   }
   
-  return res.status(201).json(userProfile)
+  return res.status(201).json(profile)
 }

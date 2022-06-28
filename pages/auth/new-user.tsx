@@ -10,7 +10,7 @@ import { useEffect } from 'react'
 import { prisma } from '../../lib/db'
 import { useSession } from 'next-auth/react'
 import { GetServerSideProps } from 'next'
-import useOrCreateUserProfile from '../../hooks/useOrCreateUserProfile'
+import useOrCreateProfile from '../../hooks/useOrCreateProfile'
 
 const items = [
   {
@@ -99,7 +99,7 @@ export default function NewUser() {
 
 
     // const createProfile = async () => {
-    //   await prisma.userProfile.upsert({
+    //   await prisma.profile.upsert({
     //     where: {
     //       userId: session?.user.uid
     //     },

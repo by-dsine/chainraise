@@ -42,14 +42,14 @@ export default async function newIssuerAndOrganization(
   }
 
   // #1 Locate or create a user profile to be the owner
-  var userProfile = await prisma.userProfile.findUnique({
+  var profile = await prisma.profile.findUnique({
     where: {
       email: email,
     },
   })
 
-  if (!userProfile) {
-    userProfile = await prisma.userProfile.create({
+  if (!profile) {
+    profile = await prisma.profile.create({
       data: {
         firstName: firstName,
         lastName: lastName,
@@ -67,9 +67,9 @@ export default async function newIssuerAndOrganization(
   data.append('clientID', CLIENT_ID)
   data.append('developerAPIKey', DEVELOPER_KEY)
   data.append('issuerName', organizationName)
-  data.append('firstName', userProfile.firstName!)
-  data.append('lastName', userProfile.lastName!)
-  data.append('email', userProfile.email!)
+  data.append('firstName', profile.firstName!)
+  data.append('lastName', profile.lastName!)
+  data.append('email', profile.email!)
 
   const response = await fetch(createIssuerURL, {
     method: 'PUT',
@@ -101,7 +101,7 @@ export default async function newIssuerAndOrganization(
       data: {
         name: organizationName,
         ncIssuerId: issuerIdFromResult,
-        ownerId: userProfile.id,
+        contactId: profile.id,
       },
     })
     if (!organization) {

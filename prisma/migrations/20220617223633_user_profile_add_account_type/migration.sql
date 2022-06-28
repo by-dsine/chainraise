@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "UserProfile" ADD COLUMN     "accountType" TEXT;
+ALTER TABLE "Profile" ADD COLUMN     "accountType" TEXT;

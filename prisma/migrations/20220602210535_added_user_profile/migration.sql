@@ -28,7 +28,7 @@ DROP COLUMN "zipCode",
 ADD COLUMN     "profileId" INTEGER;
 
 -- CreateTable
-CREATE TABLE "UserProfile" (
+CREATE TABLE "Profile" (
     "id" SERIAL NOT NULL,
     "userId" TEXT NOT NULL,
     "firstName" TEXT,
@@ -41,11 +41,11 @@ CREATE TABLE "UserProfile" (
     "zipCode" TEXT,
     "phone" TEXT,
 
-    CONSTRAINT "UserProfile_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UserProfile_username_key" ON "UserProfile"("username");
+CREATE UNIQUE INDEX "Profile_username_key" ON "Profile"("username");
 
 -- AddForeignKey
-ALTER TABLE "UserProfile" ADD CONSTRAINT "UserProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

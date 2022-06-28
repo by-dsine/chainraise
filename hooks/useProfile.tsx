@@ -1,13 +1,13 @@
-import { PlatformRole, UserProfile } from '@prisma/client'
+import { PlatformRole, Profile } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import useSWR from 'swr'
 import { fetcher } from '../lib/prisma'
 
-export default function useUserProfile() {
+export default function useProfile() {
   const { data: session } = useSession()
 
   const { data, error } = useSWR<
-    | (UserProfile & {
+    | (Profile & {
         platformRoles: (PlatformRole & {
           role: {
             isAdmin: boolean
@@ -15,10 +15,10 @@ export default function useUserProfile() {
         })[]
       })
     | null
-  >(() => `/api/userProfile/${session!.user.uid}`, fetcher)
+  >(() => `/api/profile/${session!.user.uid}`, fetcher)
 
   return {
-    userProfile: data,
+    profile: data,
     isLoading: !error && !data,
     isError: error,
   }

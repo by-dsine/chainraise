@@ -29,7 +29,7 @@ import {
   UserGroupIcon,
 } from '@heroicons/react/solid'
 import Header from '../../components/Header'
-import useOrCreateUserProfile from '../../hooks/useOrCreateUserProfile'
+import useOrCreateProfile from '../../hooks/useOrCreateProfile'
 import Link from 'next/link'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { KYCAMLStatus, PersonalInformationForm } from '../../types/typings'
@@ -51,7 +51,7 @@ function classNames(...classes: string[]) {
 
 export default function ProfilePage() {
   const [kycStatus, setKycStatus] = useState('')
-  const { userProfile, session, isLoading, isError } = useOrCreateUserProfile()
+  const { profile, session, isLoading, isError } = useOrCreateProfile()
   const kycModal = useKycModal()
   const [isKycDone, setKycDone] = useState(false)
 
@@ -114,24 +114,24 @@ export default function ProfilePage() {
   }, [])
 
   useEffect(() => {
-    console.log('userProfile, ', userProfile)
+    console.log('profile, ', profile)
     let defaults = {
-      firstName: userProfile?.firstName || '',
-      middleName: userProfile?.middleName || '',
-      lastName: userProfile?.lastName || '',
-      address: userProfile?.address || '',
-      city: userProfile?.city || '',
-      state: userProfile?.state || '',
-      country: userProfile?.country || '',
-      zipCode: userProfile?.zipCode || '',
-      email: userProfile?.email || '',
-      phone: userProfile?.phone || '',
+      firstName: profile?.firstName || '',
+      middleName: profile?.middleName || '',
+      lastName: profile?.lastName || '',
+      address: profile?.address || '',
+      city: profile?.city || '',
+      state: profile?.state || '',
+      country: profile?.country || '',
+      zipCode: profile?.zipCode || '',
+      email: profile?.email || '',
+      phone: profile?.phone || '',
     }
     reset(defaults)
-  }, [userProfile, reset])
+  }, [profile, reset])
 
   const onSubmit: SubmitHandler<PersonalInformationForm> = (data) => {
-    fetch('/api/userProfile/updateProfile', {
+    fetch('/api/profile/updateProfile', {
       method: 'POST',
       body: JSON.stringify(data),
     })

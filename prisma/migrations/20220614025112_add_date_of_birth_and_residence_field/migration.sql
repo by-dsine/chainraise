@@ -1,3 +1,3 @@
 -- AlterTable
-ALTER TABLE "UserProfile" ADD COLUMN     "dob" TIMESTAMP(3),
+ALTER TABLE "Profile" ADD COLUMN     "dob" TIMESTAMP(3),
 ADD COLUMN     "residence" TEXT;

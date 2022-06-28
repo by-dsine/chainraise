@@ -1,15 +1,15 @@
-import { UserProfile } from '@prisma/client'
+import { Profile } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import useSWR from 'swr'
 import { fetcher } from '../lib/prisma'
 
-export default function useOrCreateUserProfile() {
+export default function useOrCreateProfile() {
   const { data: session } = useSession()
 
-  const { data, error } = useSWR<UserProfile>(() => `/api/userProfile/upsert/${session!.user.uid}`, fetcher)
+  const { data, error } = useSWR<Profile>(() => `/api/profile/upsert/${session!.user.uid}`, fetcher)
 
   return {
-    userProfile: data,
+    profile: data,
     session: session,
     isLoading: !error && !data,
     isError: error,

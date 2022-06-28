@@ -2,7 +2,7 @@
   Warnings:
 
   - The primary key for the `Follows` table will be changed. If it partially fails, the table could be left without primary key constraint.
-  - The primary key for the `UserProfile` table will be changed. If it partially fails, the table could be left without primary key constraint.
+  - The primary key for the `Profile` table will be changed. If it partially fails, the table could be left without primary key constraint.
 
 */
 -- DropForeignKey
@@ -18,11 +18,11 @@ ALTER COLUMN "followingId" SET DATA TYPE TEXT,
 ADD CONSTRAINT "Follows_pkey" PRIMARY KEY ("followerId", "followingId");
 
 -- AlterTable
-ALTER TABLE "UserProfile" DROP CONSTRAINT "UserProfile_pkey",
+ALTER TABLE "Profile" DROP CONSTRAINT "Profile_pkey",
 ALTER COLUMN "id" DROP DEFAULT,
 ALTER COLUMN "id" SET DATA TYPE TEXT,
-ADD CONSTRAINT "UserProfile_pkey" PRIMARY KEY ("id");
-DROP SEQUENCE "UserProfile_id_seq";
+ADD CONSTRAINT "Profile_pkey" PRIMARY KEY ("id");
+DROP SEQUENCE "Profile_id_seq";
 
 -- CreateTable
 CREATE TABLE "UserPost" (
@@ -73,22 +73,22 @@ CREATE TABLE "UserReaction" (
 );
 
 -- AddForeignKey
-ALTER TABLE "Follows" ADD CONSTRAINT "Follows_followerId_fkey" FOREIGN KEY ("followerId") REFERENCES "UserProfile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Follows" ADD CONSTRAINT "Follows_followerId_fkey" FOREIGN KEY ("followerId") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Follows" ADD CONSTRAINT "Follows_followingId_fkey" FOREIGN KEY ("followingId") REFERENCES "UserProfile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Follows" ADD CONSTRAINT "Follows_followingId_fkey" FOREIGN KEY ("followingId") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserPost" ADD CONSTRAINT "UserPost_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "UserProfile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "UserPost" ADD CONSTRAINT "UserPost_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "Profile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserPostComment" ADD CONSTRAINT "UserPostComment_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "UserProfile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "UserPostComment" ADD CONSTRAINT "UserPostComment_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "Profile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UserPostComment" ADD CONSTRAINT "UserPostComment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "UserPost"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserPostReaction" ADD CONSTRAINT "UserPostReaction_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "UserProfile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "UserPostReaction" ADD CONSTRAINT "UserPostReaction_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "Profile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UserPostReaction" ADD CONSTRAINT "UserPostReaction_postId_fkey" FOREIGN KEY ("postId") REFERENCES "UserPost"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -97,7 +97,7 @@ ALTER TABLE "UserPostReaction" ADD CONSTRAINT "UserPostReaction_postId_fkey" FOR
 ALTER TABLE "UserPostReaction" ADD CONSTRAINT "UserPostReaction_reactionId_fkey" FOREIGN KEY ("reactionId") REFERENCES "UserReaction"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserPostCommentReaction" ADD CONSTRAINT "UserPostCommentReaction_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "UserProfile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "UserPostCommentReaction" ADD CONSTRAINT "UserPostCommentReaction_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "Profile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UserPostCommentReaction" ADD CONSTRAINT "UserPostCommentReaction_commentId_fkey" FOREIGN KEY ("commentId") REFERENCES "UserPostComment"("id") ON DELETE CASCADE ON UPDATE CASCADE;
