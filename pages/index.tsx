@@ -1,8 +1,6 @@
-import { Fragment, useEffect, useState } from 'react'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import Header from '../components/navigation/Header'
+import Footer from '../components/navigation/Footer'
 import { ChevronRightIcon } from '@heroicons/react/solid'
-import { useRouter } from 'next/router'
 
 const trendingRaises = [
   {
@@ -115,45 +113,7 @@ export default function Home() {
       <Header />
 
       <main>
-        {/* <div className="mx-auto max-w-6xl rounded-lg  md:max-w-7xl">
-          <div className="p-8 lg:grid lg:grid-cols-12 lg:gap-8">
-            <div className="z-10 px-4 sm:px-6 sm:text-center md:mx-auto md:max-w-2xl lg:col-span-8 lg:flex lg:items-center lg:text-left">
-              <div>
-                <a
-                  href="/raise-funds"
-                  className="inline-flex items-center rounded-full border border-gray-700 bg-transparent p-1 pr-2 sm:text-base lg:text-sm xl:text-base"
-                >
-                  <span className="rounded-full bg-cr-primary px-3 py-0.5 text-xs font-semibold uppercase leading-5 tracking-wide text-white">
-                    Need funds?
-                  </span>
-                  <span className="ml-4 text-sm text-stone-900">
-                    Start your own ChainRaise!
-                  </span>
-                  <ChevronRightIcon
-                    className="ml-2 h-5 w-5 text-cr-primary"
-                    aria-hidden="true"
-                  />
-                </a>
-                <h1 className="my-4 text-4xl tracking-tight sm:mt-5 sm:leading-none lg:mt-6 lg:text-5xl xl:text-6xl">
-                  <span className="font-bold text-cr-primary md:block">
-                    Investing in the next big thing should be for
-                  </span>{' '}
-                  <span className="bg-gradient-to-r from-cr-secondary to-cr-primary bg-clip-text pb-3 font-extrabold text-transparent md:block">
-                    everybody
-                  </span>
-                </h1>
-                <p className="mt-3 text-base text-stone-900 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                  Join ChainRaise now to get started investing in start-ups and
-                  small businesses doing things you care about.
-                </p>
-              </div>
-              
-            </div>
-            <div className=''>
-                <img src="/harold.jpg" alt="harold" />
-              </div>
-          </div>
-        </div> */}
+       
         {/* Hero */}
         <div className="mx-auto flex max-w-7xl flex-col border-b border-gray-200 lg:border-0">
           <div className="relative">

@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "UserProfile" ADD COLUMN     "country" TEXT;
+ALTER TABLE "Profile" ADD COLUMN     "country" TEXT;

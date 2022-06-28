@@ -38,7 +38,7 @@ CREATE TABLE "OrganizationRole" (
 );
 
 -- AddForeignKey
-ALTER TABLE "PlatformRole" ADD CONSTRAINT "PlatformRole_userId_fkey" FOREIGN KEY ("userId") REFERENCES "UserProfile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "PlatformRole" ADD CONSTRAINT "PlatformRole_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Profile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "PlatformRole" ADD CONSTRAINT "PlatformRole_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "RolePermission"("id") ON DELETE CASCADE ON UPDATE CASCADE;

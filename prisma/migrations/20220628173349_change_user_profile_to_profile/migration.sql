@@ -6,8 +6,10 @@
   - You are about to drop the column `profileId` on the `OfferingUserPostComment` table. All the data in the column will be lost.
   - You are about to drop the column `profileId` on the `OfferingUserPostCommentReaction` table. All the data in the column will be lost.
   - You are about to drop the column `profileId` on the `OfferingUserPostReaction` table. All the data in the column will be lost.
+  - You are about to drop the column `ownerId` on the `Organization` table. All the data in the column will be lost.
   - You are about to drop the column `profileId` on the `OrganizationMembership` table. All the data in the column will be lost.
   - You are about to drop the column `profileId` on the `PlatformRole` table. All the data in the column will be lost.
+  - You are about to drop the column `canApprove` on the `RolePermission` table. All the data in the column will be lost.
   - You are about to drop the column `profileId` on the `Transaction` table. All the data in the column will be lost.
   - You are about to drop the column `profileId` on the `UserKYCAML` table. All the data in the column will be lost.
   - You are about to drop the `Profile` table. If the table is not empty, all the data it contains will be lost.
@@ -16,8 +18,10 @@
   - Added the required column `profileId` to the `OfferingUserPostComment` table without a default value. This is not possible if the table is not empty.
   - Added the required column `profileId` to the `OfferingUserPostCommentReaction` table without a default value. This is not possible if the table is not empty.
   - Added the required column `profileId` to the `OfferingUserPostReaction` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `contactId` to the `Organization` table without a default value. This is not possible if the table is not empty.
   - Added the required column `profileId` to the `OrganizationMembership` table without a default value. This is not possible if the table is not empty.
   - Added the required column `profileId` to the `PlatformRole` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `canApprovePosts` to the `RolePermission` table without a default value. This is not possible if the table is not empty.
   - Added the required column `profileId` to the `Transaction` table without a default value. This is not possible if the table is not empty.
   - Added the required column `profileId` to the `UserKYCAML` table without a default value. This is not possible if the table is not empty.
 
@@ -53,9 +57,6 @@ ALTER TABLE "OrganizationMembership" DROP CONSTRAINT "OrganizationMembership_pro
 ALTER TABLE "PlatformRole" DROP CONSTRAINT "PlatformRole_profileId_fkey";
 
 -- DropForeignKey
-ALTER TABLE "Profile" DROP CONSTRAINT "Profile_userId_fkey";
-
--- DropForeignKey
 ALTER TABLE "Transaction" DROP CONSTRAINT "Transaction_profileId_fkey";
 
 -- DropForeignKey
@@ -72,6 +73,9 @@ ALTER TABLE "UserPostCommentReaction" DROP CONSTRAINT "UserPostCommentReaction_a
 
 -- DropForeignKey
 ALTER TABLE "UserPostReaction" DROP CONSTRAINT "UserPostReaction_authorId_fkey";
+
+-- DropForeignKey
+ALTER TABLE "Profile" DROP CONSTRAINT "Profile_userId_fkey";
 
 -- AlterTable
 ALTER TABLE "OfferingUpdate" DROP COLUMN "profileId",
@@ -94,12 +98,20 @@ ALTER TABLE "OfferingUserPostReaction" DROP COLUMN "profileId",
 ADD COLUMN     "profileId" TEXT NOT NULL;
 
 -- AlterTable
+ALTER TABLE "Organization" DROP COLUMN "ownerId",
+ADD COLUMN     "contactId" TEXT NOT NULL;
+
+-- AlterTable
 ALTER TABLE "OrganizationMembership" DROP COLUMN "profileId",
 ADD COLUMN     "profileId" TEXT NOT NULL;
 
 -- AlterTable
 ALTER TABLE "PlatformRole" DROP COLUMN "profileId",
 ADD COLUMN     "profileId" TEXT NOT NULL;
+
+-- AlterTable
+ALTER TABLE "RolePermission" DROP COLUMN "canApprove",
+ADD COLUMN     "canApprovePosts" BOOLEAN NOT NULL;
 
 -- AlterTable
 ALTER TABLE "Transaction" DROP COLUMN "profileId",
@@ -117,12 +129,16 @@ CREATE TABLE "Profile" (
     "id" TEXT NOT NULL,
     "userId" TEXT,
     "ncPartyId" TEXT,
+    "ncAccountId" TEXT,
+    "ncLinkId" TEXT,
     "firstName" TEXT,
     "middleName" TEXT,
     "lastName" TEXT,
     "username" TEXT,
     "bio" TEXT,
-    "address" TEXT,
+    "address1" TEXT,
+    "address2" TEXT,
+    "unit" TEXT,
     "city" TEXT,
     "country" TEXT,
     "state" TEXT,
@@ -143,6 +159,9 @@ CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Profile_ncPartyId_key" ON "Profile"("ncPartyId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Profile_ncAccountId_key" ON "Profile"("ncAccountId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Profile_username_key" ON "Profile"("username");
@@ -175,7 +194,7 @@ ALTER TABLE "UserPostReaction" ADD CONSTRAINT "UserPostReaction_authorId_fkey" F
 ALTER TABLE "UserPostCommentReaction" ADD CONSTRAINT "UserPostCommentReaction_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "Profile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Organization" ADD CONSTRAINT "Organization_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "Profile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Organization" ADD CONSTRAINT "Organization_contactId_fkey" FOREIGN KEY ("contactId") REFERENCES "Profile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "OrganizationMembership" ADD CONSTRAINT "OrganizationMembership_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profile"("id") ON DELETE CASCADE ON UPDATE CASCADE;

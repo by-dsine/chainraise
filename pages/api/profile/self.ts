@@ -19,7 +19,7 @@ export default async function profile(
   switch (req.method) {
     case 'GET':
       console.log("Fetching user with ID: ", session.user.uid)
-      const profile = await prisma.userProfile.findUnique({
+      const profile = await prisma.profile.findUnique({
         where: {
           userId: session.user.uid 
         }
@@ -33,7 +33,7 @@ export default async function profile(
       console.log("Updating user with ID: ", session.user.uid)
       console.log("Received req, ", req.body)
       const data: ContactInformationForm = req.body
-      const profileUpdate = await prisma.userProfile.update({
+      const profileUpdate = await prisma.profile.update({
         where: {
           userId: session.user.uid,
         },

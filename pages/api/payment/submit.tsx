@@ -9,12 +9,10 @@ import {
   PurchaseDetail,
 } from '../../../types/typings'
 import { prisma } from '../../../lib/db'
-import {
-  CREDIT_CARD_TXN_LIMIT,
-  TRANSACTION_CREATED_STATUS,
-} from '../../../constants/const'
+
 import { mapPaymentMethodtoTransactionType } from '../../../utils/mappers'
 import { isCCValid } from '../../../utils/utils'
+import { CREDIT_CARD_TXN_LIMIT, TRANSACTION_CREATED_STATUS } from '../../../lib/consts'
 
 export default async function handleNorthCapital(
   req: NextApiRequest,
@@ -61,7 +59,7 @@ export default async function handleNorthCapital(
   })
 
   // verify profile submitted
-  const profile = await prisma.userProfile.findUnique({
+  const profile = await prisma.profile.findUnique({
     where: {
       userId: session.user.uid,
     },
@@ -121,7 +119,7 @@ export default async function handleNorthCapital(
 
     const transaction = await prisma.transaction.create({
       data: {
-        userProfileId: session.user.uid! as string,
+        profileId: session.user.uid! as string,
         ncTradeId: tradeId,
         offeringId: offering.id,
         transactionType: paymentForm.paymentMethod,

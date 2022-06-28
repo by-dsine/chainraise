@@ -9,13 +9,13 @@ async function main() {
       name: 'Dylan Dilla',
       email: 'dylan@test.io',
       image: '/dylan.png',
-      userProfile: {
+      profile: {
         create: {
           firstName: 'Dylan',
           lastName: 'Dilla',
           username: 'dsinetester',
           bio: 'What am I here for?',
-          address: '123 Easy Street',
+          address1: '123 Easy Street',
           city: "Nowhere",
           state: "Arizona",
           zipCode: "12345",

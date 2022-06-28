@@ -23,9 +23,9 @@ export default async function adminStatistics(
     return res.status(405).end(`Method ${req.method} not allowed`)
   } 
 
-  const userProfileCount = await prisma.userProfile.count()
+  const profileCount = await prisma.profile.count()
 
-  if (userProfileCount !=0 && !userProfileCount) {
+  if (profileCount !=0 && !profileCount) {
     return res.status(500).json({ message: "No user count returned."})
   }
 
@@ -35,5 +35,5 @@ export default async function adminStatistics(
     return res.status(500).json({ message: "No offering count returned."})
   }
 
-  return res.status(200).json({userCount: userProfileCount, offeringsCount: offeringsCount})
+  return res.status(200).json({userCount: profileCount, offeringsCount: offeringsCount})
 }

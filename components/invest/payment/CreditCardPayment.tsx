@@ -5,7 +5,7 @@ import { CCPayment, PaymentMethodForm } from '../../../types/typings'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { usePaymentMethodStore } from '../../../lib/zustand/paymentStore'
-import { CARDS } from '../../../constants/const'
+import { CARDS } from '../../../lib/consts'
 
 export const CreditCardPayment = () => {
   const paymentMethodForm = usePaymentMethodStore()

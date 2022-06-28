@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "UserProfile" ALTER COLUMN "ncPartyId" SET DATA TYPE TEXT;
+ALTER TABLE "Profile" ALTER COLUMN "ncPartyId" SET DATA TYPE TEXT;

@@ -1,4 +1,3 @@
-import { truncate } from 'fs/promises'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react'
 import { prisma } from '../../../../lib/db'

@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "UserProfile" ADD COLUMN     "ncLinkId" TEXT;
+ALTER TABLE "Profile" ADD COLUMN     "ncLinkId" TEXT;

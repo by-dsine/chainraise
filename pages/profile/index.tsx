@@ -27,8 +27,8 @@ import {
   SearchIcon,
   UserGroupIcon,
 } from '@heroicons/react/solid'
-import Header from '../../components/Header'
-import useOrCreateUserProfile from '../../hooks/useOrCreateUserProfile'
+import Header from '../../components/navigation/Header'
+import useOrCreateProfile from '../../hooks/useOrCreateProfile'
 import Link from 'next/link'
 
 const navigation = [
@@ -102,7 +102,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function ProfilePage() {
-  const { userProfile, session, isLoading, isError } = useOrCreateUserProfile()
+  const { profile, session, isLoading, isError } = useOrCreateProfile()
 
   return (
     <div className="min-h-full">
@@ -120,8 +120,8 @@ export default function ProfilePage() {
                       <div className="flex items-center">
                         <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:leading-9">
                           Welcome to ChainRaise
-                          {', ' + userProfile?.username ||
-                            ', ' + userProfile?.firstName ||
+                          {', ' + profile?.username ||
+                            ', ' + profile?.firstName ||
                             '!'}
                         </h1>
                       </div>

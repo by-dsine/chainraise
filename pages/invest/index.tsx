@@ -1,21 +1,15 @@
-import React, { Fragment, useEffect, useState } from 'react'
-import { CheckIcon } from '@heroicons/react/solid'
-import Link from 'next/link'
+import React, { Fragment, useEffect } from 'react'
 import { Tab } from '@headlessui/react'
-import Header from '../../components/Header'
+import Header from '../../components/navigation/Header'
 import AccountType from '../../components/invest/AccountType'
 import { PersonalInformation } from '../../components/invest/PersonalInformation'
-import AccreditationStatus from '../../components/invest/AccreditationStatus'
 import SignDocuments from '../../components/invest/SignDocuments'
 import { SubmitPayment } from '../../components/invest/SubmitPayment'
 import { useInvestorForm } from '../../lib/zustand/investorFormStore'
-import { GetServerSideProps } from 'next'
-import useUserProfile from '../../hooks/useUserProfile'
-import { UserProfile } from '@prisma/client'
-import useOrCreateUserProfile from '../../hooks/useOrCreateUserProfile'
+import { Profile } from '@prisma/client'
+import useOrCreateProfile from '../../hooks/useOrCreateProfile'
 import { KYCAMLInvestorFlow } from '../../components/invest/KYCAMLInvestorFlow'
-import { convertDateToSimpleString, mapDatabaseTimestampToDateFormat } from '../../utils/mappers'
-import { useRouter } from 'next/router'
+import { mapDatabaseTimestampToDateFormat } from '../../utils/mappers'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -23,58 +17,58 @@ function classNames(...classes: string[]) {
 
 export default function Invest() {
   const investorForm = useInvestorForm()
-  const { userProfile, session, isLoading, isError } = useOrCreateUserProfile()
+  const { profile, session, isLoading, isError } = useOrCreateProfile()
 
   useEffect(() => {
-    if(userProfile?.accountType){
-      investorForm.setAccountType(userProfile.accountType)
+    if(profile?.accountType){
+      investorForm.setAccountType(profile.accountType)
     }
-    if(userProfile?.entityName){
-      investorForm.setEntityName(userProfile.entityName)
+    if(profile?.entityName){
+      investorForm.setEntityName(profile.entityName)
     }
-    if(userProfile?.firstName){
-      investorForm.setFirstName(userProfile.firstName)
+    if(profile?.firstName){
+      investorForm.setFirstName(profile.firstName)
     }
-    if(userProfile?.middleName){
-      investorForm.setMiddleName(userProfile.middleName)
+    if(profile?.middleName){
+      investorForm.setMiddleName(profile.middleName)
     }
-    if(userProfile?.lastName){
-      investorForm.setLastName(userProfile.lastName)
+    if(profile?.lastName){
+      investorForm.setLastName(profile.lastName)
     }
-    if(userProfile?.email){
-      investorForm.setEmail(userProfile.email)
+    if(profile?.email){
+      investorForm.setEmail(profile.email)
     }
-    if(userProfile?.phone){
-      investorForm.setPhone(userProfile.phone)
+    if(profile?.phone){
+      investorForm.setPhone(profile.phone)
     }
-    if(userProfile?.dob){
-      investorForm.setDateOfBirth(mapDatabaseTimestampToDateFormat(userProfile.dob))
+    if(profile?.dob){
+      investorForm.setDateOfBirth(mapDatabaseTimestampToDateFormat(profile.dob))
     }
-    if(userProfile?.country){
-      investorForm.setCountryOfResidence(userProfile.country)
+    if(profile?.country){
+      investorForm.setCountryOfResidence(profile.country)
     }
-    if(userProfile?.city){
-      investorForm.setCity(userProfile.city)
+    if(profile?.city){
+      investorForm.setCity(profile.city)
     }
-    if(userProfile?.address1){
-      investorForm.setAddress1(userProfile.address1)
+    if(profile?.address1){
+      investorForm.setAddress1(profile.address1)
     }
-    if(userProfile?.unit){
-      investorForm.setUnit(userProfile.unit)
+    if(profile?.unit){
+      investorForm.setUnit(profile.unit)
     }
-    if(userProfile?.address2){
-      investorForm.setAddress2(userProfile.address2)
+    if(profile?.address2){
+      investorForm.setAddress2(profile.address2)
     }
-    if(userProfile?.state){
-      investorForm.setState(userProfile.state)
+    if(profile?.state){
+      investorForm.setState(profile.state)
     }
-    if(userProfile?.zipCode) {
-      investorForm.setZipCode(userProfile.zipCode)
+    if(profile?.zipCode) {
+      investorForm.setZipCode(profile.zipCode)
     }
-    if(userProfile?.residence){
-      investorForm.setResidence(userProfile.residence)
+    if(profile?.residence){
+      investorForm.setResidence(profile.residence)
     }
-  }, [userProfile])
+  }, [profile])
 
 
   return (
@@ -166,17 +160,17 @@ export default function Invest() {
           <Tab.Panels as={Fragment}>
             <Tab.Panel className="-mb-10">
               <h3 className="sr-only">Account Type</h3>
-              <AccountType userProfile={userProfile as UserProfile} />
+              <AccountType profile={profile as Profile} />
             </Tab.Panel>
 
             <Tab.Panel className="text-sm text-gray-500">
               <h3 className="sr-only">Personal Information</h3>
-              <PersonalInformation userProfile={userProfile as UserProfile}/>
+              <PersonalInformation profile={profile as Profile}/>
             </Tab.Panel>
 
             <Tab.Panel className="text-sm text-gray-500">
               <h3 className="sr-only">Complete KYC/AML Check</h3>
-              <KYCAMLInvestorFlow userProfile={userProfile as UserProfile}/>
+              <KYCAMLInvestorFlow profile={profile as Profile}/>
             </Tab.Panel>
 
 

@@ -46,7 +46,7 @@ export default async function onboardNorthCapital(
 
   switch (req.method) {
     case 'PUT':
-      const userProfile = await prisma.userProfile.findUnique({
+      const profile = await prisma.profile.findUnique({
         where: {
           userId: session.user.uid,
         },
@@ -59,11 +59,11 @@ export default async function onboardNorthCapital(
         },
       })
 
-      if (!userProfile) {
+      if (!profile) {
         return res.status(500).json({ message: 'Message not found.' })
       }
 
-      let partyId = userProfile.ncPartyId
+      let partyId = profile.ncPartyId
 
       if (!partyId) {
         console.log('Attempting to create party.')
@@ -75,16 +75,16 @@ export default async function onboardNorthCapital(
           const data = new URLSearchParams()
           data.append('clientID', CLIENT_ID)
           data.append('developerAPIKey', DEVELOPER_KEY)
-          data.append('domicile', userProfile.residence!)
-          data.append('firstName', userProfile.firstName!)
-          data.append('lastName', userProfile.lastName!)
-          data.append('dob', convertDateToSimpleString(userProfile.dob!))
-          data.append('primCountry', userProfile.country!)
-          data.append('primAddress1', userProfile.address1!)
-          data.append('primCity', userProfile.city!)
-          data.append('primState', userProfile.state!)
-          data.append('primZip', userProfile.zipCode!)
-          data.append('emailAddress', userProfile.email!)
+          data.append('domicile', profile.residence!)
+          data.append('firstName', profile.firstName!)
+          data.append('lastName', profile.lastName!)
+          data.append('dob', convertDateToSimpleString(profile.dob!))
+          data.append('primCountry', profile.country!)
+          data.append('primAddress1', profile.address1!)
+          data.append('primCity', profile.city!)
+          data.append('primState', profile.state!)
+          data.append('primZip', profile.zipCode!)
+          data.append('emailAddress', profile.email!)
           console.log('CreateParty request with parameters: ', data)
 
           const response = await fetch(createPartyURL, {
@@ -118,20 +118,20 @@ export default async function onboardNorthCapital(
               console.log('Party ID obtained ', partyIdAsNumber)
             }
             console.log(
-              "Updating UserProfile with NC Party ID and new KYC Status: 'Party Created'"
+              "Updating Profile with NC Party ID and new KYC Status: 'Party Created'"
             )
             // update statuses
             const userKYCAMLRecord = await prisma.userKYCAML.create({
               data: {
                 kycStatus: 'Party Created',
                 amlStatus: 'Not Started',
-                userProfileId: userProfile.id,
+                profileId: profile.id,
                 timestamp: new Date(),
               },
             })
 
             // update party id
-            const userWithParty = await prisma.userProfile.update({
+            const userWithParty = await prisma.profile.update({
               where: {
                 userId: session?.user?.uid,
               },
@@ -141,7 +141,7 @@ export default async function onboardNorthCapital(
             })
             if (!userWithParty || !userWithParty.ncPartyId) {
               console.log(
-                'This UserProfile object caused an issue: ',
+                'This Profile object caused an issue: ',
                 userWithParty
               )
               return res.status(500).json({
@@ -167,7 +167,7 @@ export default async function onboardNorthCapital(
         }
       }
 
-      let accountId = userProfile.ncAccountId
+      let accountId = profile.ncAccountId
 
       if (!accountId) {
         console.log(
@@ -182,17 +182,17 @@ export default async function onboardNorthCapital(
           const data = new URLSearchParams()
           data.append('clientID', CLIENT_ID)
           data.append('developerAPIKey', DEVELOPER_KEY)
-          data.append('accountRegistration', userProfile.residence!)
-          data.append('type', userProfile.accountType!)
+          data.append('accountRegistration', profile.residence!)
+          data.append('type', profile.accountType!)
           data.append('domesticYN', 'domestic_account')
-          data.append('streetAddress1', userProfile.address1!)
-          data.append('streetAddress2', userProfile.address2!)
-          data.append('city', userProfile.city!)
-          data.append('state', userProfile.state!)
-          data.append('zip', userProfile.zipCode!)
-          data.append('country', userProfile.country!)
-          data.append('KYCstatus', userProfile.userKYCAML[0].kycStatus!)
-          data.append('AMLstatus', userProfile.userKYCAML[0].amlStatus!)
+          data.append('streetAddress1', profile.address1!)
+          data.append('streetAddress2', profile.address2!)
+          data.append('city', profile.city!)
+          data.append('state', profile.state!)
+          data.append('zip', profile.zipCode!)
+          data.append('country', profile.country!)
+          data.append('KYCstatus', profile.userKYCAML[0].kycStatus!)
+          data.append('AMLstatus', profile.userKYCAML[0].amlStatus!)
           data.append('AccreditedStatus', 'pending')
           data.append('approvalStatus', 'pending')
 
@@ -228,7 +228,7 @@ export default async function onboardNorthCapital(
                 .json({ message: 'No account ID was returned.' })
             }
 
-            const userProfile = await prisma.userProfile.update({
+            const profile = await prisma.profile.update({
               where: {
                 userId: session.user.uid,
               },
@@ -237,7 +237,7 @@ export default async function onboardNorthCapital(
               },
             })
 
-            if (!userProfile) {
+            if (!profile) {
               return res.status(500).json({
                 message:
                   'There was a problem adding the account ID to the user profile.',
@@ -255,7 +255,7 @@ export default async function onboardNorthCapital(
         }
       }
 
-      let linkId = userProfile.ncLinkId
+      let linkId = profile.ncLinkId
 
       if(!linkId) {
         console.log("Creating link in NC for party and account")
@@ -269,9 +269,9 @@ export default async function onboardNorthCapital(
           data.append('clientID', CLIENT_ID)
           data.append('developerAPIKey', DEVELOPER_KEY)
           data.append('firstEntryType', "Account")
-          data.append('firstEntry', userProfile.ncAccountId!)
-          data.append('relatedEntryType', getEntryType(userProfile.accountType!))
-          data.append('relatedEntry', userProfile.ncPartyId!)
+          data.append('firstEntry', profile.ncAccountId!)
+          data.append('relatedEntryType', getEntryType(profile.accountType!))
+          data.append('relatedEntry', profile.ncPartyId!)
           data.append('linkType', 'owner')
           data.append('primary_value', "1")
 
@@ -311,7 +311,7 @@ export default async function onboardNorthCapital(
                 .json({ message: 'No link ID was returned.' })
             }
 
-            const userProfile = await prisma.userProfile.update({
+            const profile = await prisma.profile.update({
               where: {
                 userId: session.user.uid,
               },
@@ -320,7 +320,7 @@ export default async function onboardNorthCapital(
               },
             })
 
-            if (!userProfile) {
+            if (!profile) {
               return res.status(500).json({
                 message:
                   'There was a problem adding the account ID to the user profile.',

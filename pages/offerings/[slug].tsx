@@ -1,17 +1,10 @@
 import { Fragment, useEffect, useState } from 'react'
-import { Disclosure, Menu, Popover, Transition } from '@headlessui/react'
 import {
-  ChevronDownIcon,
-  SearchIcon,
-  MinusSmIcon,
-  PlusSmIcon,
   EyeIcon,
 } from '@heroicons/react/solid'
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
-import Header from '../../components/Header'
+import Header from '../../components/navigation/Header'
 import { Tab } from '@headlessui/react'
-import { DownloadIcon, QuestionMarkCircleIcon } from '@heroicons/react/outline'
-import Link from 'next/link'
+import { DownloadIcon } from '@heroicons/react/outline'
 import { useInvestorForm } from '../../lib/zustand/investorFormStore'
 import { useRouter } from 'next/router'
 import {
@@ -32,7 +25,7 @@ import {
 import { formatter } from '../../utils/formatters'
 import { GetServerSideProps } from 'next'
 import { prisma } from '../../lib/db'
-import useUserProfile from '../../hooks/useUserProfile'
+import useProfile from '../../hooks/useProfile'
 
 const product = {
   name: 'Multivest',
@@ -213,7 +206,7 @@ function classNames(...classes: string[]) {
 export default function OfferingPage({ offeringForDisplay }: Props) {
   console.log(offeringForDisplay)
 
-  const { userProfile } = useUserProfile()
+  const { profile } = useProfile()
   const router = useRouter()
   const { slug } = router.query
   const investorForm = useInvestorForm()
@@ -255,7 +248,7 @@ export default function OfferingPage({ offeringForDisplay }: Props) {
   //     var offering = await prisma.offeringUserPost.create({
   //       data: {
   //         offeringId: offeringForDisplay.offeringId,
-  //         userProfileId: userProfile?.id!,
+  //         profileId: profile?.id!,
   //         body: ""
   //       }
   //     })
@@ -270,7 +263,7 @@ export default function OfferingPage({ offeringForDisplay }: Props) {
   //     var offeringPostComment = await prisma.offeringUserPostComment.create({
   //       data: {
   //         offeringPostId: postId,
-  //         userProfileId: userProfile?.id!,
+  //         profileId: profile?.id!,
   //         body: body
   //       }
   //     })
@@ -285,7 +278,7 @@ export default function OfferingPage({ offeringForDisplay }: Props) {
   //     var offeringPostReaction = await prisma.offeringUserPostReaction.create({
   //       data: {
   //         offeringPostId: postId,
-  //         userProfileId: userProfile?.id!,
+  //         profileId: profile?.id!,
   //         reactionId: reactionId
   //       }
   //     })
@@ -300,7 +293,7 @@ export default function OfferingPage({ offeringForDisplay }: Props) {
   //     var offeringPostReaction = await prisma.offeringUserPostCommentReaction.create({
   //       data: {
   //         offeringPostCommentId: commentId,
-  //         userProfileId: userProfile?.id!,
+  //         profileId: profile?.id!,
   //         reactionId: reactionId
   //       }
   //     })

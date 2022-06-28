@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "UserProfile" ADD COLUMN     "amlStatus" TEXT DEFAULT E'Not Started';
+ALTER TABLE "Profile" ADD COLUMN     "amlStatus" TEXT DEFAULT E'Not Started';

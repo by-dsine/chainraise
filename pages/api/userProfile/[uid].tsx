@@ -18,7 +18,7 @@ export default async function getUserById(
       })
   }
 
-  const userProfile = await prisma.userProfile.findUnique({
+  const profile = await prisma.profile.findUnique({
     where: {
       userId: uid,
     },
@@ -35,9 +35,9 @@ export default async function getUserById(
     }
   })
 
-  if (!userProfile) {
+  if (!profile) {
     return res.status(404).json({ message: 'User not found.' })
   }
 
-  return res.status(201).json(userProfile)
+  return res.status(201).json(profile)
 }

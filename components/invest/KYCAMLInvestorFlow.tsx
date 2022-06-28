@@ -1,4 +1,4 @@
-import { UserProfile } from '@prisma/client'
+import { Profile } from '@prisma/client'
 import React, { useEffect, useState } from 'react'
 import { PaperClipIcon } from '@heroicons/react/solid'
 import { useInvestorForm } from '../../lib/zustand/investorFormStore'
@@ -7,13 +7,13 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
-import { AUTO_APPROVED, NOT_STARTED } from '../../constants/const'
+import { AUTO_APPROVED } from '../../lib/consts'
 
 type Props = {
-  userProfile: UserProfile
+  profile: Profile
 }
 
-export const KYCAMLInvestorFlow = ({ userProfile }: Props) => {
+export const KYCAMLInvestorFlow = ({ profile }: Props) => {
   const [kycStateLoading, setKycStateLoading] = useState(false)
 
   const investorForm = useInvestorForm()

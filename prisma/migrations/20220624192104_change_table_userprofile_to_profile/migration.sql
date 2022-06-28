@@ -1,16 +1,16 @@
 /*
   Warnings:
 
-  - You are about to drop the column `userProfileId` on the `OfferingUpdate` table. All the data in the column will be lost.
-  - You are about to drop the column `userProfileId` on the `OfferingUserPost` table. All the data in the column will be lost.
-  - You are about to drop the column `userProfileId` on the `OfferingUserPostComment` table. All the data in the column will be lost.
-  - You are about to drop the column `userProfileId` on the `OfferingUserPostCommentReaction` table. All the data in the column will be lost.
-  - You are about to drop the column `userProfileId` on the `OfferingUserPostReaction` table. All the data in the column will be lost.
-  - You are about to drop the column `userProfileId` on the `OrganizationMembership` table. All the data in the column will be lost.
-  - You are about to drop the column `userProfileId` on the `PlatformRole` table. All the data in the column will be lost.
-  - You are about to drop the column `userProfileId` on the `Transaction` table. All the data in the column will be lost.
-  - You are about to drop the column `userProfileId` on the `UserKYCAML` table. All the data in the column will be lost.
-  - You are about to drop the `UserProfile` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the column `profileId` on the `OfferingUpdate` table. All the data in the column will be lost.
+  - You are about to drop the column `profileId` on the `OfferingUserPost` table. All the data in the column will be lost.
+  - You are about to drop the column `profileId` on the `OfferingUserPostComment` table. All the data in the column will be lost.
+  - You are about to drop the column `profileId` on the `OfferingUserPostCommentReaction` table. All the data in the column will be lost.
+  - You are about to drop the column `profileId` on the `OfferingUserPostReaction` table. All the data in the column will be lost.
+  - You are about to drop the column `profileId` on the `OrganizationMembership` table. All the data in the column will be lost.
+  - You are about to drop the column `profileId` on the `PlatformRole` table. All the data in the column will be lost.
+  - You are about to drop the column `profileId` on the `Transaction` table. All the data in the column will be lost.
+  - You are about to drop the column `profileId` on the `UserKYCAML` table. All the data in the column will be lost.
+  - You are about to drop the `Profile` table. If the table is not empty, all the data it contains will be lost.
   - Added the required column `profileId` to the `OfferingUpdate` table without a default value. This is not possible if the table is not empty.
   - Added the required column `profileId` to the `OfferingUserPost` table without a default value. This is not possible if the table is not empty.
   - Added the required column `profileId` to the `OfferingUserPostComment` table without a default value. This is not possible if the table is not empty.
@@ -28,34 +28,34 @@ ALTER TABLE "Follows" DROP CONSTRAINT "Follows_followerId_fkey";
 ALTER TABLE "Follows" DROP CONSTRAINT "Follows_followingId_fkey";
 
 -- DropForeignKey
-ALTER TABLE "OfferingUpdate" DROP CONSTRAINT "OfferingUpdate_userProfileId_fkey";
+ALTER TABLE "OfferingUpdate" DROP CONSTRAINT "OfferingUpdate_profileId_fkey";
 
 -- DropForeignKey
-ALTER TABLE "OfferingUserPost" DROP CONSTRAINT "OfferingUserPost_userProfileId_fkey";
+ALTER TABLE "OfferingUserPost" DROP CONSTRAINT "OfferingUserPost_profileId_fkey";
 
 -- DropForeignKey
-ALTER TABLE "OfferingUserPostComment" DROP CONSTRAINT "OfferingUserPostComment_userProfileId_fkey";
+ALTER TABLE "OfferingUserPostComment" DROP CONSTRAINT "OfferingUserPostComment_profileId_fkey";
 
 -- DropForeignKey
-ALTER TABLE "OfferingUserPostCommentReaction" DROP CONSTRAINT "OfferingUserPostCommentReaction_userProfileId_fkey";
+ALTER TABLE "OfferingUserPostCommentReaction" DROP CONSTRAINT "OfferingUserPostCommentReaction_profileId_fkey";
 
 -- DropForeignKey
-ALTER TABLE "OfferingUserPostReaction" DROP CONSTRAINT "OfferingUserPostReaction_userProfileId_fkey";
+ALTER TABLE "OfferingUserPostReaction" DROP CONSTRAINT "OfferingUserPostReaction_profileId_fkey";
 
 -- DropForeignKey
 ALTER TABLE "Organization" DROP CONSTRAINT "Organization_ownerId_fkey";
 
 -- DropForeignKey
-ALTER TABLE "OrganizationMembership" DROP CONSTRAINT "OrganizationMembership_userProfileId_fkey";
+ALTER TABLE "OrganizationMembership" DROP CONSTRAINT "OrganizationMembership_profileId_fkey";
 
 -- DropForeignKey
-ALTER TABLE "PlatformRole" DROP CONSTRAINT "PlatformRole_userProfileId_fkey";
+ALTER TABLE "PlatformRole" DROP CONSTRAINT "PlatformRole_profileId_fkey";
 
 -- DropForeignKey
-ALTER TABLE "Transaction" DROP CONSTRAINT "Transaction_userProfileId_fkey";
+ALTER TABLE "Transaction" DROP CONSTRAINT "Transaction_profileId_fkey";
 
 -- DropForeignKey
-ALTER TABLE "UserKYCAML" DROP CONSTRAINT "UserKYCAML_userProfileId_fkey";
+ALTER TABLE "UserKYCAML" DROP CONSTRAINT "UserKYCAML_profileId_fkey";
 
 -- DropForeignKey
 ALTER TABLE "UserPost" DROP CONSTRAINT "UserPost_authorId_fkey";
@@ -70,46 +70,46 @@ ALTER TABLE "UserPostCommentReaction" DROP CONSTRAINT "UserPostCommentReaction_a
 ALTER TABLE "UserPostReaction" DROP CONSTRAINT "UserPostReaction_authorId_fkey";
 
 -- DropForeignKey
-ALTER TABLE "UserProfile" DROP CONSTRAINT "UserProfile_userId_fkey";
+ALTER TABLE "Profile" DROP CONSTRAINT "Profile_userId_fkey";
 
 -- AlterTable
-ALTER TABLE "OfferingUpdate" DROP COLUMN "userProfileId",
+ALTER TABLE "OfferingUpdate" DROP COLUMN "profileId",
 ADD COLUMN     "profileId" TEXT NOT NULL;
 
 -- AlterTable
-ALTER TABLE "OfferingUserPost" DROP COLUMN "userProfileId",
+ALTER TABLE "OfferingUserPost" DROP COLUMN "profileId",
 ADD COLUMN     "profileId" TEXT NOT NULL;
 
 -- AlterTable
-ALTER TABLE "OfferingUserPostComment" DROP COLUMN "userProfileId",
+ALTER TABLE "OfferingUserPostComment" DROP COLUMN "profileId",
 ADD COLUMN     "profileId" TEXT NOT NULL;
 
 -- AlterTable
-ALTER TABLE "OfferingUserPostCommentReaction" DROP COLUMN "userProfileId",
+ALTER TABLE "OfferingUserPostCommentReaction" DROP COLUMN "profileId",
 ADD COLUMN     "profileId" TEXT NOT NULL;
 
 -- AlterTable
-ALTER TABLE "OfferingUserPostReaction" DROP COLUMN "userProfileId",
+ALTER TABLE "OfferingUserPostReaction" DROP COLUMN "profileId",
 ADD COLUMN     "profileId" TEXT NOT NULL;
 
 -- AlterTable
-ALTER TABLE "OrganizationMembership" DROP COLUMN "userProfileId",
+ALTER TABLE "OrganizationMembership" DROP COLUMN "profileId",
 ADD COLUMN     "profileId" TEXT NOT NULL;
 
 -- AlterTable
-ALTER TABLE "PlatformRole" DROP COLUMN "userProfileId",
+ALTER TABLE "PlatformRole" DROP COLUMN "profileId",
 ADD COLUMN     "profileId" TEXT NOT NULL;
 
 -- AlterTable
-ALTER TABLE "Transaction" DROP COLUMN "userProfileId",
+ALTER TABLE "Transaction" DROP COLUMN "profileId",
 ADD COLUMN     "profileId" TEXT NOT NULL;
 
 -- AlterTable
-ALTER TABLE "UserKYCAML" DROP COLUMN "userProfileId",
+ALTER TABLE "UserKYCAML" DROP COLUMN "profileId",
 ADD COLUMN     "profileId" TEXT;
 
 -- DropTable
-DROP TABLE "UserProfile";
+DROP TABLE "Profile";
 
 -- CreateTable
 CREATE TABLE "Profile" (

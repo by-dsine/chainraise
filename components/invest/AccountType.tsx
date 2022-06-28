@@ -7,7 +7,7 @@ import { AccountTypeForm } from '../../types/typings'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useSession } from 'next-auth/react'
-import { UserProfile } from '@prisma/client'
+import { Profile } from '@prisma/client'
 
 type setting = {
   name: string
@@ -33,10 +33,10 @@ function classNames(...classes: string[]) {
 }
 
 type Props = {
-  userProfile: UserProfile
+  profile: Profile
 }
 
-export default function AccountType({ userProfile }: Props) {
+export default function AccountType({ profile }: Props) {
   const [selected, setSelected] = useState(settings[0])
   const accountType = useInvestorForm((store) => store.accountType)
   const setAccountType = useInvestorForm((store) => store.setAccountType)
@@ -80,9 +80,9 @@ export default function AccountType({ userProfile }: Props) {
 
   // useEffect(() => {
   //   let defaults = {
-  //     accountType: userProfile.accountType?,
+  //     accountType: profile.accountType?,
   //   }
-  // }, [userProfile, watch])
+  // }, [profile, watch])
 
   const watchType = watch('accountType')
 

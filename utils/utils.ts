@@ -1,4 +1,4 @@
-import { ACCEPTED_CARDS, CARDS } from "../constants/const"
+import { ACCEPTED_CARDS, CARDS } from "../lib/consts"
 import { CCPayment } from "../types/typings"
 
 export function makeID(length: number): string {
