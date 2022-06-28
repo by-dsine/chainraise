@@ -1,34 +1,8 @@
-import { Fragment, useEffect, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { useEffect, useState } from 'react'
 import {
-  BellIcon,
-  BookmarkIcon,
-  ClockIcon,
-  CogIcon,
-  CurrencyDollarIcon,
-  CreditCardIcon,
-  DocumentReportIcon,
-  HomeIcon,
-  MenuAlt1Icon,
-  QuestionMarkCircleIcon,
-  ScaleIcon,
-  ShieldCheckIcon,
-  XIcon,
-  ExclamationCircleIcon,
-  ArrowRightIcon,
-} from '@heroicons/react/outline'
-import {
-  CashIcon,
-  ChartBarIcon,
   CheckCircleIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
-  OfficeBuildingIcon,
-  PaperClipIcon,
-  SearchIcon,
-  UserGroupIcon,
 } from '@heroicons/react/solid'
-import Header from '../../components/Header'
+import Header from '../../components/navigation/Header'
 import useOrCreateProfile from '../../hooks/useOrCreateProfile'
 import Link from 'next/link'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -45,18 +19,11 @@ const residenceOptions = [
   { id: 'non-resident', title: 'Non-resident' },
 ]
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
-}
-
 export default function ProfilePage() {
   const [kycStatus, setKycStatus] = useState('')
   const { profile, session, isLoading, isError } = useOrCreateProfile()
   const kycModal = useKycModal()
   const [isKycDone, setKycDone] = useState(false)
-
-  const [isEditingAccreditationMethod, setEditingAccreditationMethod] =
-    useState(false)
 
   const contactInfoSchema = yup.object().shape({
     firstName: yup.string().required('Please enter a first name.'),
@@ -514,112 +481,6 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
-
-          {/* <div className="mt-12">
-            <div className="px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8">
-              <div>
-                <h3 className="text-lg font-medium leading-6 text-gray-900">
-                  Accreditation Status
-                </h3>
-                <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                  Manage your accreditation status here.
-                </p>
-              </div>
-
-              <div className="mt-5 border-t border-gray-200">
-                <dl className="divide-y divide-gray-200">
-                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-                    <dt className="text-sm font-medium text-gray-500">
-                      Accreditation Method
-                    </dt>
-                    <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      {isEditingAccreditationMethod ? (
-                        <div className="flex-grow">
-                          <label htmlFor="first-name" className="sr-only">
-                            Accreditation Method
-                          </label>
-                          <input
-                            type="text"
-                            name="accreditation-method"
-                            id="accreditation-method"
-                            autoComplete="accreditation-method"
-                            className="block w-full rounded-md border-gray-300  placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                            placeholder="Accreditation Method"
-                          />
-                        </div>
-                      ) : (
-                        <span className="flex-grow">Individual</span>
-                      )}
-                      <span className="ml-4 flex-shrink-0">
-                        <button
-                          type="button"
-                          className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                          onClick={() =>
-                            setEditingAccreditationMethod(
-                              !isEditingAccreditationMethod
-                            )
-                          }
-                        >
-                          Update
-                        </button>
-                      </span>
-                    </dd>
-                  </div>
-
-                  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-                    <dt className="text-sm font-medium text-gray-500">
-                      Attachments
-                    </dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      <ul
-                        role="list"
-                        className="divide-y divide-gray-200 rounded-md border border-gray-200"
-                      >
-                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
-                          <div className="flex w-0 flex-1 items-center">
-                            <PaperClipIcon
-                              className="h-5 w-5 flex-shrink-0 text-gray-400"
-                              aria-hidden="true"
-                            />
-                            <span className="ml-2 w-0 flex-1 truncate">
-                              asset_portfolio.pdf
-                            </span>
-                          </div>
-                          <div className="ml-4 flex-shrink-0">
-                            <a
-                              href="#"
-                              className="font-medium text-indigo-600 hover:text-indigo-500"
-                            >
-                              Download
-                            </a>
-                          </div>
-                        </li>
-                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
-                          <div className="flex w-0 flex-1 items-center">
-                            <PaperClipIcon
-                              className="h-5 w-5 flex-shrink-0 text-gray-400"
-                              aria-hidden="true"
-                            />
-                            <span className="ml-2 w-0 flex-1 truncate">
-                              statement_of_receipt.pdf
-                            </span>
-                          </div>
-                          <div className="ml-4 flex-shrink-0">
-                            <a
-                              href="#"
-                              className="font-medium text-indigo-600 hover:text-indigo-500"
-                            >
-                              Download
-                            </a>
-                          </div>
-                        </li>
-                      </ul>
-                    </dd>
-                  </div>
-                </dl>
-              </div>
-            </div>
-          </div> */}
         </main>
       </div>
     </div>

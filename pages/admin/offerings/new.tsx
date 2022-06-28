@@ -1,5 +1,5 @@
 import NewOffering from '../../../components/admin/NewOffering'
-import Header from '../../../components/Header'
+import Header from '../../../components/navigation/Header'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')

@@ -27,7 +27,7 @@ import {
   SearchIcon,
   UserGroupIcon,
 } from '@heroicons/react/solid'
-import Header from '../../components/Header'
+import Header from '../../components/navigation/Header'
 import useOrCreateProfile from '../../hooks/useOrCreateProfile'
 import Link from 'next/link'
 

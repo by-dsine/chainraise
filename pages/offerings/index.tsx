@@ -1,8 +1,7 @@
 import { Fragment } from 'react'
-import { Disclosure, Menu, Popover, Transition } from '@headlessui/react'
-import { ChevronDownIcon, SearchIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/solid'
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
-import Header from '../../components/Header'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { ChevronDownIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/solid'
+import Header from '../../components/navigation/Header'
 import { GetStaticProps } from 'next'
 import { prisma } from '../../lib/db'
 

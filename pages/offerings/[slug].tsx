@@ -1,17 +1,10 @@
 import { Fragment, useEffect, useState } from 'react'
-import { Disclosure, Menu, Popover, Transition } from '@headlessui/react'
 import {
-  ChevronDownIcon,
-  SearchIcon,
-  MinusSmIcon,
-  PlusSmIcon,
   EyeIcon,
 } from '@heroicons/react/solid'
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
-import Header from '../../components/Header'
+import Header from '../../components/navigation/Header'
 import { Tab } from '@headlessui/react'
-import { DownloadIcon, QuestionMarkCircleIcon } from '@heroicons/react/outline'
-import Link from 'next/link'
+import { DownloadIcon } from '@heroicons/react/outline'
 import { useInvestorForm } from '../../lib/zustand/investorFormStore'
 import { useRouter } from 'next/router'
 import {

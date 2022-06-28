@@ -1,10 +1,9 @@
 import React from 'react'
-import Header from '../../components/Header'
-import SearchBar from '../../components/SearchBar'
-import { UserPanel } from '../../components/UserPanel'
-import { Feed } from '../../components/Feed'
-import QuickPost from '../../components/QuickPost'
+import Header from '../../components/navigation/Header'
+import { Feed } from '../../components/feed/Feed'
 import { useSession } from 'next-auth/react'
+import QuickPost from '../../components/feed/QuickPost'
+import { UserPanel } from '../../components/feed/UserPanel'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')

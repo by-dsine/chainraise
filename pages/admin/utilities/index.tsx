@@ -1,10 +1,7 @@
-import { useEffect, useState } from 'react'
-import { CurrencyDollarIcon } from '@heroicons/react/outline'
-import { CheckCircleIcon, UserGroupIcon } from '@heroicons/react/solid'
-import Header from '../../../components/Header'
+import { CheckCircleIcon } from '@heroicons/react/solid'
+import Header from '../../../components/navigation/Header'
 import useOrCreateProfile from '../../../hooks/useOrCreateProfile'
 import { DeleteLink } from '../../../components/admin/nc/DeleteLink'
-
 
 export default function AdminPage() {
   const { profile, session, isLoading, isError } = useOrCreateProfile()
