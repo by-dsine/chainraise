@@ -9,9 +9,9 @@ import {
   PartyDetail,
 } from '../../../types/typings'
 import { BASE_URL } from '../../../nc'
-import { AUTO_APPROVED, DISAPPROVED } from '../../../constants/const'
 import { convertDateToSimpleString } from '../../../utils/mappers'
 import { getPartyNumberFromResult } from '../../../lib/nc'
+import { AUTO_APPROVED } from '../../../lib/consts'
 export default async function handleNorthCapital(
   req: NextApiRequest,
   res: NextApiResponse

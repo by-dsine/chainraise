@@ -7,7 +7,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
-import { AUTO_APPROVED, NOT_STARTED } from '../../constants/const'
+import { AUTO_APPROVED } from '../../lib/consts'
 
 type Props = {
   profile: Profile

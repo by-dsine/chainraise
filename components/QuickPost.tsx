@@ -14,7 +14,6 @@ import {
 } from '@heroicons/react/solid'
 import { INewPostForm } from '../types/typings'
 import { Controller, ControllerRenderProps, SubmitHandler, useForm } from 'react-hook-form'
-import PortableText from 'react-portable-text'
 import { useSession } from 'next-auth/react'
 
 const moods = [

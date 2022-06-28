@@ -1,9 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react'
-import {
-  OFFERING_CREATED_STATUS,
-  STANDARD_DISCLOSURE,
-} from '../../../../constants/const'
+import { OFFERING_CREATED_STATUS, STANDARD_DISCLOSURE } from '../../../../lib/consts'
+
 import { prisma } from '../../../../lib/db'
 import {
   OfferingDetails,

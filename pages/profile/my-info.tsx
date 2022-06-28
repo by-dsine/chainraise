@@ -37,7 +37,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import KYCModal from '../../components/profile/KYCModal'
 import { useKycModal } from '../../lib/zustand/investorFormStore'
-import { AUTO_APPROVED } from '../../constants/const'
+import { AUTO_APPROVED } from '../../lib/consts'
 
 const residenceOptions = [
   { id: 'us-citizen', title: 'U.S. Citizen' },
@@ -119,7 +119,7 @@ export default function ProfilePage() {
       firstName: profile?.firstName || '',
       middleName: profile?.middleName || '',
       lastName: profile?.lastName || '',
-      address: profile?.address || '',
+      address: profile?.address1 || '',
       city: profile?.city || '',
       state: profile?.state || '',
       country: profile?.country || '',

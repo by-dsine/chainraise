@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react'
-import { NOT_STARTED } from '../../../constants/const'
+import { NOT_STARTED } from '../../../lib/consts'
 import { prisma } from '../../../lib/db'
 import { DisplayAdminUser, DisplayAdminOffering } from '../../../types/typings'
 

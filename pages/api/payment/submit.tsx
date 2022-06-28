@@ -9,12 +9,10 @@ import {
   PurchaseDetail,
 } from '../../../types/typings'
 import { prisma } from '../../../lib/db'
-import {
-  CREDIT_CARD_TXN_LIMIT,
-  TRANSACTION_CREATED_STATUS,
-} from '../../../constants/const'
+
 import { mapPaymentMethodtoTransactionType } from '../../../utils/mappers'
 import { isCCValid } from '../../../utils/utils'
+import { CREDIT_CARD_TXN_LIMIT, TRANSACTION_CREATED_STATUS } from '../../../lib/consts'
 
 export default async function handleNorthCapital(
   req: NextApiRequest,
