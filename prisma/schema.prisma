@@ -61,6 +61,7 @@ model Profile {
   ncPartyId           String?   @unique
   ncAccountId         String?   @unique
   ncLinkId            String?
+  profilePicSrc       String?
   firstName           String?
   middleName          String?
   lastName            String?

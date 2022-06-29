@@ -246,6 +246,10 @@ export type AdminDisplayTransaction = {
   purchaserName: string
 }
 
+export type ProfilePictureForm = {
+  fileName: string
+}
+
 // North Capital API types
 // createParty
 type CreatePartyResponse = {
