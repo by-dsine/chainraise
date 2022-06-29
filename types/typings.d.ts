@@ -247,7 +247,7 @@ export type AdminDisplayTransaction = {
 }
 
 export type ProfilePictureForm = {
-  fileName: string
+  file: FileList
 }
 
 // North Capital API types

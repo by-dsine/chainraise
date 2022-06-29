@@ -1,13 +1,60 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ProfilePictureForm } from '../../types/typings'
 
 export const ProfilePicture = () => {
-  const [newProfilePic, setNewProfilePic] = useState('')
+  const [newProfilePicPath, setNewProfilePicPath] = useState('')
 
-  const { register, handleSubmit } = useForm<ProfilePictureForm>()
+  const [isLoading, setIsLoading] = React.useState(false)
+  const inputFileRef = React.useRef<HTMLInputElement | null>(null)
 
-  const changeProfilePic = (e: React.MouseEvent<HTMLButtonElement>): void => {}
+  const updatePreview = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if(e.target?.files){
+      setNewProfilePicPath(URL.createObjectURL(e.target.files[0]))
+    }
+  }
+
+  const handleOnClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    /* Prevent form from submitting by default */
+    e.preventDefault()
+
+    /* If file is not selected, then show alert message */
+    if (!inputFileRef.current?.files?.length) {
+      alert('Please, select file you want to upload')
+      return
+    }
+
+    setIsLoading(true)
+
+    /* Add files to FormData */
+    const formData = new FormData()
+    Object.values(inputFileRef.current.files).forEach((file) => {
+      formData.append('file', file)
+    })
+
+    /* Send request to our api route */
+    const response = await fetch('/api/profile/profilePic', {
+      method: 'POST',
+      body: formData,
+    })
+
+    const body = (await response.json()) as {
+      status: 'ok' | 'fail'
+      message: string
+    }
+
+    alert(body.message)
+
+    if (body.status === 'ok') {
+      inputFileRef.current.value = ''
+      // Do some stuff on successfully upload
+    } else {
+      // Do some stuff on error
+    }
+
+    setIsLoading(false)
+    setNewProfilePicPath('')
+  }
 
   return (
     <div>
@@ -26,24 +73,35 @@ export const ProfilePicture = () => {
         >
           Photo
         </label>
-        <input
-          {...register('fileName', {
-            onChange: (e) => {
-              if (e.target.files.length > 0) {
-                const input = e.target as HTMLInputElement
-                if(!input || !input.files){
-                  return false
-                }
-                // Update UI to show file is uploading
-                const file = input.files[0]
-                console.log(file)
-                setNewProfilePic(file.name)
-                console.log(file.name)
-              }
-            },
-          })}
-          type="file"
-        />
+        <div className="flex">
+          <input type="file" name="myfile" ref={inputFileRef} onChange={(e) => updatePreview(e)} />
+          {newProfilePicPath && (
+            <>
+              <img
+                className="h-16 w-16 rounded-full lg:h-20 lg:w-20"
+                src={newProfilePicPath}
+                alt=""
+              />
+              <button
+                onClick={() => setNewProfilePicPath('')}
+                type="button"
+                className="my-1.5 flex items-center rounded border border-transparent bg-cr-primary px-2.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              >
+                Cancel
+              </button>
+              {!isLoading && (
+                <button
+              onClick={(e) => handleOnClick(e)}
+                type="submit"
+                className="my-1.5 flex items-center rounded border border-transparent bg-cr-primary px-2.5 text-xs font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              >
+                Save
+              </button>
+              )}
+              
+            </>
+          )}
+        </div>
         {/* <div className="mt-1 sm:col-span-2 sm:mt-0">
           <div className="flex items-center">
             <span className="h-12 w-12 overflow-hidden rounded-full bg-gray-100">
