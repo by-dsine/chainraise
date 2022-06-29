@@ -41,7 +41,7 @@ export default async function handler(
             Bucket: process.env.DO_SPACES_CF_PUBLIC_BUCKET!,
             Key: process.env.DO_PROFILE_PIC_FOLDER + "/" + id,
             Body: fs.createReadStream(fileToPut.filepath),
-            ACL: 'public-read,'
+            ACL: 'public-read',
           }, async() => res.status(201).json({message: "File uploaded"}))
         } catch (e) {
           console.log(e)
