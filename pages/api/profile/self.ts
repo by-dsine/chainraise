@@ -4,7 +4,7 @@ import { ContactInformationForm } from '../../../types/typings'
 import { prisma } from '../../../lib/db'
 import { convertInputDateToDateTime } from '../../../utils/mappers'
 
-export default async function profile(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -22,6 +22,9 @@ export default async function profile(
       const profile = await prisma.profile.findUnique({
         where: {
           userId: session.user.uid 
+        },
+        include: {
+          userKYCAML: true
         }
       })
       if(!profile) {
