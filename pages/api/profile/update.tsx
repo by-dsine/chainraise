@@ -10,7 +10,7 @@ export default async function handler(
   const session = await getSession({ req })
 
   if (!session?.user?.uid) {
-    return res.status(500).json({ message: 'No user id found.' })
+    return res.status(500).json({statusCode: '500', statusDesc: 'No session detected.', body: {}})
   }
 
   const variables = req.query

@@ -61,6 +61,7 @@ model Profile {
   ncPartyId           String?   @unique
   ncAccountId         String?   @unique
   ncLinkId            String?
+  fortressId          String?   @unique
   firstName           String?
   middleName          String?
   lastName            String?
@@ -96,8 +97,19 @@ model Profile {
   offeringPostCommentReaction OfferingUserPostCommentReaction[]
   platformRoles               PlatformRole[]
   userKYCAML                  UserKYCAML[]
-  Transaction                 Transaction[]
-  OfferingUpdate              OfferingUpdate[]
+  transactions                Transaction[]
+  offeringUpdates             OfferingUpdate[]
+  documents                   ProfileDocument[]
+}
+
+model ProfileDocument {
+  id           String  @id @default(cuid())
+  profileId    String
+  profile      Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  documentName String
+  src          String
+  public       Boolean @default(false)
+  visible      Boolean @default(false)
 }
 
 model PlatformRole {

@@ -13,7 +13,7 @@ export default async function handler(
 
   if (!session?.user?.uid) {
     console.log('Session or user id not found.')
-    return res.status(500).json({ message: 'No user id found.' })
+    return res.status(500).json({statusCode: '500', statusDesc: 'No session detected.', body: {}})
   }
 
   switch (req.method) {
@@ -24,13 +24,14 @@ export default async function handler(
           userId: session.user.uid 
         },
         include: {
-          userKYCAML: true
+          userKYCAML: true,
+          documents: true,
         }
       })
       if(!profile) {
-        return res.status(404).json( {message: "Profile not found."} )
+        return res.status(404).json({statusCode: '404', statusDesc: 'No profile found.', body: {}})
       }
-      return res.status(200).json(profile)
+      return res.status(200).json({statusCode: '200', statusDesc: 'Profile retrieved.', body: profile})
       
     case 'POST':
       console.log("Updating user with ID: ", session.user.uid)

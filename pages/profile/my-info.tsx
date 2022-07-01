@@ -4,7 +4,7 @@ import Header from '../../components/navigation/Header'
 import useOrCreateProfile from '../../hooks/useOrCreateProfile'
 import Link from 'next/link'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { KYCAMLStatus, PersonalInformationForm } from '../../types/typings'
+import { APIResponse, KYCAMLStatus } from '../../types/typings'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import KYCModal from '../../components/profile/KYCModal'
@@ -14,6 +14,7 @@ import { KYCAMLInvestorFlow } from '../../components/invest/KYCAMLInvestorFlow'
 import { useProfileInfoStore } from '../../lib/zustand/profileStore'
 import { mapDatabaseTimestampToDateFormat } from '../../utils/mappers'
 import { UpdateValue } from '../../components/profile/UpdateValue'
+import { ProfileWithKycHistoryAndDocs } from '../../prisma/types'
 
 const residenceOptions = [
   { id: 'us-citizen', title: 'U.S. Citizen' },
@@ -45,6 +46,20 @@ export default function ProfilePage() {
     }
 
     fetchKycData().catch(console.error)
+
+    const fetchProfilePageData = async () => {
+      const response = await fetch('/api/profile/self', {
+        method : 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      })
+
+      const result = (await response.json()) as APIResponse<ProfileWithKycHistoryAndDocs>
+    }
+
+
   }, [])
 
   // when profile comes back from hook, update display info
@@ -60,7 +75,9 @@ export default function ProfilePage() {
     profileInfoStore.setCity(profile?.city!)
     profileInfoStore.setState(profile?.state!)
     profileInfoStore.setZipCode(profile?.zipCode!)
-    profileInfoStore.setDateOfBirth(mapDatabaseTimestampToDateFormat(profile?.dob!))
+    profileInfoStore.setDateOfBirth(
+      mapDatabaseTimestampToDateFormat(profile?.dob!)
+    )
   }, [profile])
 
   return (
@@ -133,43 +150,28 @@ export default function ProfilePage() {
                 </div>
                 <div className="mt-5 border-t border-gray-200">
                   <dl className="divide-y divide-gray-200">
-                    
-                    
-                    
-                    {/* <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-                      <dt className="text-sm font-medium text-gray-500">
-                        First name
-                      </dt>
-                      <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                        <span className="flex-grow">{profile?.firstName}</span>
-                        <span className="ml-4 flex-shrink-0">
-                          <button
-                            type="button"
-                            className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                          >
-                            Update
-                          </button>
-                        </span>
-                      </dd>
-                    </div> */}
-
-                    <UpdateValue displayName='First Name' storeName='firstName'/>
-                    <UpdateValue displayName='Middle Name' storeName='middleName'/>
-                    <UpdateValue displayName='Last Name' storeName='lastName'/>
-                    <UpdateValue displayName='Phone' storeName='phone'/>
-                    <UpdateValue displayName='Address 1' storeName='address1'/>
-                    <UpdateValue displayName='Address 2' storeName='address2'/>
-                    <UpdateValue displayName='Unit' storeName='unit'/>
-                    <UpdateValue displayName='City' storeName='city'/>
-                    <UpdateValue displayName='State' storeName='state'/>
-                
+                    <UpdateValue
+                      displayName="First Name"
+                      storeName="firstName"
+                    />
+                    <UpdateValue
+                      displayName="Middle Name"
+                      storeName="middleName"
+                    />
+                    <UpdateValue displayName="Last Name" storeName="lastName" />
+                    <UpdateValue displayName="Phone" storeName="phone" />
+                    <UpdateValue displayName="Address 1" storeName="address1" />
+                    <UpdateValue displayName="Address 2" storeName="address2" />
+                    <UpdateValue displayName="Unit" storeName="unit" />
+                    <UpdateValue displayName="City" storeName="city" />
+                    <UpdateValue displayName="State" storeName="state" />
                   </dl>
                 </div>
               </div>
             </section>
 
             {/* Secondary column (hidden on smaller screens) */}
-            <aside className="hidden lg:block lg:flex-shrink-0 lg:mr-2">
+            <aside className="hidden lg:mr-2 lg:block lg:flex-shrink-0">
               <div className="relative flex h-full w-96 flex-col overflow-y-auto border-r border-gray-200 bg-white">
                 <div className="border-b border-gray-200 pb-2 sm:flex sm:items-center sm:justify-between">
                   <h3 className="text-lg font-medium leading-6 text-gray-900">

@@ -382,7 +382,6 @@ export type UpdateUser = {
   unit: string
   city: string
   state: string
-
 }
 
 export type APIResponse<Type> = {
