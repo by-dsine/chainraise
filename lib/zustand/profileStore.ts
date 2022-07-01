@@ -1,3 +1,4 @@
+import { ProfileDocument } from '@prisma/client'
 import create from 'zustand'
 
 export interface ProfileInfoStore {
@@ -39,6 +40,17 @@ export interface ProfileInfoStore {
 
   ssn: string
   setSSN: (zipCode: string) => void
+
+  kycStatus: string
+  setKycStatus: (kycStatus: string) => void
+
+  amlStatus: string
+  setAmlStatus: (amlStatus: string) => void
+
+  docs: ProfileDocument[]
+  addProfileDoc: (document: ProfileDocument) => void
+  removeProfileDoc: (documentIndex: number) => void
+  updateProfileDoc: (document: ProfileDocument) => void
 }
 
 export const useProfileInfoStore = create<ProfileInfoStore>((set) => ({
@@ -131,6 +143,39 @@ export const useProfileInfoStore = create<ProfileInfoStore>((set) => ({
     set((state) => ({
       ...state,
       ssn: value,
+    }))
+  },
+  kycStatus: '',
+  setKycStatus: (value) => {
+    set((state) => ({
+      ...state,
+      kycStatus: value,
+    }))
+  },
+  amlStatus: '',
+  setAmlStatus: (value) => {
+    set((state) => ({
+      ...state,
+      amlStatus: value,
+    }))
+  },
+  docs: [],
+  addProfileDoc: (doc) => {
+    set((state) => ({
+      ...state,
+      docs: [...state.docs, doc],
+    }))
+  },
+  removeProfileDoc: (documentId) => {
+    set((state) => ({
+      ...state,
+      docs: state.docs.filter((_item, index) => documentId !== index),
+    }))
+  },
+  updateProfileDoc: (doc) => {
+    set((state) => ({
+      ...state,
+      docs: state.docs.filter((item) => item.id !== doc.id),
     }))
   },
 }))

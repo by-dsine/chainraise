@@ -39,11 +39,7 @@ export const UpdateValue = ({ displayName, storeName }: Props) => {
     })
 
     const result = (await (response.json())) as APIResponse<Profile>
-    console.log(result)
-   
-
-    // if response is good, reload component by changing investor form
-
+    // show error if result is bad
     setToggle(true)
     
   }

@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react'
-import { CheckCircleIcon, PaperClipIcon } from '@heroicons/react/solid'
+import { CheckCircleIcon, PaperClipIcon, XCircleIcon } from '@heroicons/react/solid'
 import Header from '../../components/navigation/Header'
 import useOrCreateProfile from '../../hooks/useOrCreateProfile'
 import Link from 'next/link'
-import { SubmitHandler, useForm } from 'react-hook-form'
 import { APIResponse, KYCAMLStatus } from '../../types/typings'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
 import KYCModal from '../../components/profile/KYCModal'
 import { useKycModal } from '../../lib/zustand/investorFormStore'
 import { AUTO_APPROVED } from '../../lib/consts'
@@ -23,43 +20,32 @@ const residenceOptions = [
 ]
 
 export default function ProfilePage() {
-  const { profile, session, isLoading, isError } = useOrCreateProfile()
+  const { session, isLoading, isError } = useOrCreateProfile()
 
-  const kycModal = useKycModal()
-  const [isKycDone, setKycDone] = useState(false)
-  const [kycStatus, setKycStatus] = useState('')
+  const [profile, setProfile] = useState<ProfileWithKycHistoryAndDocs>()
 
   const profileInfoStore = useProfileInfoStore()
 
   useEffect(() => {
-    const fetchKycData = async () => {
-      const response = await fetch('/api/nc/kyc', {
+    const fetchProfilePageData = async () => {
+      const response = await fetch('/api/profile/self', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
       })
-      const result = (await response.json()) as KYCAMLStatus
-      setKycStatus(result.kycStatus)
-      setKycDone(result.kycStatus == AUTO_APPROVED)
+
+      const result =
+        (await response.json()) as APIResponse<ProfileWithKycHistoryAndDocs>
+      console.log(result)
+      if (result.statusCode == '200') {
+        setProfile(result.body)
+        console.log(result.body)
+      }
     }
 
-    fetchKycData().catch(console.error)
-
-    const fetchProfilePageData = async () => {
-      const response = await fetch('/api/profile/self', {
-        method : 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      })
-
-      const result = (await response.json()) as APIResponse<ProfileWithKycHistoryAndDocs>
-    }
-
-
+    fetchProfilePageData().catch(console.error)
   }, [])
 
   // when profile comes back from hook, update display info
@@ -78,11 +64,31 @@ export default function ProfilePage() {
     profileInfoStore.setDateOfBirth(
       mapDatabaseTimestampToDateFormat(profile?.dob!)
     )
+    var kycStatus: string = ''
+    var amlStatus: string = ''
+
+    if (profile?.userKYCAML.length) {
+      kycStatus = profile.userKYCAML[0].kycStatus || ''
+      amlStatus = profile.userKYCAML[0].amlStatus || ''
+    }
+
+    if (!kycStatus || kycStatus == '') {
+      kycStatus = 'Not Started'
+    }
+
+    if (!amlStatus || amlStatus == '') {
+      amlStatus = 'Not Started'
+    }
+
+    profileInfoStore.setKycStatus(kycStatus)
+    profileInfoStore.setAmlStatus(amlStatus)
   }, [profile])
 
   return (
     <div className="min-h-full">
-      {kycStatus && <KYCModal kycStatus={kycStatus} />}
+      {profileInfoStore.kycStatus && (
+        <KYCModal kycStatus={profileInfoStore.kycStatus} />
+      )}
       <Header />
       <div className="flex flex-1 flex-col">
         <main className="flex-1 pb-8">
@@ -102,11 +108,27 @@ export default function ProfilePage() {
                       <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
                         <dt className="sr-only">Account status</dt>
                         <dd className="mt-3 flex items-center text-sm font-medium capitalize text-gray-500 sm:mr-6 sm:mt-0">
-                          <CheckCircleIcon
-                            className="mr-1.5 h-5 w-5 flex-shrink-0 text-green-400"
-                            aria-hidden="true"
-                          />
-                          Verified account
+                          {profileInfoStore.kycStatus == AUTO_APPROVED &&
+                          profileInfoStore.amlStatus == AUTO_APPROVED ? (
+                            <>
+                              <CheckCircleIcon
+                                className="mr-1.5 h-5 w-5 flex-shrink-0 text-green-400"
+                                aria-hidden="true"
+                              />
+                              Verified account
+                            </>
+                          ) : (
+                            <div className='flex gap-x-2'>
+                              <XCircleIcon
+                                className="mr-1.5 h-5 w-5 flex-shrink-0 text-red-400"
+                                aria-hidden="true"
+                              />
+                              <p><span className='font-semibold'>KYC Status: </span>{profileInfoStore.kycStatus}</p>
+                              <p><span className='font-semibold'>AML Status: </span>{profileInfoStore.amlStatus}</p>
+                             
+
+                            </div>
+                          )}
                         </dd>
                       </dl>
                     </div>
@@ -188,49 +210,53 @@ export default function ProfilePage() {
                 </div>
                 <div className="flex py-4">
                   <dd className="mt-1 w-full text-sm text-gray-900 sm:mt-0">
-                    <ul
-                      role="list"
-                      className="divide-y divide-gray-200 rounded-md border border-gray-200"
-                    >
-                      <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
-                        <div className="flex w-0 flex-1 items-center">
-                          <PaperClipIcon
-                            className="h-5 w-5 flex-shrink-0 text-gray-400"
-                            aria-hidden="true"
-                          />
-                          <span className="ml-2 w-0 flex-1 truncate">
-                            form_c.pdf
-                          </span>
-                        </div>
-                        <div className="ml-4 flex flex-shrink-0 space-x-4">
-                          <button
-                            type="button"
-                            className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      </li>
-                      <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
-                        <div className="flex w-0 flex-1 items-center">
-                          <PaperClipIcon
-                            className="h-5 w-5 flex-shrink-0 text-gray-400"
-                            aria-hidden="true"
-                          />
-                          <span className="ml-2 w-0 flex-1 truncate">
-                            articles.pdf
-                          </span>
-                        </div>
-                        <div className="ml-4 flex flex-shrink-0 space-x-4">
-                          <button
-                            type="button"
-                            className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      </li>
-                    </ul>
+                    {profile?.documents.length ? (
+                      <ul
+                        role="list"
+                        className="divide-y divide-gray-200 rounded-md border border-gray-200"
+                      >
+                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                          <div className="flex w-0 flex-1 items-center">
+                            <PaperClipIcon
+                              className="h-5 w-5 flex-shrink-0 text-gray-400"
+                              aria-hidden="true"
+                            />
+                            <span className="ml-2 w-0 flex-1 truncate">
+                              form_c.pdf
+                            </span>
+                          </div>
+                          <div className="ml-4 flex flex-shrink-0 space-x-4">
+                            <button
+                              type="button"
+                              className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </li>
+                        <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                          <div className="flex w-0 flex-1 items-center">
+                            <PaperClipIcon
+                              className="h-5 w-5 flex-shrink-0 text-gray-400"
+                              aria-hidden="true"
+                            />
+                            <span className="ml-2 w-0 flex-1 truncate">
+                              articles.pdf
+                            </span>
+                          </div>
+                          <div className="ml-4 flex flex-shrink-0 space-x-4">
+                            <button
+                              type="button"
+                              className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </li>
+                      </ul>
+                    ) : (
+                      <div>No documents!</div>
+                    )}
                   </dd>
                 </div>
               </div>
