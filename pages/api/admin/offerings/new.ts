@@ -82,7 +82,7 @@ export default async function newOffering(
 
     console.log('Organization found')
     // #2 Create offering with North Capital
-    const createOfferingURL = new URL(
+    const createOfferingURL = (
       'https://api-sandboxdash.norcapsecurities.com/tapiv3/index.php/v3/createOffering'
     )
     const data = new URLSearchParams()

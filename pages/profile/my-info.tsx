@@ -11,6 +11,9 @@ import KYCModal from '../../components/profile/KYCModal'
 import { useKycModal } from '../../lib/zustand/investorFormStore'
 import { AUTO_APPROVED } from '../../lib/consts'
 import { KYCAMLInvestorFlow } from '../../components/invest/KYCAMLInvestorFlow'
+import { useProfileInfoStore } from '../../lib/zustand/profileStore'
+import { mapDatabaseTimestampToDateFormat } from '../../utils/mappers'
+import { UpdateValue } from '../../components/profile/UpdateValue'
 
 const residenceOptions = [
   { id: 'us-citizen', title: 'U.S. Citizen' },
@@ -19,13 +22,16 @@ const residenceOptions = [
 ]
 
 export default function ProfilePage() {
-  const [kycStatus, setKycStatus] = useState('')
   const { profile, session, isLoading, isError } = useOrCreateProfile()
+
   const kycModal = useKycModal()
   const [isKycDone, setKycDone] = useState(false)
+  const [kycStatus, setKycStatus] = useState('')
+
+  const profileInfoStore = useProfileInfoStore()
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchKycData = async () => {
       const response = await fetch('/api/nc/kyc', {
         method: 'GET',
         headers: {
@@ -38,8 +44,24 @@ export default function ProfilePage() {
       setKycDone(result.kycStatus == AUTO_APPROVED)
     }
 
-    fetchData().catch(console.error)
+    fetchKycData().catch(console.error)
   }, [])
+
+  // when profile comes back from hook, update display info
+  useEffect(() => {
+    profileInfoStore.setFirstName(profile?.firstName!)
+    profileInfoStore.setMiddleName(profile?.middleName!)
+    profileInfoStore.setLastName(profile?.lastName!)
+    profileInfoStore.setEmail(profile?.email!)
+    profileInfoStore.setPhone(profile?.phone!)
+    profileInfoStore.setAddress1(profile?.address1!)
+    profileInfoStore.setAddress2(profile?.address2!)
+    profileInfoStore.setUnit(profile?.unit!)
+    profileInfoStore.setCity(profile?.city!)
+    profileInfoStore.setState(profile?.state!)
+    profileInfoStore.setZipCode(profile?.zipCode!)
+    profileInfoStore.setDateOfBirth(mapDatabaseTimestampToDateFormat(profile?.dob!))
+  }, [profile])
 
   return (
     <div className="min-h-full">
@@ -111,7 +133,10 @@ export default function ProfilePage() {
                 </div>
                 <div className="mt-5 border-t border-gray-200">
                   <dl className="divide-y divide-gray-200">
-                    <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+                    
+                    
+                    
+                    {/* <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
                       <dt className="text-sm font-medium text-gray-500">
                         First name
                       </dt>
@@ -126,57 +151,18 @@ export default function ProfilePage() {
                           </button>
                         </span>
                       </dd>
-                    </div>
-                    <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-                      <dt className="text-sm font-medium text-gray-500">
-                        Application for
-                      </dt>
-                      <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                        <span className="flex-grow">Backend Developer</span>
-                        <span className="ml-4 flex-shrink-0">
-                          <button
-                            type="button"
-                            className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                          >
-                            Update
-                          </button>
-                        </span>
-                      </dd>
-                    </div>
-                    <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-                      <dt className="text-sm font-medium text-gray-500">
-                        Email address
-                      </dt>
-                      <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                        <span className="flex-grow">
-                          margotfoster@example.com
-                        </span>
-                        <span className="ml-4 flex-shrink-0">
-                          <button
-                            type="button"
-                            className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                          >
-                            Update
-                          </button>
-                        </span>
-                      </dd>
-                    </div>
-                    <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-                      <dt className="text-sm font-medium text-gray-500">
-                        Salary expectation
-                      </dt>
-                      <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                        <span className="flex-grow"> $120,000</span>
-                        <span className="ml-4 flex-shrink-0">
-                          <button
-                            type="button"
-                            className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                          >
-                            Update
-                          </button>
-                        </span>
-                      </dd>
-                    </div>
+                    </div> */}
+
+                    <UpdateValue displayName='First Name' storeName='firstName'/>
+                    <UpdateValue displayName='Middle Name' storeName='middleName'/>
+                    <UpdateValue displayName='Last Name' storeName='lastName'/>
+                    <UpdateValue displayName='Phone' storeName='phone'/>
+                    <UpdateValue displayName='Address 1' storeName='address1'/>
+                    <UpdateValue displayName='Address 2' storeName='address2'/>
+                    <UpdateValue displayName='Unit' storeName='unit'/>
+                    <UpdateValue displayName='City' storeName='city'/>
+                    <UpdateValue displayName='State' storeName='state'/>
+                
                   </dl>
                 </div>
               </div>
