@@ -208,6 +208,12 @@ export type PaymentMethodForm = {
   ach: ExternalBankAccountInfo | null
 }
 
+export type NewFormDocument = {
+  file: File | Blob | string
+  name: string
+  isPublic: boolean
+}
+
 export type CCPayment = {
   ownerName: string
   cardNumber: number

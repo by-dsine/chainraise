@@ -103,13 +103,12 @@ model Profile {
 }
 
 model ProfileDocument {
-  id           String  @id @default(cuid())
-  profileId    String
-  profile      Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  documentName String
-  src          String
-  public       Boolean @default(false)
-  visible      Boolean @default(false)
+  id        String  @id @default(cuid())
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name      String
+  src       String
+  public    Boolean @default(false)
 }
 
 model PlatformRole {

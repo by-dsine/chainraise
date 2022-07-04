@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
-import { CheckCircleIcon, PaperClipIcon, XCircleIcon } from '@heroicons/react/solid'
+import {
+  CheckCircleIcon,
+  PaperClipIcon,
+  XCircleIcon,
+} from '@heroicons/react/solid'
 import Header from '../../components/navigation/Header'
 import useOrCreateProfile from '../../hooks/useOrCreateProfile'
 import Link from 'next/link'
@@ -12,6 +16,8 @@ import { useProfileInfoStore } from '../../lib/zustand/profileStore'
 import { mapDatabaseTimestampToDateFormat } from '../../utils/mappers'
 import { UpdateValue } from '../../components/profile/UpdateValue'
 import { ProfileWithKycHistoryAndDocs } from '../../prisma/types'
+import { useNewDocModalStore } from '../../lib/zustand/newDocModalStore'
+import NewDocumentModal from '../../components/profile/NewDocumentModal'
 
 const residenceOptions = [
   { id: 'us-citizen', title: 'U.S. Citizen' },
@@ -25,6 +31,8 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<ProfileWithKycHistoryAndDocs>()
 
   const profileInfoStore = useProfileInfoStore()
+
+  const newDocModal = useNewDocModalStore()
 
   useEffect(() => {
     const fetchProfilePageData = async () => {
@@ -86,15 +94,16 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-full">
+      {newDocModal.modalOpen && <NewDocumentModal />}
       {profileInfoStore.kycStatus && (
         <KYCModal kycStatus={profileInfoStore.kycStatus} />
       )}
       <Header />
       <div className="flex flex-1 flex-col">
-        <main className="flex-1 pb-8">
+        <main className="flex-1 pb-8 ">
           {/* Page header */}
           <div className="bg-white shadow">
-            <div className="px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8">
+            <div className="px-4 sm:px-6 lg:mx-auto lg:max-w-4xl lg:px-8">
               <div className="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
                 <div className="min-w-0 flex-1">
                   {/* Profile */}
@@ -118,15 +127,23 @@ export default function ProfilePage() {
                               Verified account
                             </>
                           ) : (
-                            <div className='flex gap-x-2'>
+                            <div className="flex gap-x-2">
                               <XCircleIcon
                                 className="mr-1.5 h-5 w-5 flex-shrink-0 text-red-400"
                                 aria-hidden="true"
                               />
-                              <p><span className='font-semibold'>KYC Status: </span>{profileInfoStore.kycStatus}</p>
-                              <p><span className='font-semibold'>AML Status: </span>{profileInfoStore.amlStatus}</p>
-                             
-
+                              <p>
+                                <span className="font-semibold">
+                                  KYC Status:{' '}
+                                </span>
+                                {profileInfoStore.kycStatus}
+                              </p>
+                              <p>
+                                <span className="font-semibold">
+                                  AML Status:{' '}
+                                </span>
+                                {profileInfoStore.amlStatus}
+                              </p>
                             </div>
                           )}
                         </dd>
@@ -201,6 +218,7 @@ export default function ProfilePage() {
                   </h3>
                   <div className="mt-3 flex sm:mt-0 sm:ml-4">
                     <button
+                      onClick={() => newDocModal.setModalOpen(true)}
                       type="button"
                       className="ml-3 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
@@ -215,6 +233,27 @@ export default function ProfilePage() {
                         role="list"
                         className="divide-y divide-gray-200 rounded-md border border-gray-200"
                       >
+                        {profile.documents.map((document) => (
+                          <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                            <div className="flex w-0 flex-1 items-center">
+                              <PaperClipIcon
+                                className="h-5 w-5 flex-shrink-0 text-gray-400"
+                                aria-hidden="true"
+                              />
+                              <span className="ml-2 w-0 flex-1 truncate">
+                                {document.name}
+                              </span>
+                            </div>
+                            <div className="ml-4 flex flex-shrink-0 space-x-4">
+                              <button
+                                type="button"
+                                className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </li>
+                        ))}
                         <li className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
                           <div className="flex w-0 flex-1 items-center">
                             <PaperClipIcon

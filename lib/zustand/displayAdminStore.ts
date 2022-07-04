@@ -1,14 +1,14 @@
 import { DisplayAdminOffering, DisplayAdminUser } from '../../types/typings'
 import create from 'zustand'
 
-interface displayAdminStore {
+interface DisplayAdminStore {
   displayUsers: DisplayAdminUser[]
   addDisplayUser: (displayUser: DisplayAdminUser) => void
   displayOfferings: DisplayAdminOffering[]
   addDisplayOffering: (displayOffering: DisplayAdminOffering) => void
 }
 
-export const useDisplayStore = create<displayAdminStore>((set) => ({
+export const useDisplayStore = create<DisplayAdminStore>((set) => ({
   displayUsers: [],
   addDisplayUser: (displayUser) => {
     set((state) => ({
