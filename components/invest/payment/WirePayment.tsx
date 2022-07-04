@@ -1,7 +1,5 @@
-import React from 'react'
+import React from 'react';
 
 export const WirePayment = () => {
-  return (
-    <div>WirePayment</div>
-  )
-}
+   return <div>WirePayment</div>;
+};

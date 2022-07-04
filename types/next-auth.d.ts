@@ -1,11 +1,11 @@
-import NextAuth, { DefaultSession } from "next-auth"
+import NextAuth, { DefaultSession } from 'next-auth';
 
-declare module "next-auth" {
-  interface Session {
-    user: {
-      username: string 
-      uid: string | undefined
-      admin: boolean
-    } & DefaultSession["user"]
-  }
+declare module 'next-auth' {
+   interface Session {
+      user: {
+         username: string;
+         uid: string | undefined;
+         admin: boolean;
+      } & DefaultSession['user'];
+   }
 }

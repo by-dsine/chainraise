@@ -1,47 +1,47 @@
-import { NextApiRequest, NextApiResponse } from 'next'
-import { getSession } from 'next-auth/react'
-import { prisma } from '../../../../lib/db'
+import { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
+import { prisma } from '../../../../lib/db';
 
 export default async function offerings(
-  req: NextApiRequest,
-  res: NextApiResponse
+   req: NextApiRequest,
+   res: NextApiResponse
 ) {
-  console.log('Fetching session...')
-  const session = await getSession({ req })
+   console.log('Fetching session...');
+   const session = await getSession({ req });
 
-  if (!session?.user?.uid) {
-    console.log('Session not found.')
+   if (!session?.user?.uid) {
+      console.log('Session not found.');
 
-    return res.status(500).json({ message: 'No user id found.' })
-  }
+      return res.status(500).json({ message: 'No user id found.' });
+   }
 
-  if (!session.user.admin) {
-    return res.status(404).json({ message: "You're not allowed in here." })
-  }
+   if (!session.user.admin) {
+      return res.status(404).json({ message: "You're not allowed in here." });
+   }
 
-  if (req.method != 'GET') {
-    return res.status(405).end(`Method ${req.method} not allowed`)
-  }
+   if (req.method != 'GET') {
+      return res.status(405).end(`Method ${req.method} not allowed`);
+   }
 
-  const { slug } = req.query
-  if(typeof slug !== 'string'){
-    return res.status(404).json({ message: "No slug received"})
-  }
+   const { slug } = req.query;
+   if (typeof slug !== 'string') {
+      return res.status(404).json({ message: 'No slug received' });
+   }
 
-  const offering = await prisma.offering.findUnique({
-    where: {
-        slug: slug,
+   const offering = await prisma.offering.findUnique({
+      where: {
+         slug: slug,
       },
-      include : {
-        sections: true,
-        offeringParameters: true,
-        offeringHistory: true
-      }
-  })
+      include: {
+         sections: true,
+         offeringParameters: true,
+         offeringHistory: true,
+      },
+   });
 
-  if (!offering) {
-    return res.status(404).json({ message: "No slug received"})
-  }
+   if (!offering) {
+      return res.status(404).json({ message: 'No slug received' });
+   }
 
-  return res.status(200).json(offering)
+   return res.status(200).json(offering);
 }

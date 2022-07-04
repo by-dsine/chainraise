@@ -1,13 +1,12 @@
-import useSWR from 'swr'
-import { fetcher } from '../lib/prisma'
+import useSWR from 'swr';
+import { fetcher } from '../lib/prisma';
 
-export function useUser (id: string) {
+export function useUser(id: string) {
+   const { data, error } = useSWR(`/api/user/${id}`, fetcher);
 
-    const { data, error } = useSWR(`/api/user/${id}`, fetcher)
-  
-    return {
+   return {
       user: data,
       isLoading: !error && !data,
-      isError: error
-    }
-  }
+      isError: error,
+   };
+}

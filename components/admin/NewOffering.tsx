@@ -1,30 +1,30 @@
-import NewOfferingInfoForm from './NewOfferingForm/NewOfferingInfoForm'
-import NewOrganizationPrimaryIssuerForm from './NewOfferingForm/OrganizationPrimaryIssuerForm'
+import NewOfferingInfoForm from './NewOfferingForm/NewOfferingInfoForm';
+import NewOrganizationPrimaryIssuerForm from './NewOfferingForm/OrganizationPrimaryIssuerForm';
 
 export default function NewOffering() {
-  return (
-    <>
-      <div className="hidden sm:block" aria-hidden="true">
-        <div className="py-5">
-          <div className="border-t border-gray-200" />
-        </div>
-      </div>
+   return (
+      <>
+         <div className="hidden sm:block" aria-hidden="true">
+            <div className="py-5">
+               <div className="border-t border-gray-200" />
+            </div>
+         </div>
 
-      <NewOrganizationPrimaryIssuerForm />
+         <NewOrganizationPrimaryIssuerForm />
 
-      <div className="hidden sm:block" aria-hidden="true">
-        <div className="py-5">
-          <div className="border-t border-gray-200" />
-        </div>
-      </div>
+         <div className="hidden sm:block" aria-hidden="true">
+            <div className="py-5">
+               <div className="border-t border-gray-200" />
+            </div>
+         </div>
 
-      <NewOfferingInfoForm />
+         <NewOfferingInfoForm />
 
-      <div className="hidden sm:block" aria-hidden="true">
-        <div className="py-5">
-          <div className="border-t border-gray-200" />
-        </div>
-      </div>
-    </>
-  )
+         <div className="hidden sm:block" aria-hidden="true">
+            <div className="py-5">
+               <div className="border-t border-gray-200" />
+            </div>
+         </div>
+      </>
+   );
 }

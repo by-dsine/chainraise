@@ -1,14 +1,16 @@
-import useSWR from 'swr'
-import { fetcher } from '../lib/prisma'
-import { DisplayAdminUser } from '../types/typings'
+import useSWR from 'swr';
+import { fetcher } from '../lib/prisma';
+import { DisplayAdminUser } from '../types/typings';
 
 export function useAllUsersForAdmin() {
+   const { data, error } = useSWR<DisplayAdminUser[]>(
+      `/api/admin/users`,
+      fetcher
+   );
 
-    const { data, error } = useSWR<DisplayAdminUser[]>(`/api/admin/users`, fetcher)
-  
-    return {
+   return {
       users: data,
       isLoading: !error && !data,
-      isError: error
-    }
-  }
+      isError: error,
+   };
+}

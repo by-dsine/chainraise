@@ -1,12 +1,12 @@
-import React from 'react'
-import Header from '../../components/navigation/Header'
+import React from 'react';
+import Header from '../../components/navigation/Header';
 
 const LearnKycAml = () => {
-  return (
-    <>
-      <Header />
-    </>
-  )
-}
+   return (
+      <>
+         <Header />
+      </>
+   );
+};
 
-export default LearnKycAml
+export default LearnKycAml;
