@@ -110,7 +110,7 @@ export default function Example() {
             <div className="bg-gray-50 py-24 sm:py-32">
                <div className="mx-auto max-w-md pl-4 pr-8 sm:max-w-lg sm:px-6 lg:max-w-7xl lg:px-8">
                   <h1 className="text-center text-4xl font-extrabold leading-10 tracking-tight text-gray-900 sm:text-5xl sm:leading-none lg:text-6xl">
-                     Get to raisin'!
+                     Get to raisin!
                   </h1>
                   <p className="mx-auto mt-6 max-w-3xl text-center text-xl leading-normal text-gray-500">
                      Make your dreams come true with the power of an
@@ -134,7 +134,7 @@ export default function Example() {
                   <div className="lg:pr-8">
                      <div className="mx-auto max-w-md sm:max-w-lg lg:mx-0">
                         <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
-                           Let's get your project funded
+                           Lets get your project funded
                         </h2>
                         <p className="mt-4 text-lg text-gray-500 sm:mt-3">
                            Please fill out the form below. We will be notified

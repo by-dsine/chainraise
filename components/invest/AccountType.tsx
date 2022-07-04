@@ -89,9 +89,7 @@ export default function AccountType({ profile }: Props) {
    const onSubmit = handleSubmit((data) => {
       const isEntity = data.accountType == 'entity';
       let hasEntityName =
-         /^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$|\w+/.test(
-            data.entityName
-         );
+         /^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$|\w+/.test(data.entityName);
 
       const entityError = isEntity && !hasEntityName;
 

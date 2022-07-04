@@ -79,8 +79,7 @@ export default function KYCModal({ kycStatus }: KycModalProps) {
                                  </Dialog.Title>
                                  <div className="mt-2">
                                     <p className="text-sm text-gray-500">
-                                       Your KYC Status is "
-                                       <span>{kycStatus}</span>".
+                                       Your KYC Status is <span>{kycStatus}</span>.
                                     </p>
                                     {kycStatus == NOT_STARTED && (
                                        <p className="text-sm text-gray-500">

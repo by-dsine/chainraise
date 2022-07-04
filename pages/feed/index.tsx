@@ -9,7 +9,7 @@ function classNames(...classes: string[]) {
    return classes.filter(Boolean).join(' ');
 }
 
-export default function index() {
+export default function Index() {
    const { data: session } = useSession();
 
    return (
