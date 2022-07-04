@@ -1,5 +1,3 @@
-import { StatementType } from '@fauna-labs/fauna-schema-migrate/dist/types/expressions'
-import { BooleanSchema } from 'yup'
 import create from 'zustand'
 
 interface investorFormStore {
