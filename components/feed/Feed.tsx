@@ -202,6 +202,7 @@ export function Feed() {
                                     <img
                                        className="aspect-square max-h-12"
                                        src={message.previewPic}
+                                       alt="preview pic"
                                     />
                                  )}
                               </div>
