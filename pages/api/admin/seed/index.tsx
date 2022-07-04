@@ -33,7 +33,7 @@ export default async function newOffering(
   const testOrganization = await prisma.organization.create({
     data: {
       name: 'ChainRaise Test',
-      owner: {
+      contact: {
         connect: {
           userId: session.user.uid,
         },

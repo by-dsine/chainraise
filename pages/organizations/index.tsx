@@ -528,6 +528,7 @@ export default function Example() {
                     className="relative z-0 divide-y divide-gray-200"
                   >
                     {/* ignore for now, this works */}
+                    {/* @ts-ignore */}
                     {directory[letter].map((person) => (
                       <li key={person.id}>
                         <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500 hover:bg-gray-50">

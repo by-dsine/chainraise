@@ -49,7 +49,7 @@ export const usePaymentMethodStore = create<paymentMethodStore>((set) => ({
     ownerName: '',
     cardNumber: 0,
     expirationDate: '',
-    cvcNumber: 0,
+    cvvNumber: 0,
     cardType: '',
     createdIpAddress: '',
   },
