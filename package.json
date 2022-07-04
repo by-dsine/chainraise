@@ -5,7 +5,8 @@
       "build": "next build",
       "start": "next start",
       "lint": "next lint",
-      "prettier": "prettier --write ."
+      "prettier": "prettier --write .",
+      "prepare": "husky install"
    },
    "prisma": {
       "seed": "ts-node prisma/seed.ts"
@@ -29,6 +30,8 @@
       "zustand": "^4.0.0-rc.1"
    },
    "devDependencies": {
+      "@commitlint/cli": "^17.0.3",
+      "@commitlint/config-conventional": "^17.0.3",
       "@tailwindcss/aspect-ratio": "^0.4.0",
       "@tailwindcss/forms": "^0.5.1",
       "@types/next-auth": "^3.15.0",
@@ -38,6 +41,7 @@
       "autoprefixer": "^10.4.0",
       "eslint": "^8.19.0",
       "eslint-config-next": "^12.2.0",
+      "husky": "^8.0.1",
       "postcss": "^8.4.5",
       "prettier": "^2.5.1",
       "prettier-plugin-tailwindcss": "^0.1.1",
