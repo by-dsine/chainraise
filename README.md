@@ -4,7 +4,7 @@ The ChainRaise crowdfunding platform is a Next.js application built with [Typesc
 
 <p>It interacts with North Capital API for handling offering and user documentation as well as managing funds.</p>
 
-<p>To get started with this repo, simply pull it down then run <code>yarn install</code>. If you don't have yarn installed, you can run <code>npm install --global yarn</code> to get yarn.</p>
+<p>To get started with this repo, simply pull it down then run <code>yarn install</code>. If you don't have yarn installed, you can run <code>npm install --global yarn</code> to get yarn. The project is engine locked to yarn to prevent build conflicts with npm; npm will not successfully build this project.</p>
 
 <p>To gain access to the Trello board associated with this project, please email dylan@chainraise.io.</p>
 

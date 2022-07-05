@@ -2,6 +2,14 @@
    "extends": ["next", "next/core-web-vitals", "eslint:recommended"],
    "globals": { "React": "readonly" },
    "rules": {
-      "no-unused-vars": [1, { "args": "after-used", "argsIgnorePattern": "^_" }]
+      "no-unused-vars": [0, { "args": "after-used", "argsIgnorePattern": "^_" }],
+      "@next/next/no-html-link-for-pages": "off",
+      "@next/next/no-img-element": "off",
+      "react-hooks/exhaustive-deps" : "off",
+      "react/jsx-key": "off",
+      "react/no-unescaped-entities": "off",
+      "no-useless-escape": "off",
+      "no-empty": "off",
+      "no-case-declarations": "off"
    }
 }
