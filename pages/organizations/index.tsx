@@ -1,12 +1,14 @@
-import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/outline';
 import {
    ArrowRightIcon,
    ChevronLeftIcon,
    FilterIcon,
+   MailIcon,
+   PhoneIcon,
    SearchIcon,
 } from '@heroicons/react/solid';
+import { Fragment, useState } from 'react';
 import Header from '../../components/navigation/Header';
 
 const directory = {
@@ -245,12 +247,39 @@ const team = [
    },
 ];
 
+const organization = {
+   name: 'ChainRaise',
+   imageUrl: '/chainraise_logo.png',
+   coverImageUrl: '',
+   about: `
+     <p>Tincidunt quam neque in cursus viverra orci, dapibus nec tristique. Nullam ut sit dolor consectetur urna, dui cras nec sed. Cursus risus congue arcu aenean posuere aliquam.</p>
+     <p>Et vivamus lorem pulvinar nascetur non. Pulvinar a sed platea rhoncus ac mauris amet. Urna, sem pretium sit pretium urna, senectus vitae. Scelerisque fermentum, cursus felis dui suspendisse velit pharetra. Augue et duis cursus maecenas eget quam lectus. Accumsan vitae nascetur pharetra rhoncus praesent dictum risus suspendisse.</p>
+   `,
+   fields: {
+      Phone: '(555) 123-4567',
+      Email: 'ricardocooper@example.com',
+      Title: 'Senior Front-End Developer',
+      Team: 'Product Development',
+      Location: 'San Francisco',
+      Sits: 'Oasis, 4th floor',
+      Salary: '$145,000',
+      Birthday: 'June 8, 1990',
+   },
+};
+
+const tabs = [
+   { name: 'Profile', href: '#', current: true },
+   { name: 'Calendar', href: '#', current: false },
+   { name: 'Recognition', href: '#', current: false },
+];
+
 function classNames(...classes: string[]) {
    return classes.filter(Boolean).join(' ');
 }
 
-export default function Example() {
-   const [open, setOpen] = useState(true);
+export default function Organizations() {
+   const [open, setOpen] = useState(false);
+   const [organizationSelected, setOrganizationSelected] = useState(false);
 
    return (
       <>
@@ -279,197 +308,224 @@ export default function Example() {
                   </nav>
 
                   <article>
-                     <div className="mx-auto max-w-xl pt-20">
-                        <div className="text-center">
-                           <svg
-                              className="mx-auto h-12 w-12 text-gray-400"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 48 48"
-                              aria-hidden="true"
-                           >
-                              <path
-                                 strokeLinecap="round"
-                                 strokeLinejoin="round"
-                                 strokeWidth={2}
-                                 d="M34 40h10v-4a6 6 0 00-10.712-3.714M34 40H14m20 0v-4a9.971 9.971 0 00-.712-3.714M14 40H4v-4a6 6 0 0110.713-3.714M14 40v-4c0-1.313.253-2.566.713-3.714m0 0A10.003 10.003 0 0124 26c4.21 0 7.813 2.602 9.288 6.286M30 14a6 6 0 11-12 0 6 6 0 0112 0zm12 6a4 4 0 11-8 0 4 4 0 018 0zm-28 0a4 4 0 11-8 0 4 4 0 018 0z"
-                              />
-                           </svg>
-                           <h2 className="mt-2 text-lg font-medium text-gray-900">
-                              Search for an organization or create your own
-                           </h2>
-                           <p className="mt-1 text-sm text-gray-500"></p>
-                        </div>
-                        <form action="#" className="mt-6 flex">
-                           <label htmlFor="name" className="sr-only">
-                              Organization Name
-                           </label>
-                           <input
-                              type="name"
-                              name="name"
-                              id="name"
-                              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-cr-primary focus:ring-cr-primary sm:text-sm"
-                              placeholder="      Enter your organization name"
-                           />
-                           <button
-                              type="submit"
-                              className="ml-4 flex-shrink-0 rounded-md border border-transparent bg-cr-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cr-primary focus:outline-none focus:ring-2 focus:ring-cr-primary focus:ring-offset-2"
-                           >
-                              Create your organization
-                           </button>
-                        </form>
-                        <div className="mt-2 flex items-center">
-                           <div className="mx-auto">
-                              <button
-                                 onClick={() => setOpen(true)}
-                                 type="button"
-                                 className="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 underline hover:font-bold hover:underline-offset-1 focus:outline-none"
-                              >
-                                 Got an invite code?
-                                 <div>
-                                    <ArrowRightIcon className="text-gray-700" />
+                     {organizationSelected ? (
+                        <>
+                           <div>
+                              <div>
+                                 {organization.coverImageUrl ? (
+                                    <img
+                                       className="h-32 w-full object-cover lg:h-48"
+                                       src={organization.coverImageUrl}
+                                       alt=""
+                                    />
+                                 ) : (
+                                    <div className="h-32 w-full object-cover lg:h-48"></div>
+                                 )}
+                              </div>
+                              <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+                                 <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
+                                    <div className="flex">
+                                       <img
+                                          className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32"
+                                          src={organization.imageUrl}
+                                          alt=""
+                                       />
+                                    </div>
+                                    <div className="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
+                                       <div className="mt-6 min-w-0 flex-1 sm:hidden 2xl:block">
+                                          <h1 className="truncate text-2xl font-bold text-gray-900">
+                                             {organization.name}
+                                          </h1>
+                                       </div>
+                                       <div className="justify-stretch mt-6 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
+                                          <button
+                                             type="button"
+                                             className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+                                          >
+                                             <MailIcon
+                                                className="-ml-1 mr-2 h-5 w-5 text-gray-400"
+                                                aria-hidden="true"
+                                             />
+                                             <span>Message</span>
+                                          </button>
+                                          <button
+                                             type="button"
+                                             className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+                                          >
+                                             <PhoneIcon
+                                                className="-ml-1 mr-2 h-5 w-5 text-gray-400"
+                                                aria-hidden="true"
+                                             />
+                                             <span>Call</span>
+                                          </button>
+                                       </div>
+                                    </div>
                                  </div>
+                                 <div className="mt-6 hidden min-w-0 flex-1 sm:block 2xl:hidden">
+                                    <h1 className="truncate text-2xl font-bold text-gray-900">
+                                       {organization.name}
+                                    </h1>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <div className="mt-6 sm:mt-2 2xl:mt-5">
+                              <div className="border-b border-gray-200">
+                                 <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+                                    <nav
+                                       className="-mb-px flex space-x-8"
+                                       aria-label="Tabs"
+                                    >
+                                       {tabs.map((tab) => (
+                                          <a
+                                             key={tab.name}
+                                             href={tab.href}
+                                             className={classNames(
+                                                tab.current
+                                                   ? 'border-pink-500 text-gray-900'
+                                                   : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                                                'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
+                                             )}
+                                             aria-current={
+                                                tab.current ? 'page' : undefined
+                                             }
+                                          >
+                                             {tab.name}
+                                          </a>
+                                       ))}
+                                    </nav>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
+                              <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+                                 {Object.keys(organization.fields).map(
+                                    (field) => (
+                                       <div
+                                          key={field}
+                                          className="sm:col-span-1"
+                                       >
+                                          <dt className="text-sm font-medium text-gray-500">
+                                             {field}
+                                          </dt>
+                                          <dd className="mt-1 text-sm text-gray-900">
+                                             {/* ignore for now, this works */}
+                                             {/* @ts-ignore */}
+                                             {organization.fields[field]}
+                                          </dd>
+                                       </div>
+                                    )
+                                 )}
+                                 <div className="sm:col-span-2">
+                                    <dt className="text-sm font-medium text-gray-500">
+                                       About
+                                    </dt>
+                                    <dd
+                                       className="mt-1 max-w-prose space-y-5 text-sm text-gray-900"
+                                       dangerouslySetInnerHTML={{
+                                          __html: organization.about,
+                                       }}
+                                    />
+                                 </div>
+                              </dl>
+                           </div>
+
+                           <div className="mx-auto mt-8 max-w-5xl px-4 pb-12 sm:px-6 lg:px-8">
+                              <h2 className="text-sm font-medium text-gray-500">
+                                 Team members
+                              </h2>
+                              <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                 {team.map((person) => (
+                                    <div
+                                       key={person.handle}
+                                       className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-pink-500 focus-within:ring-offset-2 hover:border-gray-400"
+                                    >
+                                       <div className="flex-shrink-0">
+                                          <img
+                                             className="h-10 w-10 rounded-full"
+                                             src={person.imageUrl}
+                                             alt=""
+                                          />
+                                       </div>
+                                       <div className="min-w-0 flex-1">
+                                          <a
+                                             href="#"
+                                             className="focus:outline-none"
+                                          >
+                                             <span
+                                                className="absolute inset-0"
+                                                aria-hidden="true"
+                                             />
+                                             <p className="text-sm font-medium text-gray-900">
+                                                {person.name}
+                                             </p>
+                                             <p className="truncate text-sm text-gray-500">
+                                                {person.role}
+                                             </p>
+                                          </a>
+                                       </div>
+                                    </div>
+                                 ))}
+                              </div>
+                           </div>
+                        </>
+                     ) : (
+                        <div className="mx-auto max-w-xl pt-20">
+                           <div className="text-center">
+                              <svg
+                                 className="mx-auto h-12 w-12 text-gray-400"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 viewBox="0 0 48 48"
+                                 aria-hidden="true"
+                              >
+                                 <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M34 40h10v-4a6 6 0 00-10.712-3.714M34 40H14m20 0v-4a9.971 9.971 0 00-.712-3.714M14 40H4v-4a6 6 0 0110.713-3.714M14 40v-4c0-1.313.253-2.566.713-3.714m0 0A10.003 10.003 0 0124 26c4.21 0 7.813 2.602 9.288 6.286M30 14a6 6 0 11-12 0 6 6 0 0112 0zm12 6a4 4 0 11-8 0 4 4 0 018 0zm-28 0a4 4 0 11-8 0 4 4 0 018 0z"
+                                 />
+                              </svg>
+                              <h2 className="mt-2 text-lg font-medium text-gray-900">
+                                 Search for an organization or create your own
+                              </h2>
+                              <p className="mt-1 text-sm text-gray-500"></p>
+                           </div>
+                           <form action="#" className="mt-6 flex">
+                              <label htmlFor="name" className="sr-only">
+                                 Organization Name
+                              </label>
+                              <input
+                                 type="name"
+                                 name="name"
+                                 id="name"
+                                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-cr-primary focus:ring-cr-primary sm:text-sm"
+                                 placeholder="      Enter your organization name"
+                              />
+                              <button
+                                 type="submit"
+                                 className="ml-4 flex-shrink-0 rounded-md border border-transparent bg-cr-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cr-primary focus:outline-none focus:ring-2 focus:ring-cr-primary focus:ring-offset-2"
+                              >
+                                 Create your organization
                               </button>
+                           </form>
+                           <div className="mt-2 flex items-center">
+                              <div className="mx-auto">
+                                 <button
+                                    onClick={() => setOpen(true)}
+                                    type="button"
+                                    className="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 underline hover:font-bold hover:underline-offset-1 focus:outline-none"
+                                 >
+                                    Got an invite code?
+                                    <div>
+                                       <ArrowRightIcon className="text-gray-700" />
+                                    </div>
+                                 </button>
+                              </div>
                            </div>
                         </div>
-                     </div>
-
-                     {/* <div>
-                <div>
-                  <img
-                    className="h-32 w-full object-cover lg:h-48"
-                    src={profile.coverImageUrl}
-                    alt=""
-                  />
-                </div>
-                <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-                  <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
-                    <div className="flex">
-                      <img
-                        className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32"
-                        src={profile.imageUrl}
-                        alt=""
-                      />
-                    </div>
-                    <div className="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
-                      <div className="mt-6 min-w-0 flex-1 sm:hidden 2xl:block">
-                        <h1 className="truncate text-2xl font-bold text-gray-900">
-                          {profile.name}
-                        </h1>
-                      </div>
-                      <div className="justify-stretch mt-6 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-                        <button
-                          type="button"
-                          className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
-                        >
-                          <MailIcon
-                            className="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                            aria-hidden="true"
-                          />
-                          <span>Message</span>
-                        </button>
-                        <button
-                          type="button"
-                          className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
-                        >
-                          <PhoneIcon
-                            className="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                            aria-hidden="true"
-                          />
-                          <span>Call</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-6 hidden min-w-0 flex-1 sm:block 2xl:hidden">
-                    <h1 className="truncate text-2xl font-bold text-gray-900">
-                      {profile.name}
-                    </h1>
-                  </div>
-                </div>
-              </div>
-            
-              <div className="mt-6 sm:mt-2 2xl:mt-5">
-                <div className="border-b border-gray-200">
-                  <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-                    <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-                      {tabs.map((tab) => (
-                        <a
-                          key={tab.name}
-                          href={tab.href}
-                          className={classNames(
-                            tab.current
-                              ? 'border-pink-500 text-gray-900'
-                              : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                            'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
-                          )}
-                          aria-current={tab.current ? 'page' : undefined}
-                        >
-                          {tab.name}
-                        </a>
-                      ))}
-                    </nav>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
-                <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                  {Object.keys(profile.fields).map((field) => (
-                    <div key={field} className="sm:col-span-1">
-                      <dt className="text-sm font-medium text-gray-500">
-                        {field}
-                      </dt>
-                      <dd className="mt-1 text-sm text-gray-900">
-                        {profile.fields[field]}
-                      </dd>
-                    </div>
-                  ))}
-                  <div className="sm:col-span-2">
-                    <dt className="text-sm font-medium text-gray-500">About</dt>
-                    <dd
-                      className="mt-1 max-w-prose space-y-5 text-sm text-gray-900"
-                      dangerouslySetInnerHTML={{ __html: profile.about }}
-                    />
-                  </div>
-                </dl>
-              </div>
-
-              <div className="mx-auto mt-8 max-w-5xl px-4 pb-12 sm:px-6 lg:px-8">
-                <h2 className="text-sm font-medium text-gray-500">
-                  Team members
-                </h2>
-                <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  {team.map((person) => (
-                    <div
-                      key={person.handle}
-                      className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-pink-500 focus-within:ring-offset-2 hover:border-gray-400"
-                    >
-                      <div className="flex-shrink-0">
-                        <img
-                          className="h-10 w-10 rounded-full"
-                          src={person.imageUrl}
-                          alt=""
-                        />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <a href="#" className="focus:outline-none">
-                          <span
-                            className="absolute inset-0"
-                            aria-hidden="true"
-                          />
-                          <p className="text-sm font-medium text-gray-900">
-                            {person.name}
-                          </p>
-                          <p className="truncate text-sm text-gray-500">
-                            {person.role}
-                          </p>
-                        </a>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div> */}
+                     )}
                   </article>
                </main>
                <aside className="hidden w-96 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col">
@@ -530,7 +586,12 @@ export default function Example() {
                               {/* ignore for now, this works */}
                               {/* @ts-ignore */}
                               {directory[letter].map((person) => (
-                                 <li key={person.id}>
+                                 <li
+                                    key={person.id}
+                                    onClick={() =>
+                                       setOrganizationSelected(true)
+                                    }
+                                 >
                                     <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500 hover:bg-gray-50">
                                        <div className="flex-shrink-0">
                                           <img

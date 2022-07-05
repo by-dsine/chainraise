@@ -1,22 +1,21 @@
-import Header from '../../../../components/navigation/Header';
+import { PaperClipIcon } from '@heroicons/react/solid';
+import { GetServerSideProps } from 'next/types';
+import { useState } from 'react';
+import { NewSectionResource } from '../../../components/admin/EditOffering/NewSectionResource';
+import Header from '../../../components/navigation/Header';
+import { prisma } from '../../../lib/db';
 import {
    DisplayOffering,
-   DisplayOfferingResource,
    DisplayOfferingSection,
    DisplayOfferingSectionResource,
-} from '../../../../types/typings';
-import { prisma } from '../../../../lib/db';
-import { GetServerSideProps } from 'next/types';
+} from '../../../types/typings';
+import { formatter } from '../../../utils/formatters';
 import {
    convertDateToSimpleString,
    mapResourceType,
    mapStatusId,
-} from '../../../../utils/mappers';
-import { formatter } from '../../../../utils/formatters';
-import { useEffect, useState } from 'react';
-import { PaperClipIcon, PlusIcon } from '@heroicons/react/solid';
-import { NewSectionResource } from '../../../../components/admin/EditOffering/NewSectionResource';
-import { makeID } from '../../../../utils/utils';
+} from '../../../utils/mappers';
+import { makeID } from '../../../utils/utils';
 
 function classNames(...classes: string[]) {
    return classes.filter(Boolean).join(' ');

@@ -174,30 +174,50 @@ model UserReaction {
 }
 
 model Organization {
-  id          String                   @id @default(cuid())
-  name        String                   @unique
-  ncIssuerId  String?                  @unique
-  contactId   String
-  contact     Profile?                 @relation(fields: [contactId], references: [id], onDelete: SetNull)
-  memberships OrganizationMembership[]
-  offerings   Offering[]
+  id           String                     @id @default(cuid())
+  name         String                     @unique
+  ncIssuerId   String?                    @unique
+  contactId    String
+  contact      Profile?                   @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  location     String
+  founded      String
+  about        String
+  website      String
+  industries   String[]
+  websiteLinks OrganizationExternalLink[]
+  memberships  OrganizationMembership[]
+  offerings    Offering[]
+}
+
+model OrganizationExternalLink {
+  id             String        @id @default(cuid())
+  organizationId String
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  linkName       String
+  linkIcon       String
+
 }
 
 model OrganizationRole {
   id          Int                      @id @default(autoincrement())
   name        String
-  canApprove  Boolean
+  isOwner     Boolean // owner status. only owner can assign roles.
+  canApprove  Boolean // allowed to make changes to offerings
+  isVerified  Boolean // has check mark next to name to signify they speak officially
   memberships OrganizationMembership[]
 }
 
 model OrganizationMembership {
   id             String           @id @default(cuid())
+  title          String
   organizationId String
   organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   profileId      String
   profile        Profile          @relation(fields: [profileId], references: [id], onDelete: Cascade)
   roleId         Int
   role           OrganizationRole @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, profileId])
 }
 
 model Offering {
