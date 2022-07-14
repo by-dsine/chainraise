@@ -7,7 +7,7 @@ export default function useOrCreateProfile() {
    const { data: session } = useSession();
 
    const { data, error } = useSWR<Profile>(
-      () => `/api/profile/upsert/${session!.user.uid}`,
+      () => `/api/userProfile/upsert/${session!.user.uid}`,
       fetcher
    );
 
