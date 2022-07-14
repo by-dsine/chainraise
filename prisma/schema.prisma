@@ -62,6 +62,7 @@ model Profile {
   ncAccountId         String?   @unique
   ncLinkId            String?
   fortressId          String?   @unique
+  profilePicSrc       String?
   firstName           String?
   middleName          String?
   lastName            String?

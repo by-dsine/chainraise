@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  CheckCircleIcon,
-  PaperClipIcon,
-  XCircleIcon,
-} from '@heroicons/react/solid'
+import { CheckCircleIcon } from '@heroicons/react/solid'
 import Header from '../../components/navigation/Header'
 import useOrCreateProfile from '../../hooks/useOrCreateProfile'
 import Link from 'next/link'
@@ -11,13 +7,8 @@ import { APIResponse, KYCAMLStatus } from '../../types/typings'
 import KYCModal from '../../components/profile/KYCModal'
 import { useKycModal } from '../../lib/zustand/investorFormStore'
 import { AUTO_APPROVED } from '../../lib/consts'
-import { KYCAMLInvestorFlow } from '../../components/invest/KYCAMLInvestorFlow'
-import { useProfileInfoStore } from '../../lib/zustand/profileStore'
-import { mapDatabaseTimestampToDateFormat } from '../../utils/mappers'
-import { UpdateValue } from '../../components/profile/UpdateValue'
-import { ProfileWithKycHistoryAndDocs } from '../../prisma/types'
-import { useNewDocModalStore } from '../../lib/zustand/newDocModalStore'
-import NewDocumentModal from '../../components/profile/NewDocumentModal'
+import { ProfileHeader } from '../../components/profile/ProfileHeader'
+import { ProfilePicture } from '../../components/profile/ProfilePicture'
 
 const residenceOptions = [
    { id: 'us-citizen', title: 'U.S. Citizen' },
@@ -92,6 +83,10 @@ export default function ProfilePage() {
     profileInfoStore.setAmlStatus(amlStatus)
   }, [profile])
 
+  const changeProfilePic = (e: React.MouseEvent<HTMLButtonElement>): void => {
+
+  }
+
   return (
     <div className="min-h-full">
       {newDocModal.modalOpen && <NewDocumentModal />}
@@ -102,84 +97,41 @@ export default function ProfilePage() {
       <div className="flex flex-1 flex-col">
         <main className="flex-1 pb-8 ">
           {/* Page header */}
-          <div className="bg-white shadow">
-            <div className="px-4 sm:px-6 lg:mx-auto lg:max-w-4xl lg:px-8">
-              <div className="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
-                <div className="min-w-0 flex-1">
-                  {/* Profile */}
-                  <div className="flex items-center">
-                    <div>
-                      <div className="flex items-center">
-                        <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:leading-9">
-                          Welcome to ChainRaise
-                        </h1>
-                      </div>
-                      <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
-                        <dt className="sr-only">Account status</dt>
-                        <dd className="mt-3 flex items-center text-sm font-medium capitalize text-gray-500 sm:mr-6 sm:mt-0">
-                          {profileInfoStore.kycStatus == AUTO_APPROVED &&
-                          profileInfoStore.amlStatus == AUTO_APPROVED ? (
-                            <>
-                              <CheckCircleIcon
-                                className="mr-1.5 h-5 w-5 flex-shrink-0 text-green-400"
-                                aria-hidden="true"
-                              />
-                              Verified account
-                            </>
-                          ) : (
-                            <div className="flex gap-x-2">
-                              <XCircleIcon
-                                className="mr-1.5 h-5 w-5 flex-shrink-0 text-red-400"
-                                aria-hidden="true"
-                              />
-                              <p>
-                                <span className="font-semibold">
-                                  KYC Status:{' '}
-                                </span>
-                                {profileInfoStore.kycStatus}
-                              </p>
-                              <p>
-                                <span className="font-semibold">
-                                  AML Status:{' '}
-                                </span>
-                                {profileInfoStore.amlStatus}
-                              </p>
-                            </div>
-                          )}
-                        </dd>
-                      </dl>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-6 flex space-x-3 md:mt-0 md:ml-4">
-                  <button
-                    type="button"
-                    className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
-                  >
-                    Update Profile Information
-                  </button>
-                  <Link href="/profile">
-                    <button
-                      type="button"
-                      className="inline-flex items-center rounded-md border border-transparent bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
+          <ProfileHeader />
+          <div className="mt-8">
+            <div className="mx-4 rounded-md pt-4 shadow sm:mx-6 lg:mx-auto lg:max-w-6xl">
+              <ProfilePicture />
+              <div className="mt-10 sm:mt-0">
+                <div className="md:grid md:grid-cols-3 md:gap-6">
+                  <div className="mt-10 md:col-span-3 md:mt-0">
+                    <form
+                      onSubmit={handleSubmit(onSubmit)}
+                      action="#"
+                      method="POST"
                     >
-                      View Account Summary
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-1 overflow-hidden">
-            {/* Primary column */}
-            <section
-              aria-labelledby="primary-heading"
-              className="flex h-full min-w-0 flex-1 flex-col overflow-y-auto"
-            >
-              <h1 id="primary-heading" className="sr-only">
-                Account
-              </h1>
+                      <div className="overflow-hidden sm:rounded-md">
+                        <div className="bg-white py-5 px-4">
+                          <div className="grid grid-cols-6 gap-6">
+                            <div className="col-span-6 sm:col-span-2">
+                              <label
+                                htmlFor="first-name"
+                                className="block text-sm font-medium text-gray-700"
+                              >
+                                First name
+                              </label>
+                              <input
+                                type="text"
+                                {...register('firstName')}
+                                id="first-name"
+                                autoComplete="given-name"
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                              />
+                              {errors.firstName && (
+                                <p className="mx-auto mt-2 text-sm text-red-600">
+                                  {errors.firstName.message}
+                                </p>
+                              )}
+                            </div>
 
               <div className="bg-white px-8">
                 <div>
@@ -305,3 +257,5 @@ export default function ProfilePage() {
       </div>
    );
 }
+
+
