@@ -18,43 +18,25 @@ import {
    ArrowRightIcon,
 } from '@heroicons/react/outline';
 import {
-   CashIcon,
-   ChartBarIcon,
-   CheckCircleIcon,
-   ChevronDownIcon,
-   ChevronRightIcon,
-   OfficeBuildingIcon,
-   SearchIcon,
-   UserGroupIcon,
-} from '@heroicons/react/solid';
-import Header from '../../components/navigation/Header';
-import useOrCreateProfile from '../../hooks/useOrCreateProfile';
-import Link from 'next/link';
+  CashIcon,
+  CheckCircleIcon,
+  ChevronRightIcon,
+  UserGroupIcon,
+} from '@heroicons/react/solid'
+import Header from '../../components/navigation/Header'
+import useOrCreateProfile from '../../hooks/useOrCreateProfile'
+import Link from 'next/link'
 
-const navigation = [
-   { name: 'Home', href: '#', icon: HomeIcon, current: true },
-   { name: 'History', href: '#', icon: ClockIcon, current: false },
-   { name: 'Balances', href: '#', icon: ScaleIcon, current: false },
-   { name: 'Cards', href: '#', icon: CreditCardIcon, current: false },
-   { name: 'Recipients', href: '#', icon: UserGroupIcon, current: false },
-   { name: 'Reports', href: '#', icon: DocumentReportIcon, current: false },
-];
-const secondaryNavigation = [
-   { name: 'Settings', href: '#', icon: CogIcon },
-   { name: 'Help', href: '#', icon: QuestionMarkCircleIcon },
-   { name: 'Privacy', href: '#', icon: ShieldCheckIcon },
-];
+
 const cards = [
-   {
-      name: 'Investments',
-      href: '#',
-      icon: CurrencyDollarIcon,
-      amount: '1',
-   },
-   { name: 'Saved Offerings', href: '#', icon: UserGroupIcon, amount: '42' },
-
-   // More items...
-];
+  {
+    name: 'Investments',
+    href: '#',
+    icon: CurrencyDollarIcon,
+    amount: '1',
+  },
+  { name: 'Saved Offerings', href: '#', icon: UserGroupIcon, amount: '42' },
+]
 
 const actions = [
    { name: 'Complete Investor Flow', href: '#', icon: ExclamationCircleIcon },
