@@ -104,7 +104,7 @@ export default async function handler(
       //   }
       // }
       //res.status(status).json(resultBody)
-
+      break;
     default:
       return res.status(405).end(`Method ${req.method} not allowed`)
   }
