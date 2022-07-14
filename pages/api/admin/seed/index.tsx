@@ -30,6 +30,25 @@ export default async function newOffering(
    await prisma.status.deleteMany({});
    await prisma.organization.deleteMany({});
 
+   // Create referential tables
+   await prisma.organizationRole.createMany({
+      data: [
+         { name: 'Owner', isOwner: true, canApprove: true, isVerified: true },
+         {
+            name: 'Team Member',
+            isOwner: false,
+            canApprove: false,
+            isVerified: true,
+         },
+         {
+            name: 'Manager',
+            isOwner: false,
+            canApprove: true,
+            isVerified: true,
+         },
+      ],
+   });
+
    const testOrganization = await prisma.organization.create({
       data: {
          name: 'ChainRaise Test',
@@ -38,14 +57,22 @@ export default async function newOffering(
                userId: session.user.uid,
             },
          },
+         location: 'Phoenix, AZ',
+         founded: '2021',
+         about: "This is a very long description for a test organization. My goodness it goes on. And wouldn't you know, it doesn't even say that much. Like wow this is a lot of words to say absolutely nothing. And here you are, at the end of the line, and no way to get all that time back.",
+         website: 'https://chainraise.io',
       },
    });
 
    await prisma.status.createMany({
       data: [
          { value: 'Created' },
+         { value: 'Public' },
          { value: 'Ready to Launch' },
          { value: 'Active' },
+         { value: 'Canceled' },
+         { value: 'Complete' },
+         { value: 'Pause' },
       ],
    });
 
