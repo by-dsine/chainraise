@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { UseFormRegister } from 'react-hook-form';
-import { CCPayment, PaymentMethodForm } from '../../../types/typings';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { usePaymentMethodStore } from '../../../lib/zustand/paymentStore';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
 import { CARDS } from '../../../lib/consts';
+import { usePaymentMethodStore } from '../../../lib/zustand/paymentStore';
+import { CCPayment, PaymentMethodForm } from '../../../types/typings';
 
 export const CreditCardPayment = () => {
    const paymentMethodForm = usePaymentMethodStore();
