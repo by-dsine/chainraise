@@ -4,11 +4,13 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { CARDS } from '../../../lib/consts';
 import { usePaymentMethodStore } from '../../../lib/zustand/paymentStore';
+import { usePaymentSubmittedModalStore } from '../../../lib/zustand/paymentSubmittedModalStore';
 import { CCPayment, PaymentMethodForm } from '../../../types/typings';
 import CreditCard from './cc/CreditCard';
 
 export const CreditCardPayment = () => {
    const paymentMethodForm = usePaymentMethodStore();
+   const paymentSubmittedModalStore = usePaymentSubmittedModalStore();
 
    let schema = yup.object().shape({
       ownerName: yup.string().required(),
@@ -139,13 +141,14 @@ export const CreditCardPayment = () => {
                   type="button"
                   className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                >
-                  Cancel
+                  Clear
                </button>
                <button
+                  onClick={() => paymentSubmittedModalStore.setModalOpen(true)}
                   type="submit"
                   className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                >
-                  Next
+                  Submit
                </button>
             </div>
          </div>
