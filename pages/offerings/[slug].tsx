@@ -1,10 +1,16 @@
-import { Fragment, useEffect, useState } from 'react';
-import { EyeIcon } from '@heroicons/react/solid';
-import Header from '../../components/navigation/Header';
 import { Tab } from '@headlessui/react';
 import { DownloadIcon } from '@heroicons/react/outline';
-import { useInvestorForm } from '../../lib/zustand/investorFormStore';
+import { EyeIcon } from '@heroicons/react/solid';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { Fragment, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import Header from '../../components/navigation/Header';
+import useProfile from '../../hooks/useProfile';
+import { prisma } from '../../lib/db';
+import { useInvestorForm } from '../../lib/zustand/investorFormStore';
 import {
    DisplayOffering,
    DisplayOfferingResource,
@@ -12,18 +18,12 @@ import {
    DisplayOfferingSectionResource,
    InvestmentAmountForm,
 } from '../../types/typings';
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { formatter } from '../../utils/formatters';
 import {
    convertDateToSimpleString,
    mapResourceType,
    mapStatusId,
 } from '../../utils/mappers';
-import { formatter } from '../../utils/formatters';
-import { GetServerSideProps } from 'next';
-import { prisma } from '../../lib/db';
-import useProfile from '../../hooks/useProfile';
 
 const product = {
    name: 'Multivest',
@@ -914,7 +914,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
    if (!offering) {
       console.log('not found');
       return {
-         props: {},
+         notFound: true,
       };
    }
 
