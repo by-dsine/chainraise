@@ -20,7 +20,8 @@
       "types/**/*.ts",
       "**/*.ts",
       "**/*.tsx",
-      "lib/prisma.js"
+      "lib/prisma.js",
+      "**/*.jsx"
    ],
    "exclude": ["node_modules"]
 }

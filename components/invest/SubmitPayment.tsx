@@ -96,7 +96,7 @@ export const SubmitPayment = () => {
    return (
       <>
          {/* Payment */}
-         <div className="-pt-10">
+         <div className="-pt-10 w-full">
             <fieldset className="mt-4">
                <legend className="sr-only">Payment type</legend>
                <div className="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
