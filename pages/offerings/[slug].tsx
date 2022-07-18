@@ -8,6 +8,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import Header from '../../components/navigation/Header';
+import { HeroCarousel } from '../../components/offerings/HeroCarousel';
 import useProfile from '../../hooks/useProfile';
 import { prisma } from '../../lib/db';
 import { useInvestorForm } from '../../lib/zustand/investorFormStore';
@@ -341,7 +342,6 @@ export default function OfferingPage({ offeringForDisplay }: Props) {
          }
       });
       heroResources.sort((a, b) => (a.displayOrder > b.displayOrder ? 1 : -1));
-      console.log(heroResources);
       setHeroMedia(heroResources);
    };
 
@@ -353,18 +353,8 @@ export default function OfferingPage({ offeringForDisplay }: Props) {
             <div className="mx-auto max-w-3xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-8 lg:px-8">
                <main className="lg:col-span-8">
                   <div className="flex flex-col">
-                     <div className="aspect-w-4 aspect-h-3 overflow-hidden rounded-lg bg-gray-100">
-                        <>
-                           {heroMedia.map((resource) => {
-                              return (
-                                 <img
-                                    src={resource.location}
-                                    alt={resource.description}
-                                    className="object-contain object-center"
-                                 />
-                              );
-                           })}
-                        </>
+                     <div className="overflow-hidden rounded-lg bg-gray-100">
+                        <HeroCarousel />
                      </div>
 
                      {/* Product details */}
@@ -714,7 +704,7 @@ export default function OfferingPage({ offeringForDisplay }: Props) {
                      </div>
                   </div>
                </main>
-               <aside className="mt-20 hidden sm:col-span-4 sm:block">
+               <aside className="hidden sm:col-span-4 sm:block">
                   <div className="sticky top-6 space-y-4">
                      {/* Product summary */}
                      <div className="mx-auto mt-6 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none">
