@@ -15,7 +15,7 @@ const navigation = {
             {
                name: 'New Offerings',
                href: '/offerings',
-               imageSrc: '/logomark.png',
+               imageSrc: '/chainraise_logo.png',
                imageAlt:
                   'Models sitting back to back, wearing Basic Tee in black and bone.',
                coming: false,
