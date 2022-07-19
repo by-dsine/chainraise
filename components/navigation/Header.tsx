@@ -1,15 +1,9 @@
-import Link from 'next/link';
-import { Fragment, useState } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import {
-   SearchIcon,
-   MenuIcon,
-   XIcon,
-   QuestionMarkCircleIcon,
-} from '@heroicons/react/outline';
 import { Dialog, Popover, Tab, Transition } from '@headlessui/react';
+import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { Fragment, useState } from 'react';
 
 const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP'];
 const navigation = {
@@ -21,17 +15,10 @@ const navigation = {
             {
                name: 'New Offerings',
                href: '/offerings',
-               imageSrc: '/logomark.png',
+               imageSrc: '/chainraise_logo.png',
                imageAlt:
                   'Models sitting back to back, wearing Basic Tee in black and bone.',
-            },
-            {
-               name: 'Clubs',
-               href: '/clubs',
-               imageSrc:
-                  'https://images.unsplash.com/photo-1550304952-9d1e3444f713?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2x1YiUyMHNhbmR3aWNofGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=1200&q=60',
-               imageAlt:
-                  'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
+               coming: false,
             },
             {
                name: 'Organizations',
@@ -40,14 +27,32 @@ const navigation = {
                   'https://media.istockphoto.com/photos/stack-of-hands-unity-and-teamwork-concept-picture-id1289963489?b=1&k=20&m=1289963489&s=170667a&w=0&h=5RZ6cQ5UWYgyjK52ele9lSmyIBem2uMIR66S-1faWSs=',
                imageAlt:
                   'Model wearing minimalist watch with black wristband and white watch face.',
+               coming: false,
             },
+            // {
+            //    name: 'Clubs',
+            //    href: '/',
+            //    imageSrc:
+            //       'https://images.unsplash.com/photo-1550304952-9d1e3444f713?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2x1YiUyMHNhbmR3aWNofGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=1200&q=60',
+            //    imageAlt:
+            //       'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
+            // },
+            {
+               name: 'Clubs',
+               href: '#',
+               imageSrc:
+                  'https://images.unsplash.com/photo-1550304952-9d1e3444f713?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2x1YiUyMHNhbmR3aWNofGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=1200&q=60',
+               imageAlt: 'Clubs are coming soon!',
+               coming: true,
+            },
+
             {
                name: 'Content',
-               href: '/blog',
+               href: '#',
                imageSrc:
                   'https://images.unsplash.com/photo-1513705153361-9bc726c8db67?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cGlsZSUyMG9mJTIwcGFwZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=1200&q=60',
-               imageAlt:
-                  'Model opening tan leather long wallet with credit card pockets and cash pouch.',
+               imageAlt: 'User content creation is coming soon!',
+               coming: true,
             },
          ],
       },
@@ -186,7 +191,7 @@ export default function Header() {
                         <div className="space-y-6 border-t border-gray-200 py-6 px-4">
                            {session ? (
                               <>
-                                 <div className="flow-root">
+                                 {/* <div className="flow-root">
                                     <button
                                        onClick={() => signOut()}
                                        className="-m-2 block p-2 font-medium text-gray-900"
@@ -201,7 +206,7 @@ export default function Header() {
                                     >
                                        Settings
                                     </button>
-                                 </div>
+                                 </div> */}
                                  <div className="flow-root">
                                     <button
                                        onClick={() => signOut()}
@@ -358,12 +363,26 @@ export default function Header() {
                                                                            item.name
                                                                         }
                                                                      </a>
-                                                                     <p
-                                                                        aria-hidden="true"
-                                                                        className="mt-1"
-                                                                     >
-                                                                        View now
-                                                                     </p>
+                                                                     <>
+                                                                        {item.coming ? (
+                                                                           <p
+                                                                              aria-hidden="true"
+                                                                              className="mt-1"
+                                                                           >
+                                                                              {
+                                                                                 item.imageAlt
+                                                                              }
+                                                                           </p>
+                                                                        ) : (
+                                                                           <p
+                                                                              aria-hidden="true"
+                                                                              className="mt-1"
+                                                                           >
+                                                                              View
+                                                                              now
+                                                                           </p>
+                                                                        )}
+                                                                     </>
                                                                   </div>
                                                                )
                                                             )}
@@ -386,7 +405,7 @@ export default function Header() {
                                        {page.name}
                                     </a>
                                  ))}
-
+                                 {/* 
                                  {session && (
                                     <>
                                        <div className="my-auto h-8 border border-gray-300"></div>
@@ -400,7 +419,7 @@ export default function Header() {
                                           </a>
                                        ))}
                                     </>
-                                 )}
+                                 )} */}
                               </div>
                            </Popover.Group>
                         </div>

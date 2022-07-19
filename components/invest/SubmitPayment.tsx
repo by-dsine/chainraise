@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
 import { usePaymentMethodStore } from '../../lib/zustand/paymentStore';
 import { PaymentMethodForm } from '../../types/typings';
 import { ACHPayment } from './payment/ACHPayment';
 import { CreditCardPayment } from './payment/CreditCardPayment';
 import { WirePayment } from './payment/WirePayment';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useRouter } from 'next/router';
 
 const paymentMethods: PaymentMethod[] = [
    { id: 'cc', title: 'Credit card' },
@@ -96,9 +96,7 @@ export const SubmitPayment = () => {
    return (
       <>
          {/* Payment */}
-         <div className="-pt-10">
-            <h2 className="text-lg font-medium text-gray-900">Payment</h2>
-
+         <div className="-pt-10 w-full">
             <fieldset className="mt-4">
                <legend className="sr-only">Payment type</legend>
                <div className="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
