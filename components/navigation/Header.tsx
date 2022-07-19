@@ -191,7 +191,7 @@ export default function Header() {
                         <div className="space-y-6 border-t border-gray-200 py-6 px-4">
                            {session ? (
                               <>
-                                 <div className="flow-root">
+                                 {/* <div className="flow-root">
                                     <button
                                        onClick={() => signOut()}
                                        className="-m-2 block p-2 font-medium text-gray-900"
@@ -206,7 +206,7 @@ export default function Header() {
                                     >
                                        Settings
                                     </button>
-                                 </div>
+                                 </div> */}
                                  <div className="flow-root">
                                     <button
                                        onClick={() => signOut()}
@@ -405,7 +405,7 @@ export default function Header() {
                                        {page.name}
                                     </a>
                                  ))}
-
+                                 {/* 
                                  {session && (
                                     <>
                                        <div className="my-auto h-8 border border-gray-300"></div>
@@ -419,7 +419,7 @@ export default function Header() {
                                           </a>
                                        ))}
                                     </>
-                                 )}
+                                 )} */}
                               </div>
                            </Popover.Group>
                         </div>
