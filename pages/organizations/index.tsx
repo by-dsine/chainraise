@@ -5,6 +5,7 @@ import {
    UserAddIcon,
 } from '@heroicons/react/solid';
 import { GetStaticProps } from 'next';
+import Link from 'next/link';
 import { Fragment } from 'react';
 import Header from '../../components/navigation/Header';
 import { prisma } from '../../lib/db';
@@ -17,6 +18,7 @@ const organizations = [
       email: 'info@chainraise.io',
       telephone: '+1-202-555-0170',
       imageUrl: '/chainraise_logo.png',
+      link: '/organizations/chainraise',
       shortDescription:
          'oooooh gibberish lorem ipsum yeah we do stuff and make money',
    },
@@ -130,9 +132,14 @@ export default function OfferingLanding() {
                                  src={organization.imageUrl}
                                  alt=""
                               />
-                              <h3 className="mt-6 text-sm font-medium text-gray-900">
-                                 {organization.name}
-                              </h3>
+                              <Link
+                                 href={organization.link}
+                                 className="cursor-pointer"
+                              >
+                                 <h3 className="mt-6 text-sm font-medium text-gray-900">
+                                    {organization.name}
+                                 </h3>
+                              </Link>
                               <dl className="mt-1 flex flex-grow flex-col justify-between">
                                  {/* <dt className="sr-only">Title</dt>
                                  <dd className="text-sm text-gray-500">
