@@ -235,7 +235,7 @@ export default function Header() {
                                        }
                                        className="-m-2 block p-2 font-medium text-gray-900"
                                     >
-                                       Sign In
+                                       Sign In/Sign Up
                                     </button>
                                  </div>
                               </>
@@ -458,16 +458,11 @@ export default function Header() {
                                  Sign Out
                               </button>
                            ) : (
-                              <button
-                                 onClick={() =>
-                                    signIn('google', {
-                                       callbackUrl: '/offerings',
-                                    })
-                                 }
-                                 className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:ml-8 lg:block"
-                              >
-                                 Sign In
-                              </button>
+                              <Link href="/auth/login">
+                                 <button className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:ml-8 lg:block">
+                                    Sign In/Sign Up
+                                 </button>
+                              </Link>
                            )}
 
                            {session && (
