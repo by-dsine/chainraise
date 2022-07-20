@@ -1,4 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
+import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import NewAccountModal from '../../components/auth/NewAccountModal';
 import useOrCreateProfile from '../../hooks/useOrCreateProfile';
@@ -142,7 +143,11 @@ export default function Login() {
 
                         <div>
                            <a
-                              href="#"
+                              onClick={() =>
+                                 signIn('google', {
+                                    callbackUrl: '/',
+                                 })
+                              }
                               className="group inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
                            >
                               <span className="sr-only">
