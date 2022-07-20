@@ -1,4 +1,5 @@
 import {
+   CashIcon,
    HomeIcon,
    NewspaperIcon,
    UserCircleIcon,
@@ -18,7 +19,12 @@ const navigation = [
       icon: UserCircleIcon,
       current: false,
    },
-   //{ name: 'Trending', href: '#', icon: TrendingUpIcon, current: false },
+   {
+      name: 'Payments',
+      href: '/profile/my-info/payments',
+      icon: CashIcon,
+      current: false,
+   },
 ];
 
 const communities = [
