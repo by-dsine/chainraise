@@ -1,13 +1,7 @@
-import AccountType from '../../../components/invest/AccountType';
 import Header from '../../../components/navigation/Header';
 import { Sidebar } from '../../../components/navigation/Sidebar';
-
-const user = {
-   name: 'Chelsea Hagon',
-   email: 'chelsea.hagon@example.com',
-   imageUrl:
-      'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-};
+import AccountType from '../../../components/profile/my-info/AccountType';
+import { useProfileInfoStore } from '../../../lib/zustand/profileStore';
 
 const tabs = [
    { name: 'Contact Info', href: '/profile/my-info', current: true },
@@ -19,40 +13,14 @@ const tabs = [
    },
 ];
 
-const whoToFollow = [
-   {
-      name: 'Leonard Krasner',
-      handle: 'leonardkrasner',
-      href: '#',
-      imageUrl:
-         'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-   },
-   // More people...
-];
-const trendingPosts = [
-   {
-      id: 1,
-      user: {
-         name: 'Floyd Miles',
-         imageUrl:
-            'https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-      },
-      body: 'What books do you have on your bookshelf just to look smarter than you actually are?',
-      comments: 291,
-   },
-   // More posts...
-];
-const notificationMethods = [
-   { id: 'email', title: 'Email' },
-   { id: 'sms', title: 'Phone (SMS)' },
-   { id: 'push', title: 'Push notification' },
-];
-
 function classNames(...classes: string[]) {
    return classes.filter(Boolean).join(' ');
 }
 
 export default function ProfileInfo() {
+   const accountType = useProfileInfoStore((store) => store.accountType);
+   const setAccountType = useProfileInfoStore((store) => store.setAccountType);
+
    return (
       <>
          <Header />
@@ -121,7 +89,7 @@ export default function ProfileInfo() {
                      <div className="mt-4">
                         <form action="#" method="POST">
                            <div className="shadow sm:overflow-hidden sm:rounded-md">
-                              <div className="bg-white px-4 py-5 sm:p-6">
+                              <div className="bg-white px-4 pt-5 sm:p-6">
                                  <label className="text-base font-medium text-gray-900">
                                     Account Type
                                  </label>
@@ -138,10 +106,17 @@ export default function ProfileInfo() {
                      <div className="mt-4">
                         <form action="#" method="POST">
                            <div className="shadow sm:overflow-hidden sm:rounded-md">
-                              <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                              <div className="bg-white px-4 pt-5 sm:p-6">
+                                 <label className="text-base font-medium text-gray-900">
+                                    Contact Info
+                                 </label>
+                              </div>
+                              <div className="space-y-6 bg-white px-6">
                                  <div>
                                     <label className="block text-sm font-medium text-gray-700">
-                                       Photo
+                                       {accountType == 'organization'
+                                          ? 'Logo'
+                                          : 'Photo'}
                                     </label>
                                     <div className="mt-1 flex items-center">
                                        <span className="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100">
