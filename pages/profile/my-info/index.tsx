@@ -1,3 +1,4 @@
+import AccountType from '../../../components/invest/AccountType';
 import Header from '../../../components/navigation/Header';
 import { Sidebar } from '../../../components/navigation/Sidebar';
 
@@ -40,6 +41,11 @@ const trendingPosts = [
       comments: 291,
    },
    // More posts...
+];
+const notificationMethods = [
+   { id: 'email', title: 'Email' },
+   { id: 'sms', title: 'Phone (SMS)' },
+   { id: 'push', title: 'Push notification' },
 ];
 
 function classNames(...classes: string[]) {
@@ -111,6 +117,23 @@ export default function ProfileInfo() {
                               ))}
                            </nav>
                         </div>
+                     </div>
+                     <div className="mt-4">
+                        <form action="#" method="POST">
+                           <div className="shadow sm:overflow-hidden sm:rounded-md">
+                              <div className="bg-white px-4 py-5 sm:p-6">
+                                 <label className="text-base font-medium text-gray-900">
+                                    Account Type
+                                 </label>
+
+                                 <div className="flex items-center">
+                                    <div className="w-full">
+                                       <AccountType />
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </form>
                      </div>
                      <div className="mt-4">
                         <form action="#" method="POST">

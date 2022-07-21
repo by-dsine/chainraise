@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react';
 import { RadioGroup } from '@headlessui/react';
-import { useInvestorForm } from '../../lib/zustand/investorFormStore';
-import { useRouter } from 'next/router';
-import { Controller, useForm } from 'react-hook-form';
-import { AccountTypeForm } from '../../types/typings';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useSession } from 'next-auth/react';
 import { Profile } from '@prisma/client';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { useInvestorForm } from '../../lib/zustand/investorFormStore';
+import { AccountTypeForm } from '../../types/typings';
 
 type setting = {
    name: string;
@@ -36,7 +35,7 @@ type Props = {
    profile: Profile;
 };
 
-export default function AccountType({ profile }: Props) {
+export default function AccountType() {
    const [selected, setSelected] = useState(settings[0]);
    const accountType = useInvestorForm((store) => store.accountType);
    const setAccountType = useInvestorForm((store) => store.setAccountType);
@@ -89,7 +88,9 @@ export default function AccountType({ profile }: Props) {
    const onSubmit = handleSubmit((data) => {
       const isEntity = data.accountType == 'entity';
       let hasEntityName =
-         /^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$|\w+/.test(data.entityName);
+         /^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$|\w+/.test(
+            data.entityName
+         );
 
       const entityError = isEntity && !hasEntityName;
 
@@ -220,7 +221,7 @@ export default function AccountType({ profile }: Props) {
                </p>
             </div>
          )}
-         <div className="py-5">
+         <div className="pt-5">
             <div className="flex justify-end">
                <button
                   type="button"
@@ -233,7 +234,7 @@ export default function AccountType({ profile }: Props) {
                   type="submit"
                   className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-cr-primary py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-cr-primary focus:outline-none focus:ring-2 focus:ring-cr-primary focus:ring-offset-2"
                >
-                  Next
+                  Save
                </button>
             </div>
          </div>
