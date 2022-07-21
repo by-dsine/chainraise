@@ -247,7 +247,7 @@ export default function Header() {
             </Dialog>
          </Transition.Root>
 
-         <header className="relative z-20">
+         <header className="relative z-20 border-b border-gray-400">
             <nav aria-label="Top">
                <div className="bg-white">
                   <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

@@ -1,8 +1,7 @@
-import Header from '../components/navigation/Header';
-import Footer from '../components/navigation/Footer';
 import { ChevronRightIcon } from '@heroicons/react/solid';
 import { GetServerSideProps } from 'next';
-import { prisma } from '../lib/db';
+import Footer from '../components/navigation/Footer';
+import Header from '../components/navigation/Header';
 import { OfferingPreview } from '../types/typings';
 
 const trendingRaises = [
@@ -14,20 +13,20 @@ const trendingRaises = [
       options: 'Equity',
       href: 'offerings/test-offering',
       imageSrc:
-         'https://baseballhall.org/sites/default/files/styles/fullscreen_image_popup/public/islandora_images/Johnson%20Randy%2012-2012-971_Act_NBLMangin.jpg?itok=fRyMBHeQ',
+         'https://images.unsplash.com/photo-1633642585077-06bf31087d68?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhcHN8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60',
       imageAlt: 'Let us pitch the only pest removal service.',
       description: 'Let us pitch the only pest removal service.',
    },
    {
       id: 2,
-      name: 'Sportsball International',
+      name: 'Blockchain International',
       color: 'Natural',
       price: '$1,250,000',
       options: 'Equity',
 
       href: 'offerings/test-offering',
       imageSrc:
-         'https://cdn.roosterteeth.com/image/upload/t_l/f_auto/3/e9afe27a-0a5b-4e37-ad56-69fc51e522f5.jpg/original/sportsballportrait1.jpg',
+         'https://images.unsplash.com/photo-1526378800651-c32d170fe6f8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8YmxvY2tjaGFpbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60',
       imageAlt: 'Sportsball',
       description: "Sportsball. Nuff' said.",
    },
@@ -40,20 +39,20 @@ const trendingRaises = [
 
       href: 'offerings/test-offering',
       imageSrc:
-         'https://summerofthearts.org/wp-content/uploads/Space-Jam-534x800.jpg',
+         'https://images.unsplash.com/photo-1454789548928-9efd52dc4031?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c3BhY2V8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60',
       imageAlt: "It's the movie nobody asked for but we wanna make it anyways.",
       description:
          "It's the movie nobody asked for but we wanna make it anyways.",
    },
    {
       id: 4,
-      name: 'Self Propelled Tennis Balls',
+      name: 'Magic Energy Farms',
       color: 'Natural',
       price: '$250,000',
       options: 'Equity',
       href: 'offerings/test-offering',
       imageSrc:
-         'https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHNwb3J0c3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=1200&q=60',
+         'https://images.unsplash.com/photo-1474631245212-32dc3c8310c6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8YWx0ZXJuYXRpdmUlMjBlbmVyZ3l8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60',
       imageAlt: 'Wow they spin so fast.',
       description: 'Wow they spin so fast.',
    },
