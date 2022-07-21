@@ -1,7 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { usePaymentSubmittedModalStore } from '../lib/zustand/paymentSubmittedModalStore';
+import { usePaymentSubmittedModalStore } from '../../../lib/zustand/paymentSubmittedModalStore';
 
 export default function PaymentSubmittedModal() {
    const paymentSubmittedModalStore = usePaymentSubmittedModalStore();

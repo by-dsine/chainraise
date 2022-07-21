@@ -1,10 +1,10 @@
 import { CheckCircleIcon } from '@heroicons/react/outline';
 import { useEffect, useState } from 'react';
 import DocumentModal from '../../components/invest/DocumentModal';
+import PaymentSubmittedModal from '../../components/invest/payment/PaymentSubmittedModal';
 import SignDocuments from '../../components/invest/SignDocuments';
 import { SubmitPayment } from '../../components/invest/SubmitPayment';
 import Header from '../../components/navigation/Header';
-import PaymentSubmittedModal from '../../components/PaymentSubmittedModal';
 import useOrCreateProfile from '../../hooks/useOrCreateProfile';
 import { useInvestorForm } from '../../lib/zustand/investorFormStore';
 import { useNewDocModalStore } from '../../lib/zustand/newDocModalStore';
