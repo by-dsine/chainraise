@@ -1,14 +1,14 @@
-import React, { Fragment, useEffect } from 'react';
 import { Tab } from '@headlessui/react';
-import Header from '../../components/navigation/Header';
+import { Profile } from '@prisma/client';
+import { Fragment, useEffect } from 'react';
 import AccountType from '../../components/invest/AccountType';
+import { KYCAMLInvestorFlow } from '../../components/invest/KYCAMLInvestorFlow';
 import { PersonalInformation } from '../../components/invest/PersonalInformation';
 import SignDocuments from '../../components/invest/SignDocuments';
 import { SubmitPayment } from '../../components/invest/SubmitPayment';
-import { useInvestorForm } from '../../lib/zustand/investorFormStore';
-import { Profile } from '@prisma/client';
+import Header from '../../components/navigation/Header';
 import useOrCreateProfile from '../../hooks/useOrCreateProfile';
-import { KYCAMLInvestorFlow } from '../../components/invest/KYCAMLInvestorFlow';
+import { useInvestorForm } from '../../lib/zustand/investorFormStore';
 import { mapDatabaseTimestampToDateFormat } from '../../utils/mappers';
 
 function classNames(...classes: string[]) {
@@ -161,7 +161,7 @@ export default function Invest() {
                <Tab.Panels as={Fragment}>
                   <Tab.Panel className="-mb-10">
                      <h3 className="sr-only">Account Type</h3>
-                     <AccountType profile={profile as Profile} />
+                     <AccountType />
                   </Tab.Panel>
 
                   <Tab.Panel className="text-sm text-gray-500">

@@ -23,7 +23,7 @@ const settings = [
       name: 'entity',
       displayName: 'Entity',
       description:
-         "You're investing for an entity or organization such as a Family Office or an IRA.",
+         "You're representing an entity or organization such as a Family Office or an IRA.",
    },
 ];
 
