@@ -86,8 +86,9 @@ export default async function newOffering(
 
       console.log('Organization found');
       // #2 Create offering with North Capital
-      const createOfferingURL =
-         'https://api-sandboxdash.norcapsecurities.com/tapiv3/index.php/v3/createOffering';
+      const createOfferingURL = new URL(
+         'https://api-sandboxdash.norcapsecurities.com/tapiv3/index.php/v3/createOffering'
+      );
       const data = new URLSearchParams();
       data.append('clientID', CLIENT_ID);
       data.append('developerAPIKey', DEVELOPER_KEY);
@@ -135,15 +136,55 @@ export default async function newOffering(
          JSON.stringify(result, null, 4)
       );
 
-     
-   }
-
-   function getOfferingIdFromResult(result: OfferingResponse): string {
-      var resultOfferingObject = result.offeringDetails[1] as OfferingDetails[];
-      if (!resultOfferingObject || !resultOfferingObject[0].offeringId) {
-         console.log('Failed to get offering ID', resultOfferingObject);
-         return '';
+      if (result.statusCode == '101') {
+         let offeringIdFromResult = getOfferingIdFromResult(result);
+         if (!offeringIdFromResult) {
+            return res
+               .status(500)
+               .json({ message: 'No offering ID was found.' });
+         }
+         // create offering
+         const offering = await prisma.offering.create({
+            data: {
+               name: offeringName,
+               ncOfferingId: offeringIdFromResult,
+               organizationId: organizationId,
+               startTimestamp: convertInputDateToDateTime(startDate),
+               endTimestamp: convertInputDateToDateTime(endDate),
+               minimumInvestment: minimumAmount * 100,
+               goal: targetAmount * 100,
+               maxRaise: maximumAmount * 100,
+               pledged: 0,
+               description: description,
+               shortDescription: description,
+               disclosure: STANDARD_DISCLOSURE,
+               summary: '',
+               statusId: OFFERING_CREATED_STATUS,
+            },
+         });
+         if (!offering) {
+            return res
+               .status(500)
+               .json({ message: 'Offering was not created.' });
+         }
+         return res
+            .status(200)
+            .json({ message: 'Offering created.', offeringId: offering.id });
+      } else {
+         return res
+            .status(500)
+            .json({ message: 'error: ' + result.statusDesc });
       }
-      return resultOfferingObject[0].offeringId;
+   } else {
+      return res.status(405).end(`Method ${req.method} not allowed.`);
    }
+}
+
+function getOfferingIdFromResult(result: OfferingResponse): string {
+   var resultOfferingObject = result.offeringDetails[1] as OfferingDetails[];
+   if (!resultOfferingObject || !resultOfferingObject[0].offeringId) {
+      console.log('Failed to get offering ID', resultOfferingObject);
+      return '';
+   }
+   return resultOfferingObject[0].offeringId;
 }

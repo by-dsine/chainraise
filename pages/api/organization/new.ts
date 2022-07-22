@@ -81,9 +81,11 @@ export default async function newIssuerAndOrganization(
 
    if (!response.ok) {
       console.log(response);
-      return res.status(500).json({
-         message: `Error creating issuer! status: ${response.status}`,
-      });
+      return res
+         .status(500)
+         .json({
+            message: `Error creating issuer! status: ${response.status}`,
+         });
    }
 
    const result = (await response.json()) as IssuerResponse;
@@ -102,10 +104,6 @@ export default async function newIssuerAndOrganization(
             name: organizationName,
             ncIssuerId: issuerIdFromResult,
             contactId: profile.id,
-            location: 'placeholder',
-            founded: 'placeholder',
-            about: 'placeholder',
-            website: 'placeholder',
          },
       });
       if (!organization) {

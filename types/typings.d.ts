@@ -208,12 +208,6 @@ export type PaymentMethodForm = {
    ach: ExternalBankAccountInfo | null;
 };
 
-export type NewFormDocument = {
-  file: File | Blob | string
-  name: string
-  isPublic: boolean
-}
-
 export type CCPayment = {
    ownerName: string;
    cardNumber: number;
@@ -251,10 +245,6 @@ export type AdminDisplayTransaction = {
    units: number;
    purchaserName: string;
 };
-
-export type ProfilePictureForm = {
-  file: FileList
-}
 
 // North Capital API types
 // createParty
@@ -382,20 +372,40 @@ type CreateCardResponse = {
    creditcardDetails: string;
 };
 
-export type UpdateUser = {
-  firstName: string  
-  middleName: string
-  lastName: string
-  phone: string
-  address1: string
-  address2: string
-  unit: string
-  city: string
-  state: string
+// Sanity Types
+export interface Post {
+   _id: string;
+   _createdAt: string;
+   title: string;
+   author: {
+      name: string;
+      image: string;
+   };
+   comments: Comment[];
+   description: string;
+   mainImage: {
+      asset: {
+         url: string;
+      };
+   };
+   slug: {
+      current: string;
+   };
+   body: [object];
 }
 
-export type APIResponse<Type> = {
-  statusCode: string
-  statusDesc: string
-  body: Type
+export interface Comment {
+   approved: boolean;
+   comment: string;
+   email: string;
+   name: string;
+   post: {
+      _ref: string;
+      _type: string;
+   };
+   _createdAt: string;
+   _id: string;
+   _rev: string;
+   _type: string;
+   _updatedAt: string;
 }

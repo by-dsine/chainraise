@@ -1,5 +1,5 @@
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -61,8 +61,6 @@ model Profile {
   ncPartyId           String?   @unique
   ncAccountId         String?   @unique
   ncLinkId            String?
-  fortressId          String?   @unique
-  profilePicSrc       String?
   firstName           String?
   middleName          String?
   lastName            String?
@@ -98,18 +96,8 @@ model Profile {
   offeringPostCommentReaction OfferingUserPostCommentReaction[]
   platformRoles               PlatformRole[]
   userKYCAML                  UserKYCAML[]
-  transactions                Transaction[]
-  offeringUpdates             OfferingUpdate[]
-  documents                   ProfileDocument[]
-}
-
-model ProfileDocument {
-  id        String  @id @default(cuid())
-  profileId String
-  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  name      String
-  src       String
-  public    Boolean @default(false)
+  Transaction                 Transaction[]
+  OfferingUpdate              OfferingUpdate[]
 }
 
 model PlatformRole {
@@ -140,7 +128,7 @@ model Follows {
 model UserPost {
   id        String             @id @default(cuid())
   authorId  String?
-  author    Profile?           @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  author    Profile?           @relation(fields: [authorId], references: [id], onDelete: Cascade)
   body      String
   comments  UserPostComment[]
   reactions UserPostReaction[]
@@ -149,7 +137,7 @@ model UserPost {
 model UserPostComment {
   id            String                    @id @default(cuid())
   authorId      String?
-  author        Profile?                  @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  author        Profile?                  @relation(fields: [authorId], references: [id], onDelete: Cascade)
   body          String
   postId        String
   userPost      UserPost                  @relation(fields: [postId], references: [id], onDelete: Cascade)
@@ -159,7 +147,7 @@ model UserPostComment {
 model UserPostReaction {
   id         String       @id @default(cuid())
   authorId   String?
-  author     Profile?     @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  author     Profile?     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   postId     String
   userPost   UserPost     @relation(fields: [postId], references: [id], onDelete: Cascade)
   reactionId Int
@@ -169,7 +157,7 @@ model UserPostReaction {
 model UserPostCommentReaction {
   id              String          @id @default(cuid())
   authorId        String?
-  author          Profile?        @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  author          Profile?        @relation(fields: [authorId], references: [id], onDelete: Cascade)
   commentId       String
   userPostComment UserPostComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
   reactionId      Int
@@ -186,52 +174,30 @@ model UserReaction {
 }
 
 model Organization {
-  id           String                     @id @default(cuid())
-  name         String                     @unique
-  ncIssuerId   String?                    @unique
-  contactId    String
-  contact      Profile?                   @relation(fields: [contactId], references: [id], onDelete: SetNull)
-  location     String
-  founded      String
-  about        String
-  website      String
-  logoSrc      String?
-  industries   String[]
-  websiteLinks OrganizationExternalLink[]
-  memberships  OrganizationMembership[]
-  offerings    Offering[]
-}
-
-model OrganizationExternalLink {
-  id             String        @id @default(cuid())
-  organizationId String
-  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
-  linkName       String
-  linkIcon       String
-
+  id          String                   @id @default(cuid())
+  name        String                   @unique
+  ncIssuerId  String?                  @unique
+  contactId   String
+  contact     Profile?                 @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  memberships OrganizationMembership[]
+  offerings   Offering[]
 }
 
 model OrganizationRole {
   id          Int                      @id @default(autoincrement())
   name        String
-  isOwner     Boolean // owner status. only owner can assign roles.
-  canApprove  Boolean // allowed to make changes to offerings
-  isVerified  Boolean // has check mark next to name to signify they speak officially
+  canApprove  Boolean
   memberships OrganizationMembership[]
 }
 
 model OrganizationMembership {
   id             String           @id @default(cuid())
-  title          String
   organizationId String
-  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: SetNull)
-  name           String?
-  profileId      String?
-  profile        Profile?         @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  profileId      String
+  profile        Profile          @relation(fields: [profileId], references: [id], onDelete: Cascade)
   roleId         Int
   role           OrganizationRole @relation(fields: [roleId], references: [id], onDelete: Cascade)
-
-  @@unique([organizationId, profileId])
 }
 
 model Offering {
@@ -240,9 +206,9 @@ model Offering {
   slug               String?                 @unique
   ncOfferingId       String?                 @unique
   organizationId     String
-  organization       Organization            @relation(fields: [organizationId], references: [id], onDelete: SetNull)
-  startTimestamp     DateTime                @db.Timestamptz(3)
-  endTimestamp       DateTime                @db.Timestamptz(3)
+  organization       Organization            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  startTimestamp     DateTime                @db.Timestamp(0)
+  endTimestamp       DateTime                @db.Timestamp(0)
   minimumInvestment  Int
   goal               Int
   pledged            Int
@@ -255,7 +221,7 @@ model Offering {
   type               String?
   summary            String
   statusId           Int
-  status             Status                  @relation(fields: [statusId], references: [id], onDelete: SetNull)
+  status             Status                  @relation(fields: [statusId], references: [id], onDelete: Cascade)
   offeringParameters OfferingParameter[]
   offeringHistory    OfferingStatusHistory[]
   sections           OfferingSection[]
@@ -268,28 +234,28 @@ model Offering {
 model OfferingUpdate {
   id         String   @id @default(cuid())
   offeringId String
-  offering   Offering @relation(fields: [offeringId], references: [id], onDelete: SetNull)
+  offering   Offering @relation(fields: [offeringId], references: [id], onDelete: Cascade)
   profileId  String
   profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
   body       String
-  timestamp  DateTime @db.Timestamptz(3)
+  timestamp  DateTime @db.Timestamp(0)
 }
 
 model OfferingParameter {
   id           Int      @id @default(autoincrement())
-  endTimestamp DateTime @db.Timestamptz(3)
+  endTimestamp DateTime @db.Timestamp(0)
   goal         Int
   offeringId   String
-  offering     Offering @relation(fields: [offeringId], references: [id], onDelete: SetNull)
+  offering     Offering @relation(fields: [offeringId], references: [id], onDelete: Cascade)
 }
 
 model OfferingStatusHistory {
   id         String   @id @default(cuid())
   offeringId String
-  offering   Offering @relation(fields: [offeringId], references: [id], onDelete: SetNull)
+  offering   Offering @relation(fields: [offeringId], references: [id], onDelete: Cascade)
   statusId   Int
-  status     Status   @relation(fields: [statusId], references: [id], onDelete: SetNull)
-  timestamp  DateTime @db.Timestamptz(3)
+  status     Status   @relation(fields: [statusId], references: [id], onDelete: Cascade)
+  timestamp  DateTime @db.Timestamp(0)
 }
 
 model Status {
@@ -302,7 +268,7 @@ model Status {
 model OfferingSection {
   id         String            @id @default(cuid())
   offeringId String
-  offering   Offering          @relation(fields: [offeringId], references: [id], onDelete: SetNull)
+  offering   Offering          @relation(fields: [offeringId], references: [id], onDelete: Cascade)
   title      String
   subtitle   String
   body       String
@@ -313,7 +279,7 @@ model OfferingSection {
 model SectionResource {
   id          String          @id @default(cuid())
   sectionId   String
-  section     OfferingSection @relation(fields: [sectionId], references: [id], onDelete: SetNull)
+  section     OfferingSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   title       String
   subtitle    String
   description String
@@ -325,7 +291,7 @@ model SectionResource {
 model OfferingResource {
   id          String   @id @default(cuid())
   offeringId  String
-  offering    Offering @relation(fields: [offeringId], references: [id], onDelete: SetNull)
+  offering    Offering @relation(fields: [offeringId], references: [id], onDelete: Cascade)
   title       String
   description String
   location    String
@@ -337,7 +303,7 @@ model OfferingResource {
 model OfferingUserPost {
   id         String                     @id @default(cuid())
   offeringId String
-  offering   Offering                   @relation(fields: [offeringId], references: [id], onDelete: SetNull)
+  offering   Offering                   @relation(fields: [offeringId], references: [id], onDelete: Cascade)
   profileId  String
   profile    Profile                    @relation(fields: [profileId], references: [id], onDelete: Cascade)
   body       String
@@ -348,17 +314,17 @@ model OfferingUserPost {
 model OfferingUserPostReaction {
   id             String           @id @default(cuid())
   offeringPostId String
-  offeringPost   OfferingUserPost @relation(fields: [offeringPostId], references: [id], onDelete: SetNull)
+  offeringPost   OfferingUserPost @relation(fields: [offeringPostId], references: [id], onDelete: Cascade)
   profileId      String
   profile        Profile          @relation(fields: [profileId], references: [id], onDelete: Cascade)
   reactionId     Int
-  reaction       UserReaction     @relation(fields: [reactionId], references: [id], onDelete: SetNull)
+  reaction       UserReaction     @relation(fields: [reactionId], references: [id], onDelete: Cascade)
 }
 
 model OfferingUserPostComment {
   id             String                            @id @default(cuid())
   offeringPostId String
-  offeringPost   OfferingUserPost                  @relation(fields: [offeringPostId], references: [id], onDelete: SetNull)
+  offeringPost   OfferingUserPost                  @relation(fields: [offeringPostId], references: [id], onDelete: Cascade)
   profileId      String
   profile        Profile                           @relation(fields: [profileId], references: [id], onDelete: Cascade)
   body           String
@@ -368,18 +334,18 @@ model OfferingUserPostComment {
 model OfferingUserPostCommentReaction {
   id                    String                  @id @default(cuid())
   offeringPostCommentId String
-  offeringPostComment   OfferingUserPostComment @relation(fields: [offeringPostCommentId], references: [id], onDelete: SetNull)
+  offeringPostComment   OfferingUserPostComment @relation(fields: [offeringPostCommentId], references: [id], onDelete: Cascade)
   profileId             String
   profile               Profile                 @relation(fields: [profileId], references: [id], onDelete: Cascade)
   reactionId            Int
-  reaction              UserReaction            @relation(fields: [reactionId], references: [id], onDelete: SetNull)
+  reaction              UserReaction            @relation(fields: [reactionId], references: [id], onDelete: Cascade)
 }
 
 model UserKYCAML {
   id        String   @id @default(cuid())
   profileId String
   profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  timestamp DateTime @default(now()) @db.Timestamptz(3)
+  timestamp DateTime @default(now()) @db.Timestamp(0)
   kycStatus String?  @default("Not Started")
   amlStatus String?  @default("Not Started")
   response  Json?
@@ -391,11 +357,11 @@ model Transaction {
   profileId        String
   profile          Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
   offeringId       String
-  offering         Offering @relation(fields: [offeringId], references: [id], onDelete: SetNull)
+  offering         Offering @relation(fields: [offeringId], references: [id], onDelete: Cascade)
   transactionType  String
   transactionUnits Int
   totalAmount      Int
   notes            String?
   status           String
-  timestamp        DateTime @default(now()) @db.Timestamptz(3)
+  timestamp        DateTime @default(now()) @db.Timestamp(0)
 }

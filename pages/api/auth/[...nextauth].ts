@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
+import LinkedInProvider from "next-auth/providers/linkedin";
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '../../../lib/db';
 
@@ -11,6 +12,10 @@ export default NextAuth({
          clientId: process.env.GOOGLE_CLIENT_ID!,
          clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       }),
+	  LinkedInProvider({
+		clientId: process.env.LINKEDIN_CLIENT_ID,
+		clientSecret: process.env.LINKEDIN_CLIENT_SECRET
+	  })
       // ...add more providers here
    ],
    pages: {
@@ -30,4 +35,18 @@ export default NextAuth({
          return session;
       },
    },
+	// callbacks: {
+		// async jwt(token, account) {
+		  // if (account ?.accessToken) {
+			// token.accessToken = account.accessToken
+		  // }
+		  // return token;
+		// },
+		// redirect: async (url, _baseUrl)=>{
+		  // if (url === '/user') {
+			// return Promise.resolve('/')
+		  // }
+		  // return  Promise.resolve('/')
+		// }
+	// }
 });
