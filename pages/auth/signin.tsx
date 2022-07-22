@@ -34,23 +34,27 @@ export default function SignIn() {
             <h2 className="mt-6 text-center text-xl font-bold text-gray-900">Sign in to your account</h2>
           </div>
 			<div className=" grid grid-cols-3 gap-x-2">
-				<div className="   text-center flex px-10 py-2  border border-gray-300 text-gray-900 ">
-					<button className="" >
+				<div className="    ">
+					<button className="text-center flex px-10 py-2  border border-gray-300 text-gray-900" onClick={() =>
+                                          signIn('facebook', {
+                                             callbackUrl: '/profile/my-info',
+                                          })
+                                       } >
 					 <FacebookIcon size={25} round className="items-center" />
 					 </button>
 				</div>
-				<div className=" text-center flex px-10 py-2 border border-gray-300 ">
-					<button className="" onClick={() =>
+				<div className="  ">
+					<button className="text-center flex px-10 py-2 border border-gray-300" onClick={() =>
                                           signIn('google', {
-                                             callbackUrl: '/offerings',
+                                             callbackUrl: '/profile/my-info',
                                           })
                                        }> <EmailIcon size={25} round />
 					</button>
 				</div>
-				<div className="text-center flex px-10 py-2 border border-gray-300 ">
-					<button className="" onClick={() =>
+				<div className="">
+					<button className="text-center flex px-10 py-2 border border-gray-300 " onClick={() =>
                                           signIn('linkedin', {
-                                             callbackUrl: '/offerings',
+                                             callbackUrl: '/profile/my-info',
                                           })
                                        }>
 					 <LinkedinIcon size={25} round />
