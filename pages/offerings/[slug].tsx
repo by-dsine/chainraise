@@ -1,17 +1,10 @@
+import { Fragment, useEffect, useState } from 'react';
+import { EyeIcon } from '@heroicons/react/solid';
+import Header from '../../components/navigation/Header';
 import { Tab } from '@headlessui/react';
 import { DownloadIcon } from '@heroicons/react/outline';
-import { EyeIcon } from '@heroicons/react/solid';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
-import { Fragment, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import Header from '../../components/navigation/Header';
-import { HeroCarousel } from '../../components/offerings/HeroCarousel';
-import useProfile from '../../hooks/useProfile';
-import { prisma } from '../../lib/db';
 import { useInvestorForm } from '../../lib/zustand/investorFormStore';
+import { useRouter } from 'next/router';
 import {
    DisplayOffering,
    DisplayOfferingResource,
@@ -19,12 +12,18 @@ import {
    DisplayOfferingSectionResource,
    InvestmentAmountForm,
 } from '../../types/typings';
-import { formatter } from '../../utils/formatters';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
    convertDateToSimpleString,
    mapResourceType,
    mapStatusId,
 } from '../../utils/mappers';
+import { formatter } from '../../utils/formatters';
+import { GetServerSideProps } from 'next';
+import { prisma } from '../../lib/db';
+import useProfile from '../../hooks/useProfile';
 
 const product = {
    name: 'Multivest',
@@ -342,6 +341,7 @@ export default function OfferingPage({ offeringForDisplay }: Props) {
          }
       });
       heroResources.sort((a, b) => (a.displayOrder > b.displayOrder ? 1 : -1));
+      console.log(heroResources);
       setHeroMedia(heroResources);
    };
 
@@ -353,8 +353,18 @@ export default function OfferingPage({ offeringForDisplay }: Props) {
             <div className="mx-auto max-w-3xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-8 lg:px-8">
                <main className="lg:col-span-8">
                   <div className="flex flex-col">
-                     <div className="overflow-hidden rounded-lg bg-gray-100">
-                        <HeroCarousel />
+                     <div className="aspect-w-4 aspect-h-3 overflow-hidden rounded-lg bg-gray-100">
+                        <>
+                           {heroMedia.map((resource) => {
+                              return (
+                                 <img
+                                    src={resource.location}
+                                    alt={resource.description}
+                                    className="object-contain object-center"
+                                 />
+                              );
+                           })}
+                        </>
                      </div>
 
                      {/* Product details */}
@@ -704,7 +714,7 @@ export default function OfferingPage({ offeringForDisplay }: Props) {
                      </div>
                   </div>
                </main>
-               <aside className="hidden sm:col-span-4 sm:block">
+               <aside className="mt-20 hidden sm:col-span-4 sm:block">
                   <div className="sticky top-6 space-y-4">
                      {/* Product summary */}
                      <div className="mx-auto mt-6 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none">
@@ -904,7 +914,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
    if (!offering) {
       console.log('not found');
       return {
-         notFound: true,
+         props: {},
       };
    }
 

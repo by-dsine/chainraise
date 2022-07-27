@@ -1,7 +1,15 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { BadgeCheckIcon } from '@heroicons/react/outline';
 import { ChevronRightIcon } from '@heroicons/react/solid';
+import {
+   CalendarIcon,
+   BadgeCheckIcon,
+   TerminalIcon,
+} from '@heroicons/react/outline';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { prisma } from '../../lib/db';
+import { useSession } from 'next-auth/react';
+import { GetServerSideProps } from 'next';
 import useOrCreateProfile from '../../hooks/useOrCreateProfile';
 
 const items = [
@@ -27,8 +35,6 @@ function classNames(...classes: string[]) {
 }
 
 export default function NewUser() {
-   const { profile, session, isLoading, isError } = useOrCreateProfile();
-
    return (
       <>
          <div className="mx-auto mt-24 max-w-lg">

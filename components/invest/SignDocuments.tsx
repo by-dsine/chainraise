@@ -1,6 +1,13 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { PencilIcon } from '@heroicons/react/outline';
-import { useNewDocModalStore } from '../../lib/zustand/newDocModalStore';
+import {
+   CalendarIcon,
+   ClockIcon,
+   PhotographIcon,
+   TableIcon,
+   ViewBoardsIcon,
+   ViewListIcon,
+   PencilIcon,
+} from '@heroicons/react/outline';
 
 const items = [
    {
@@ -45,21 +52,20 @@ function classNames(...classes: string[]) {
    return classes.filter(Boolean).join(' ');
 }
 
-export default function SignDocuments() {
-   const newDocModalStore = useNewDocModalStore();
-
+export default function Example() {
    return (
-      <div className="mb-4 w-full">
+      <div>
+         <h2 className="text-lg font-medium text-gray-900">Documents</h2>
+         <p className="mt-1 text-sm text-gray-500">
+            You haven’t created a project yet. Get started by selecting a
+            template or start from an empty project.
+         </p>
          <ul
             role="list"
-            className="mt-6 grid grid-cols-1 gap-6 border-gray-200 py-6"
+            className="mt-6 grid grid-cols-1 gap-6 border-t border-b border-gray-200 py-6 sm:grid-cols-2"
          >
             {items.map((item, itemIdx) => (
-               <li
-                  key={itemIdx}
-                  className="flow-root"
-                  onClick={() => newDocModalStore.setModalOpen(true)}
-               >
+               <li key={itemIdx} className="flow-root">
                   <div className="relative -m-2 flex items-center space-x-4 rounded-xl p-2 focus-within:ring-2 focus-within:ring-indigo-500 hover:bg-gray-50">
                      <div
                         className={classNames(
@@ -91,6 +97,22 @@ export default function SignDocuments() {
                </li>
             ))}
          </ul>
+         <div className="pt-5">
+            <div className="flex justify-end">
+               <button
+                  type="button"
+                  className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+               >
+                  Cancel
+               </button>
+               <button
+                  type="submit"
+                  className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+               >
+                  Next
+               </button>
+            </div>
+         </div>
       </div>
    );
 }
