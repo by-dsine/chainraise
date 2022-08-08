@@ -1,8 +1,7 @@
-import Header from '../components/navigation/Header';
-import Footer from '../components/navigation/Footer';
 import { ChevronRightIcon } from '@heroicons/react/solid';
 import { GetServerSideProps } from 'next';
-import { prisma } from '../lib/db';
+import Footer from '../components/navigation/Footer';
+import Header from '../components/navigation/Header';
 import { OfferingPreview } from '../types/typings';
 
 const trendingRaises = [
