@@ -1,15 +1,9 @@
-import Link from 'next/link';
-import { Fragment, useState } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import {
-   SearchIcon,
-   MenuIcon,
-   XIcon,
-   QuestionMarkCircleIcon,
-} from '@heroicons/react/outline';
 import { Dialog, Popover, Tab, Transition } from '@headlessui/react';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { MenuIcon, XIcon } from '@heroicons/react/outline';
+import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { Fragment, useState } from 'react';
 
 const currencies = ['CAD', 'USD', 'AUD', 'EUR', 'GBP'];
 const navigation = {
@@ -226,7 +220,7 @@ export default function Header() {
                                        href="/auth/signin"
                                        className="-m-2 block p-2 font-medium text-gray-900"
                                     >
-                                       Sign In
+                                       Sign In/Sign Up
                                     </Link>
                                  </div>
                               </>
@@ -439,7 +433,7 @@ export default function Header() {
                                  href="/auth/signin"
                                  className="hidden text-sm font-medium text-gray-700 hover:text-gray-800 lg:ml-8 lg:block"
                               >
-                                 Sign In
+                                 Sign In/Sign Up
                               </Link>
                            )}
 
