@@ -1,7 +1,5 @@
-import { LockClosedIcon } from '@heroicons/react/solid';
 import { signIn } from 'next-auth/react';
-import { EmailIcon, FacebookIcon, LinkedinIcon } from 'next-share';
-import Link from 'next/link';
+import Image from 'next/image';
 
 function classNames(...classes: string[]) {
    return classes.filter(Boolean).join(' ');
@@ -9,101 +7,56 @@ function classNames(...classes: string[]) {
 
 export default function SignIn() {
    return (
-      <div className="min-h-screen bg-gray-100">
-         <div className="py-6">
-            <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-               <div className="w-full max-w-md space-y-8 bg-white py-6 px-12">
-                  <div>
-                     <Link href="/">
-                        <img
-                           className="mx-auto h-12 w-auto"
-                           src="/chainraise_logo_black_text.png"
-                           alt=""
-                        />
-                     </Link>
-                     <h2 className="mt-6 text-center text-xl font-bold text-gray-900">
-                        Sign in to your account
-                     </h2>
-                  </div>
-                  <div className=" grid grid-cols-3 gap-x-2">
-                     <div className="    ">
-                        <button
-                           className="flex border border-gray-300 px-10  py-2 text-center text-gray-900"
-                           onClick={() =>
-                              signIn('facebook', {
-                                 callbackUrl: '/profile/my-info',
-                              })
-                           }
+      <>
+         <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+               <img
+                  className="mx-auto h-12 w-auto"
+                  src="/chainraise_logo.png"
+                  alt="Workflow"
+               />
+               <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                  Sign in to your account
+               </h2>
+            </div>
+
+            <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+               <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+                  <form className="space-y-6" action="#" method="POST">
+                     <div>
+                        <label
+                           htmlFor="email"
+                           className="block text-sm font-medium text-gray-700"
                         >
-                           <FacebookIcon
-                              size={25}
-                              round
-                              className="items-center"
-                           />
-                        </button>
-                     </div>
-                     <div className="  ">
-                        <button
-                           className="flex border border-gray-300 px-10 py-2 text-center"
-                           onClick={() =>
-                              signIn('google', {
-                                 callbackUrl: '/profile/my-info',
-                              })
-                           }
-                        >
-                           {' '}
-                           <EmailIcon size={25} round />
-                        </button>
-                     </div>
-                     <div className="">
-                        <button
-                           className="flex border border-gray-300 px-10 py-2 text-center "
-                           onClick={() =>
-                              signIn('linkedin', {
-                                 callbackUrl: '/profile/my-info',
-                              })
-                           }
-                        >
-                           <LinkedinIcon size={25} round />
-                        </button>
-                     </div>
-                  </div>
-                  <div className="relative flex items-center py-4">
-                     <div className="flex-grow border-t border-gray-400"></div>
-                     <span className="mx-4 flex-shrink text-gray-400">
-                        Or Continue with
-                     </span>
-                     <div className="flex-grow border-t border-gray-400"></div>
-                  </div>
-                  <form className="mt-8 space-y-6" action="#" method="POST">
-                     <input type="hidden" name="remember" defaultValue="true" />
-                     <div className="-space-y-px rounded-md shadow-sm">
-                        <div>
-                           <label htmlFor="email-address" className="sr-only">
-                              Email address
-                           </label>
+                           Email address
+                        </label>
+                        <div className="mt-1">
                            <input
-                              id="email-address"
+                              id="email"
                               name="email"
                               type="email"
                               autoComplete="email"
                               required
-                              className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                              placeholder="Email address"
+                              className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                            />
                         </div>
-                        <div className="mt-8 space-y-6">
-                           <label htmlFor="password" className="sr-only">
-                              Password
-                           </label>
+                     </div>
+
+                     <div>
+                        <label
+                           htmlFor="password"
+                           className="block text-sm font-medium text-gray-700"
+                        >
+                           Password
+                        </label>
+                        <div className="mt-1">
                            <input
                               id="password"
                               name="password"
-                              type="password"
-                              autoComplete="current-password"
+                              type="text"
+                              autoComplete="password"
                               required
-                              className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                              placeholder="Password"
+                              className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                            />
                         </div>
                      </div>
@@ -137,21 +90,125 @@ export default function SignIn() {
                      <div>
                         <button
                            type="submit"
-                           className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                           className="flex w-full justify-center rounded-md border border-transparent bg-cr-primary py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
-                           <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                              <LockClosedIcon
-                                 className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
-                                 aria-hidden="true"
-                              />
-                           </span>
                            Sign in
                         </button>
                      </div>
                   </form>
+
+                  <div className="mt-6">
+                     <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                           <div className="w-full border-t border-gray-300" />
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                           <span className="bg-white px-2 text-gray-500">
+                              Or continue with
+                           </span>
+                        </div>
+                     </div>
+
+                     <div className="mt-6 grid grid-cols-3 gap-3">
+                        <div>
+                           <a
+                              onClick={() =>
+                                 signIn('facebook', {
+                                    callbackUrl: '/profile/my-info',
+                                 })
+                              }
+                              href="#"
+                              className="group inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
+                           >
+                              <span className="sr-only">
+                                 Sign in with Facebook
+                              </span>
+                              <div className="relative h-5 w-5">
+                                 <Image
+                                    className="grayscale group-hover:grayscale-0"
+                                    src="/facebook.png"
+                                    alt="facebook logo"
+                                    width="100%"
+                                    height="100%"
+                                    layout="responsive"
+                                    objectFit="contain"
+                                 />
+                              </div>
+                           </a>
+                        </div>
+
+                        <div>
+                           <a
+                              onClick={() =>
+                                 signIn('linkedin', {
+                                    callbackUrl: '/profile/my-info',
+                                 })
+                              }
+                              href="#"
+                              className="group inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
+                           >
+                              <span className="sr-only">
+                                 Sign in with LinkedIn
+                              </span>
+                              <div className="relative h-5 w-5">
+                                 <Image
+                                    className="grayscale group-hover:grayscale-0"
+                                    src="/linkedin.png"
+                                    alt="linkedin logo"
+                                    width="100%"
+                                    height="100%"
+                                    layout="responsive"
+                                    objectFit="contain"
+                                 />
+                              </div>
+                           </a>
+                        </div>
+
+                        <div>
+                           <a
+                              onClick={() =>
+                                 signIn('google', {
+                                    callbackUrl: '/profile/my-info',
+                                 })
+                              }
+                              href="#"
+                              className="group inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
+                           >
+                              <span className="sr-only">
+                                 Sign in with Google
+                              </span>
+                              <div className="relative h-5 w-5">
+                                 <Image
+                                    className="grayscale group-hover:grayscale-0"
+                                    src="/google.jpg"
+                                    alt="google logo"
+                                    width="100%"
+                                    height="100%"
+                                    layout="responsive"
+                                    objectFit="contain"
+                                 />
+                              </div>
+                           </a>
+                        </div>
+                     </div>
+                  </div>
                </div>
+
+               {/* <div className="my-4 bg-white py-2 px-4 shadow sm:rounded-lg sm:px-10">
+                  <h3 className="mt-2 text-xl font-bold text-gray-900">
+                     Psst... are you new here?
+                  </h3>
+                  <div>
+                     <button
+                        type="submit"
+                        className="my-2 flex w-full justify-center rounded-md border border-transparent bg-cr-secondary py-2 px-4 text-sm font-medium text-white shadow-sm hover:ring-1 hover:ring-cr-secondary hover:ring-offset-2 focus:outline-none focus:ring-2 focus:ring-cr-secondary focus:ring-offset-2"
+                     >
+                        Create a new account
+                     </button>
+                  </div>
+               </div> */}
             </div>
          </div>
-      </div>
+      </>
    );
 }
